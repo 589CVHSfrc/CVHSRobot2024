@@ -4,60 +4,114 @@
 
 package frc.robot;
 
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
-/**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
+// import com.pathplanner.lib.PathConstraints;
+// import com.pathplanner.lib.PathPlanner;
+// import com.pathplanner.lib.PathPlannerTrajectory;
+// import com.pathplanner.lib.auto.PIDConstants;
+// import com.pathplanner.lib.auto.SwerveAutoBuilder;
+
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+// import frc.robot.Constants.AutoConstants;
+// import frc.robot.Constants.DriveConstants;
+// import frc.robot.Constants.ModuleConstants;
+import frc.robot.Constants.OIConstants;
+import frc.robot.commands.DRIVE.DefaultDrive;
+import frc.robot.commands.DRIVE.ResetGyro;
+import frc.robot.subsystems.DriveSubsystem;
+
+
+/*
+ * This class is where the bulk of the robot should be declared.  Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
- * subsystems, commands, and trigger mappings) should be declared here.
+ * periodic methods (other than the scheduler calls).  Instead, the structure of the robot
+ * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+        // The robot's subsystems
+        private final static DriveSubsystem m_robotDrive = new DriveSubsystem();
+        // The driver's controller
+        XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+        // XboxController m_codriverController = new
+        // XboxController(OIConstants.kCODriverControllerPort);
+        private SendableChooser<Command> m_autoChooser = new SendableChooser<>();
+        private final Pose2d m_zero = new Pose2d();
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
+        /**
+         * The container for the robot. Contains subsystems, OI devices, and commands.
+         */
+        public RobotContainer() {
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer() {
-    // Configure the trigger bindings
-    configureBindings();
-  }
+                // Command test = m_autoBuilder.fullAuto(new PathPlannerTrajectory());
 
-  /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
-   * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-   * joysticks}.
-   */
-  private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
+                // m_autoChooser.addOption("Score TAXIIII", new ScoreTaxi(m_robotDrive,
+                // m_robotSpin));
+                // m_autoChooser.addOption("Score BALANCE", new ScoreBal(m_robotDrive,
+                // m_robotSpin));
+                // m_autoChooser.addOption("Score ONLY", new ScoreONLY(m_robotDrive,
+                // m_robotSpin));
+                // m_autoChooser.addOption("Score Backup Balance", new
+                // ScoreBalance(m_robotDrive, m_robotSpin));
+                // m_autoChooser.setDefaultOption("NOTHING", new NOTHING());
 
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-    m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-  }
+                SmartDashboard.putData(m_autoChooser);
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
-  }
+                // Configure the button bindings
+                configureButtonBindings();
+                m_robotDrive.configureHolonomicAutoBuilder();
+                m_autoChooser.setDefaultOption("Donuts", new PathPlannerAuto("Donuts"));
+                m_autoChooser.addOption("POS NEG TEST AUTO", new PathPlannerAuto("PosNegTestAuto"));
+
+        
+                m_robotDrive.setDefaultCommand(new DefaultDrive(m_robotDrive,
+                                () -> -MathUtil.applyDeadband(m_driverController.getLeftY(),
+                                                OIConstants.kDriveDeadband),
+                                () -> -MathUtil.applyDeadband(m_driverController.getLeftX(),
+                                                OIConstants.kDriveDeadband),
+                                () -> -MathUtil.applyDeadband(m_driverController.getRawAxis(2),
+                                                OIConstants.kDriveDeadband)));
+        }
+
+        private void configureButtonBindings() {
+
+                new JoystickButton(m_driverController, 4)
+                                .toggleOnTrue(new ResetGyro(m_robotDrive));
+                new JoystickButton(m_driverController, 2)
+                                .whileTrue(new RunCommand(
+                                                () -> m_robotDrive.setX(),
+                                                m_robotDrive));
+
+        }
+
+        public Command getAutonomousCommand() {
+
+                // m_robotDrive.configureHolonomicAutoBuilder();
+                // return m_autoChooser.getSelected();
+                // return null;
+                try {
+
+                        Pose2d startingpose = PathPlannerAuto
+                                        .getStaringPoseFromAutoFile(m_autoChooser.getSelected().getName());
+                        m_robotDrive.resetOdometry(startingpose);
+                        System.out.print("====================POSE: " + startingpose + "==============");
+                        return m_autoChooser.getSelected();
+                        // return new PathPlannerAuto("Testing");
+
+                } catch (RuntimeException e) {
+                        System.out.print("==================" + e);
+                        System.out.print("===COULD NOT FIND AUTO WITH SELECTED NAME===");
+                        return new WaitCommand(1);
+                }
+
+        }
+
 }
