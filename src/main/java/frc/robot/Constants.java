@@ -8,6 +8,8 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 // import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkBase.IdleMode;
 
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -153,30 +155,9 @@ public final class Constants {
     public static final double kFreeSpeedRpm = 5676;
   }
 
-  public static final class ArmSpinConstants {
-
-    public static final double kArmMaxRPM = 11000;
-    public static final double kArmMinRPM = 0;
-    public static final double kArmMaxAccel = 4000;
-    public static final double kArmAllowedErr = 0.005;
-
-    public static final double kP = 0.1;
-    public static final double kI = 0;
-    public static final double kD = 0;
-    public static final double kFF = 0;
-
-    // Arm and spinny guys IDS
-    public static final int kAngleMotorCanID = 50;
-    public static final int kSpinMotorFrontID = 51;
-    public static final int kSpinMotorBackID = 52;
-
-    // Physical Constants
-    public static final double kRaisingSpeed = 1;
-    public static final double kSpiningSpeed = .35;
-    public static final double kSpiningSpeedSlow = .1;
-    public static final boolean kSpinningDirection = false; // false is spitting it out , true is taking it in
-    public static final double kMaxArmAngle = .34;
-    public static final int ArmScaleEncoder = 1; // Change this
-    public static final int kArmGearRatio = 1; // Change this
+  public static final class VisualConstants{
+    public static final Transform3d kCameraRelativeToRobot = new Transform3d(7.5, 14, 0, new Rotation3d(0, 0, 0));//subject to change relative, x and y
+    public static final String kPhotonCameraName = "limelight";
   }
+  
 }

@@ -4,23 +4,15 @@
 
 package frc.robot.subsystems;
 
-import java.util.function.BooleanSupplier;
-
 // import com.ctre.phoenixpro.hardware.Pigeon2;
 import com.kauailabs.navx.frc.AHRS;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.ReplanningConfig;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 
-// import edu.wpi.first.cameraserver.CameraServer;
-// import edu.wpi.first.cscore.UsbCamera;
-import edu.wpi.first.cscore.VideoSource.ConnectionStrategy;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -29,6 +21,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.DriverStation;
 // import edu.wpi.first.wpilibj.ADIS16470_IMU; OLD IMU
@@ -39,6 +32,7 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.LimeLight;
 // import frc.utils.CameraVisionPipeline;
 import frc.utils.SwerveUtils;
 
@@ -67,7 +61,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   // The gyro sensor
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
-  // private UsbCamera m_camera = CameraServer.startAutomaticCapture();
+  private final LimeLight m_limelight;
   private double m_controllerXY = 1;
 
   // Slew rate filter variables for controlling lateral acceleration
@@ -96,9 +90,13 @@ public class DriveSubsystem extends SubsystemBase {
           ModuleConstants.kDrivingD),
       AutoConstants.kMaxSpeedMetersPerSecond, DriveConstants.kTrackWidth / 2, new ReplanningConfig(),
       0.02);
+  private SwerveDrivePoseEstimator m_estimator;
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
+    m_limelight = new LimeLight();
+    m_estimator = new SwerveDrivePoseEstimator(DriveConstants.kDriveKinematics,
+        new Rotation2d(Units.degreesToRadians(getGyroYaw())), getSwerveModulePositions(), getPose());
     // configureHolonomicAutoBuilder();
     // m_camera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
   }
@@ -109,7 +107,17 @@ public class DriveSubsystem extends SubsystemBase {
    * @return The pose.
    */
   public Pose2d getPose() {
-    return m_odometry.getPoseMeters();
+    return m_estimator.getEstimatedPosition();
+    // return m_odometry.getPoseMeters();
+  }
+
+  public SwerveModulePosition[] getSwerveModulePositions() {
+    return new SwerveModulePosition[] {
+        m_frontLeft.getPosition(),
+        m_frontRight.getPosition(),
+        m_rearLeft.getPosition(),
+        m_rearRight.getPosition()
+    };
   }
 
   public Pose2d getAutoPose() {
@@ -118,6 +126,9 @@ public class DriveSubsystem extends SubsystemBase {
     double autoPoseX = m_odometry.getPoseMeters().getX();
     return new Pose2d(autoPoseX, autoPoseY, m_odometry.getPoseMeters().getRotation());
   }
+  public Rotation2d currentRotation2d(){
+    return new Rotation2d(Math.toRadians(getGyroYaw()));
+  }
 
   /**
    * Resets the odometry to the specified pose.
@@ -125,16 +136,17 @@ public class DriveSubsystem extends SubsystemBase {
    * @param pose The pose to which to set the odometry.
    */
   public void resetOdometry(Pose2d pose) {
-    m_odometry.resetPosition(
-        // Rotation2d.fromDegrees(m_gyro.getAngle()),
-        Rotation2d.fromDegrees(getGyroYaw()),
-        new SwerveModulePosition[] {
-            m_frontLeft.getPosition(),
-            m_frontRight.getPosition(),
-            m_rearLeft.getPosition(),
-            m_rearRight.getPosition()
-        },
-        pose);
+    m_estimator.resetPosition(new Rotation2d(), getSwerveModulePositions(), pose);
+    // m_odometry.resetPosition(
+    //     // Rotation2d.fromDegrees(m_gyro.getAngle()),
+    //     Rotation2d.fromDegrees(getGyroYaw()),
+    //     new SwerveModulePosition[] {
+    //         m_frontLeft.getPosition(),
+    //         m_frontRight.getPosition(),
+    //         m_rearLeft.getPosition(),
+    //         m_rearRight.getPosition()
+    //     },
+    //     pose);
   }
 
   /**
@@ -381,7 +393,7 @@ public class DriveSubsystem extends SubsystemBase {
   // if Counter clockwise is Negative we need to mutliply this by -1
 
   public double getGyroYaw() {
-    return (m_gyro.getYaw()) * 1;
+    return (m_gyro.getYaw()) * -1;
     // return (m_gyro.getYaw());
   }
 
@@ -411,30 +423,14 @@ public class DriveSubsystem extends SubsystemBase {
     }
     return false;
   }
+  public void updatePoses(){
 
-  @Override
-  public void periodic() {
-    float velocity = (Math.abs(m_gyro.getVelocityX() + Math.abs(m_gyro.getVelocityY())));
-    // System.out.print(velocity+"------------"+
-    // Math.abs(MathUtil.applyDeadband(m_controllerXY,
-    // OIConstants.kDriveDeadband)));
-    double controllerXDeadBand = Math.abs(MathUtil.applyDeadband(m_controllerXY, OIConstants.kDriveDeadband));
-    if (velocity < .01 || controllerXDeadBand == 0) {
-      // System.out.print("STOPPED================");
-      m_frontLeft.setDesiredState(new SwerveModuleState(0,
-          m_frontLeft.getState().angle));
-      m_frontRight.setDesiredState(new SwerveModuleState(0,
-          m_frontRight.getState().angle));
-      m_rearLeft.setDesiredState(new SwerveModuleState(0,
-          m_rearLeft.getState().angle));
-      m_rearRight.setDesiredState(new SwerveModuleState(0,
-          m_rearRight.getState().angle));
-      // m_frontLeft.stop();
-      // m_frontRight.stop();
-      // m_rearLeft.stop();
-      // m_rearRight.stop();
+    Pose2d estimatedpose = m_limelight.estimatePose(m_estimator);
+    if(!estimatedpose.equals(getPose())){
+      m_estimator.addVisionMeasurement(estimatedpose , m_limelight.getTimestamp());
     }
-    // Update the odometry in the periodic block
+
+    m_estimator.update(currentRotation2d(), getSwerveModulePositions());
     m_odometry.update(
         Rotation2d.fromDegrees(getGyroYaw()),
         new SwerveModulePosition[] {
@@ -443,7 +439,29 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
+  }
+  @Override
+  public void periodic() {
+    updatePoses();
 
+    
+    // float velocity = (Math.abs(m_gyro.getVelocityX() + Math.abs(m_gyro.getVelocityY())));
+
+    // double controllerXDeadBand = Math.abs(MathUtil.applyDeadband(m_controllerXY, OIConstants.kDriveDeadband));
+    // if (velocity < .01 || controllerXDeadBand == 0) {
+    //   m_frontLeft.setDesiredState(new SwerveModuleState(0,
+    //       m_frontLeft.getState().angle));
+    //   m_frontRight.setDesiredState(new SwerveModuleState(0,
+    //       m_frontRight.getState().angle));
+    //   m_rearLeft.setDesiredState(new SwerveModuleState(0,
+    //       m_rearLeft.getState().angle));
+    //   m_rearRight.setDesiredState(new SwerveModuleState(0,
+    //       m_rearRight.getState().angle));
+    // }
+    
+    // Update the odometry in the periodic block
+    
+      
     // System.out.println(m_frontRight.getTurningEncoder());
     SmartDashboard.putNumber("TURNING Encoder Position", m_frontRight.getTurningEncoder());
     SmartDashboard.putNumber("Angle Position",
@@ -465,6 +483,30 @@ public class DriveSubsystem extends SubsystemBase {
         m_driveConfig,
         this::getAlliance,
         this);
+  }
+
+  public void goLeft() {
+    System.out.println("Go left!");
+  }
+
+  public void goRight() {
+    System.out.println("Go Right!");
+  }
+
+  public void goForward() {
+    System.out.println("Go Forward!");
+  }
+
+  public void goBackward() {
+    System.out.println("Go Backward!");
+  }
+
+  public void rotateCounterclockwise() {
+    System.out.println("Rotate Counterclockwise!");
+  }
+
+  public void rotateClockwise() {
+    System.out.println("Rotate Clockwise!");
   }
 
 }
