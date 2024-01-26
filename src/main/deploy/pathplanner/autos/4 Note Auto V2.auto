@@ -1,0 +1,49 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.454549670868242,
+      "y": 5.539225686154654
+    },
+    "rotation": -178.31531568249187
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Note 1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "new pickup"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Note 2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Note 3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Note 4(ends at speaker)"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

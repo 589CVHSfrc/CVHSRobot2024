@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 // import com.pathplanner.lib.PathConstraints;
@@ -26,7 +27,9 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 // import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DRIVE.DefaultDrive;
+import frc.robot.commands.DRIVE.Pickup;
 import frc.robot.commands.DRIVE.ResetGyro;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 
 
@@ -50,6 +53,12 @@ public class RobotContainer {
          * The container for the robot. Contains subsystems, OI devices, and commands.
          */
         public RobotContainer() {
+
+                //ArmSubsystem m_arm = new ArmSubsystem();
+                //Pickup m_pickup = new Pickup();
+                NamedCommands.registerCommand("new pickup", new Pickup());
+
+
 
                 // Command test = m_autoBuilder.fullAuto(new PathPlannerTrajectory());
 
