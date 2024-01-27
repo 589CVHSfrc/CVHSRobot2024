@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.7004772383296536,
-        "y": 5.58606903233778
+        "x": 2.503304879795431,
+        "y": 5.754010492067813
       },
       "isLocked": false,
       "linkedName": "Speaker"
@@ -20,28 +20,28 @@
         "y": 7.4480920431217275
       },
       "prevControl": {
-        "x": 7.780304153093442,
-        "y": 7.477463100064266
+        "x": 7.701250263173691,
+        "y": 7.4490210066019795
       },
       "nextControl": {
-        "x": 5.588474971529114,
-        "y": 6.8039960330990565
+        "x": 6.642450260649451,
+        "y": 7.389537860388131
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.4961729368519783,
-        "y": 5.55492627078484
+        "x": 1.981537315430891,
+        "y": 7.4480920431217275
       },
       "prevControl": {
-        "x": 1.6770555652380903,
-        "y": 5.574358195791997
+        "x": 2.4457976159143415,
+        "y": 7.4480920431217275
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Speaker"
+      "linkedName": null
     }
   ],
   "rotationTargets": [
@@ -61,7 +61,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 178.72696997993415,
+    "rotation": 89.10482628978889,
     "rotateFast": false
   },
   "reversed": false,

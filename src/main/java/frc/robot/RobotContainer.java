@@ -56,7 +56,11 @@ public class RobotContainer {
 
                 //ArmSubsystem m_arm = new ArmSubsystem();
                 //Pickup m_pickup = new Pickup();
+                //NamedCommands.registerCommand(" pickup method", );
                 NamedCommands.registerCommand("new pickup", new Pickup());
+
+                 NamedCommands.registerCommand("last pickup", new Pickup());
+                 System.out.print("hi");
 
 
 
