@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.290597959227301,
+      "y": 3.80602187737899
+    },
+    "rotation": 180.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Go to Speaker"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Note 8"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Note 7"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "3 Note and Under Autos",
+  "choreoAuto": false
+}

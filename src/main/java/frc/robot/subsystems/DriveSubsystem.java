@@ -381,7 +381,7 @@ public class DriveSubsystem extends SubsystemBase {
   // if Counter clockwise is Negative we need to mutliply this by -1
 
   public double getGyroYaw() {
-    return (m_gyro.getYaw()) * 1;
+    return (m_gyro.getYaw()) * -1;
     // return (m_gyro.getYaw());
   }
 

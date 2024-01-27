@@ -1,0 +1,49 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.3491521419562087,
+      "y": 7.0733452736520315
+    },
+    "rotation": 69.55045238920744
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Score Amp"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Note 1 Amp Score"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Note 2 From Amp"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Copy of Note 3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Note 8"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "3 Note and Under Autos",
+  "choreoAuto": false
+}

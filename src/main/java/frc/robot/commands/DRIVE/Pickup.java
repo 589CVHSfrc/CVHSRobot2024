@@ -2,17 +2,17 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.SHOOTER;
+package frc.robot.commands.DRIVE;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.ArmSubsystem;
 
-public class Shoot extends Command {
-  /** Creates a new Shoot. */
-  ShooterSubsystem m_shooter = new ShooterSubsystem();
-  
-  public Shoot() {
-    addRequirements();
+public class Pickup extends Command {
+  /** Creates a new Pickup. */
+
+  ArmSubsystem m_arm = new ArmSubsystem();
+  public Pickup() {
+    addRequirements(m_arm);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -23,7 +23,8 @@ public class Shoot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
+    System.out.print("picked up");
+    System.out.print("=============================");
   }
 
   // Called once the command ends or is interrupted.
@@ -33,6 +34,6 @@ public class Shoot extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

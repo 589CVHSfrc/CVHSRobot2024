@@ -153,8 +153,9 @@ public final class Constants {
     public static final double kFreeSpeedRpm = 5676;
   }
 
-  public static final class ArmSpinConstants {
+  public static final class ArmConstants {
 
+    public static final double kShootingAngle = 65;
     public static final double kArmMaxRPM = 11000;
     public static final double kArmMinRPM = 0;
     public static final double kArmMaxAccel = 4000;
@@ -165,18 +166,45 @@ public final class Constants {
     public static final double kD = 0;
     public static final double kFF = 0;
 
-    // Arm and spinny guys IDS
     public static final int kAngleMotorCanID = 50;
-    public static final int kSpinMotorFrontID = 51;
-    public static final int kSpinMotorBackID = 52;
 
     // Physical Constants
-    public static final double kRaisingSpeed = 1;
-    public static final double kSpiningSpeed = .35;
-    public static final double kSpiningSpeedSlow = .1;
-    public static final boolean kSpinningDirection = false; // false is spitting it out , true is taking it in
-    public static final double kMaxArmAngle = .34;
+    public static final double kRaisingSpeed = 1;// Change this
+    public static final double kMaxArmAngle = .34;// Change this
     public static final int ArmScaleEncoder = 1; // Change this
     public static final int kArmGearRatio = 1; // Change this
+
+  
+  }
+   public static final class ShooterConstants {
+
+    public static final double kShooterMaxRPM = 11000;
+    public static final double kShooterMinRPM = 0;
+    public static final double kShooterMaxAccel = 4000;
+    public static final double kShooterAllowedErr = 0.005;
+
+    public static final double kP = 0.1;
+    public static final double kI = 0;
+    public static final double kD = 0;
+    public static final double kFF = 0;
+
+    public static final int kShooterMotorTopCanID = 51;
+    public static final int kShooterMotorLowCanID = 52;
+    public static final int kGatewayWheelMotorID = 53;
+
+    // Physical Constants
+    public static final double kShooterSpeed = .35;// Change this
+    public static final double kShooterSpeedSlow = .1;// Change this
+    public static final boolean kShooterDirection = false; // false is spitting it out , true is takinShooter
+
+    
+  
+  }
+  public static final class ClimberConstants{
+    //difference in rate refers to the difference between the left and right amps over change in time;
+    public static final double kDifferenceInRate = 5;
+    public static final int kClimberLeftMotorCanID = 54;
+    public static final int kClimberRightMotorCanID = 55;
+    public static final double kClimbingSpeed = 0.7;
   }
 }
