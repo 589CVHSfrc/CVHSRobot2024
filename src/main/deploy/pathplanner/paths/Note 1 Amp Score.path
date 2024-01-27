@@ -20,12 +20,12 @@
         "y": 7.003080254370625
       },
       "prevControl": {
-        "x": 1.8725109148331507,
-        "y": 7.24385768416376
+        "x": 2.4148382676223257,
+        "y": 7.120188619835157
       },
       "nextControl": {
-        "x": 2.9288400075153014,
-        "y": 6.992225250185816
+        "x": 2.928716450431723,
+        "y": 6.991719074124625
       },
       "isLocked": false,
       "linkedName": null
@@ -70,7 +70,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Optimized",
   "previewStartingState": null,
   "useDefaultConstraints": false
 }

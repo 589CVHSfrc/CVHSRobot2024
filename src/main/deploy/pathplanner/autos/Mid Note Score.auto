@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.4410990864157092,
-      "y": 5.573284220930263
+      "x": 1.4961729368519783,
+      "y": 5.55492627078484
     },
     "rotation": 179.2559407971113
   },
@@ -32,6 +32,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "3 Note and Under Autos",
   "choreoAuto": false
 }

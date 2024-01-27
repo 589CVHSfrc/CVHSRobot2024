@@ -32,7 +32,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Note 3"
+            "pathName": "Copy of Note 3"
           }
         },
         {
@@ -44,6 +44,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "3 Note and Under Autos",
   "choreoAuto": false
 }

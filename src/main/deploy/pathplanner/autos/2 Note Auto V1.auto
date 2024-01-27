@@ -14,12 +14,24 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2 Note Proto V2"
+            "pathName": "Go to Speaker"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Note 8"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Note 7"
           }
         }
       ]
     }
   },
-  "folder": null,
+  "folder": "3 Note and Under Autos",
   "choreoAuto": false
 }
