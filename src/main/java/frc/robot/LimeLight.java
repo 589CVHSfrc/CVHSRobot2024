@@ -25,7 +25,7 @@ public class LimeLight {
     // String m_tableName;
     // NetworkTable m_table;
     private AprilTagFieldLayout m_aprilTagLayout;
-    private PhotonCamera m_photonCamera;
+    private PhotonCamera m_photonCamera = new PhotonCamera("aprilcamera");
     private PhotonPoseEstimator m_estimator;
     private double m_estimatetime;
 
@@ -39,20 +39,25 @@ public class LimeLight {
             System.out.println("======Unable to load AprilTag Layout: ======");
             System.out.print(e);
         }
-        m_photonCamera = new PhotonCamera(VisualConstants.kPhotonCameraName);
+        // m_photonCamera = new PhotonCamera(VisualConstants.kPhotonCameraName);
         m_estimator = new PhotonPoseEstimator(m_aprilTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_RIO, m_photonCamera,
                 VisualConstants.kCameraRelativeToRobot);
         PortForwarder.add(5800, "photonvision.local", 5800);
 
     }
-    public double getTimestamp(){
+
+    public double getTimestamp() {
         return m_estimatetime;
     }
-    
+
     public Pose2d estimatePose(SwerveDrivePoseEstimator estimator) {
         Optional<EstimatedRobotPose> estimation = m_estimator.update();
-        m_estimatetime = estimation.get().timestampSeconds;
-        return estimation.get().estimatedPose.toPose2d();
+        if (estimation.isPresent()) {
+            m_estimatetime = estimation.get().timestampSeconds;
+            System.out.print("ESTIMATION FOUND======================" + estimation.get().estimatedPose.toPose2d());
+            return estimation.get().estimatedPose.toPose2d();
+        }
+        return estimator.getEstimatedPosition();
     }
 
     // public boolean getIsTargetFound() {

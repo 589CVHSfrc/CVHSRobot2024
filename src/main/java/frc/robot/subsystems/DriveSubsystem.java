@@ -63,6 +63,7 @@ public class DriveSubsystem extends SubsystemBase {
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
   private final LimeLight m_limelight;
   private double m_controllerXY = 1;
+  private boolean m_first = true;
 
   // Slew rate filter variables for controlling lateral acceleration
   private double m_currentRotation = 0.0;
@@ -90,13 +91,13 @@ public class DriveSubsystem extends SubsystemBase {
           ModuleConstants.kDrivingD),
       AutoConstants.kMaxSpeedMetersPerSecond, DriveConstants.kTrackWidth / 2, new ReplanningConfig(),
       0.02);
-  private SwerveDrivePoseEstimator m_estimator;
+  private SwerveDrivePoseEstimator m_estimator = new SwerveDrivePoseEstimator(DriveConstants.kDriveKinematics,
+      new Rotation2d(Units.degreesToRadians(getGyroYaw())), getSwerveModulePositions(), getPose());
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
     m_limelight = new LimeLight();
-    m_estimator = new SwerveDrivePoseEstimator(DriveConstants.kDriveKinematics,
-        new Rotation2d(Units.degreesToRadians(getGyroYaw())), getSwerveModulePositions(), getPose());
+
     // configureHolonomicAutoBuilder();
     // m_camera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
   }
@@ -107,6 +108,10 @@ public class DriveSubsystem extends SubsystemBase {
    * @return The pose.
    */
   public Pose2d getPose() {
+    if (m_first) {
+      m_first = false;
+      return m_odometry.getPoseMeters();
+    }
     return m_estimator.getEstimatedPosition();
     // return m_odometry.getPoseMeters();
   }
@@ -126,7 +131,8 @@ public class DriveSubsystem extends SubsystemBase {
     double autoPoseX = m_odometry.getPoseMeters().getX();
     return new Pose2d(autoPoseX, autoPoseY, m_odometry.getPoseMeters().getRotation());
   }
-  public Rotation2d currentRotation2d(){
+
+  public Rotation2d currentRotation2d() {
     return new Rotation2d(Math.toRadians(getGyroYaw()));
   }
 
@@ -138,15 +144,15 @@ public class DriveSubsystem extends SubsystemBase {
   public void resetOdometry(Pose2d pose) {
     m_estimator.resetPosition(new Rotation2d(), getSwerveModulePositions(), pose);
     // m_odometry.resetPosition(
-    //     // Rotation2d.fromDegrees(m_gyro.getAngle()),
-    //     Rotation2d.fromDegrees(getGyroYaw()),
-    //     new SwerveModulePosition[] {
-    //         m_frontLeft.getPosition(),
-    //         m_frontRight.getPosition(),
-    //         m_rearLeft.getPosition(),
-    //         m_rearRight.getPosition()
-    //     },
-    //     pose);
+    // // Rotation2d.fromDegrees(m_gyro.getAngle()),
+    // Rotation2d.fromDegrees(getGyroYaw()),
+    // new SwerveModulePosition[] {
+    // m_frontLeft.getPosition(),
+    // m_frontRight.getPosition(),
+    // m_rearLeft.getPosition(),
+    // m_rearRight.getPosition()
+    // },
+    // pose);
   }
 
   /**
@@ -423,14 +429,14 @@ public class DriveSubsystem extends SubsystemBase {
     }
     return false;
   }
-  public void updatePoses(){
+
+  public void updatePoses() {
 
     Pose2d estimatedpose = m_limelight.estimatePose(m_estimator);
-    if(!estimatedpose.equals(getPose())){
-      m_estimator.addVisionMeasurement(estimatedpose , m_limelight.getTimestamp());
-    }
+    System.out.print("===============" + estimatedpose);
+    m_estimator.addVisionMeasurement(estimatedpose, m_limelight.getTimestamp());
 
-    m_estimator.update(currentRotation2d(), getSwerveModulePositions());
+    // m_estimator.update(currentRotation2d(), getSwerveModulePositions());
     m_odometry.update(
         Rotation2d.fromDegrees(getGyroYaw()),
         new SwerveModulePosition[] {
@@ -440,28 +446,29 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearRight.getPosition()
         });
   }
+
   @Override
   public void periodic() {
     updatePoses();
 
-    
-    // float velocity = (Math.abs(m_gyro.getVelocityX() + Math.abs(m_gyro.getVelocityY())));
+    // float velocity = (Math.abs(m_gyro.getVelocityX() +
+    // Math.abs(m_gyro.getVelocityY())));
 
-    // double controllerXDeadBand = Math.abs(MathUtil.applyDeadband(m_controllerXY, OIConstants.kDriveDeadband));
+    // double controllerXDeadBand = Math.abs(MathUtil.applyDeadband(m_controllerXY,
+    // OIConstants.kDriveDeadband));
     // if (velocity < .01 || controllerXDeadBand == 0) {
-    //   m_frontLeft.setDesiredState(new SwerveModuleState(0,
-    //       m_frontLeft.getState().angle));
-    //   m_frontRight.setDesiredState(new SwerveModuleState(0,
-    //       m_frontRight.getState().angle));
-    //   m_rearLeft.setDesiredState(new SwerveModuleState(0,
-    //       m_rearLeft.getState().angle));
-    //   m_rearRight.setDesiredState(new SwerveModuleState(0,
-    //       m_rearRight.getState().angle));
+    // m_frontLeft.setDesiredState(new SwerveModuleState(0,
+    // m_frontLeft.getState().angle));
+    // m_frontRight.setDesiredState(new SwerveModuleState(0,
+    // m_frontRight.getState().angle));
+    // m_rearLeft.setDesiredState(new SwerveModuleState(0,
+    // m_rearLeft.getState().angle));
+    // m_rearRight.setDesiredState(new SwerveModuleState(0,
+    // m_rearRight.getState().angle));
     // }
-    
+
     // Update the odometry in the periodic block
-    
-      
+
     // System.out.println(m_frontRight.getTurningEncoder());
     SmartDashboard.putNumber("TURNING Encoder Position", m_frontRight.getTurningEncoder());
     SmartDashboard.putNumber("Angle Position",
