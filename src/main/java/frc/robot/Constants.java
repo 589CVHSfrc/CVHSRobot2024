@@ -8,6 +8,8 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 // import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkBase.IdleMode;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -29,9 +31,11 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
   public static final class DriveConstants {
+
+    public static final Pose2d shootingPose = new Pose2d(2, 6, new Rotation2d(0));
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 5;// ---> CHANGE 4.45 hello!
+    public static final double kMaxSpeedMetersPerSecond = 1;//5;// ---> CHANGE 4.45 hello!
     public static final double kMaxAngularSpeed = 10.37; // --> CHANGE 10.32 hello!
 
     public static final double kDirectionSlewRate = 10; // 1.2 radians per second
@@ -156,7 +160,7 @@ public final class Constants {
   }
 
   public static final class VisualConstants{
-    public static final Transform3d kCameraRelativeToRobot = new Transform3d(7.5, 14, 0, new Rotation3d(0, 0, 0));//subject to change relative, x and y
+    public static final Transform3d kCameraRelativeToRobot = new Transform3d(Units.inchesToMeters(17.5), 0, Units.inchesToMeters(1), new Rotation3d(0, Units.degreesToRadians(54), 0));//subject to change relative, x and y
     public static final String kPhotonCameraName = "limelight";
   }
   

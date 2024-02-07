@@ -6,12 +6,6 @@ package frc.robot;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
-// import com.pathplanner.lib.PathConstraints;
-// import com.pathplanner.lib.PathPlanner;
-// import com.pathplanner.lib.PathPlannerTrajectory;
-// import com.pathplanner.lib.auto.PIDConstants;
-// import com.pathplanner.lib.auto.SwerveAutoBuilder;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.XboxController;
@@ -21,14 +15,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-// import frc.robot.Constants.AutoConstants;
-// import frc.robot.Constants.DriveConstants;
-// import frc.robot.Constants.ModuleConstants;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DRIVE.DefaultDrive;
 import frc.robot.commands.DRIVE.ResetGyro;
 import frc.robot.subsystems.DriveSubsystem;
-
+import frc.utils.DriveUtils;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -51,27 +43,13 @@ public class RobotContainer {
          */
         public RobotContainer() {
 
-                // Command test = m_autoBuilder.fullAuto(new PathPlannerTrajectory());
-
-                // m_autoChooser.addOption("Score TAXIIII", new ScoreTaxi(m_robotDrive,
-                // m_robotSpin));
-                // m_autoChooser.addOption("Score BALANCE", new ScoreBal(m_robotDrive,
-                // m_robotSpin));
-                // m_autoChooser.addOption("Score ONLY", new ScoreONLY(m_robotDrive,
-                // m_robotSpin));
-                // m_autoChooser.addOption("Score Backup Balance", new
-                // ScoreBalance(m_robotDrive, m_robotSpin));
-                // m_autoChooser.setDefaultOption("NOTHING", new NOTHING());
-
                 SmartDashboard.putData(m_autoChooser);
 
-                // Configure the button bindings
                 configureButtonBindings();
-                m_robotDrive.configureHolonomicAutoBuilder();
+                // m_robotDrive.configureHolonomicAutoBuilder();
                 m_autoChooser.setDefaultOption("Donuts", new PathPlannerAuto("Donuts"));
                 m_autoChooser.addOption("POS NEG TEST AUTO", new PathPlannerAuto("PosNegTestAuto"));
 
-        
                 m_robotDrive.setDefaultCommand(new DefaultDrive(m_robotDrive,
                                 () -> -MathUtil.applyDeadband(m_driverController.getLeftY(),
                                                 OIConstants.kDriveDeadband),
@@ -82,21 +60,19 @@ public class RobotContainer {
         }
 
         private void configureButtonBindings() {
-
+                //whiletrue is when held toggle is toggle
                 new JoystickButton(m_driverController, 4)
                                 .toggleOnTrue(new ResetGyro(m_robotDrive));
+                new JoystickButton(m_driverController, 3)
+                                .toggleOnTrue(new RunCommand(
+                                                () -> m_robotDrive.resetOdometry(m_zero)));
                 new JoystickButton(m_driverController, 2)
-                                .whileTrue(new RunCommand(
-                                                () -> m_robotDrive.setX(),
-                                                m_robotDrive));
+                                .whileTrue(new DriveUtils(m_robotDrive).driveToPose(DriveConstants.shootingPose));
 
         }
 
         public Command getAutonomousCommand() {
 
-                // m_robotDrive.configureHolonomicAutoBuilder();
-                // return m_autoChooser.getSelected();
-                // return null;
                 try {
 
                         Pose2d startingpose = PathPlannerAuto
