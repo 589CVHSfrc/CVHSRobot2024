@@ -60,14 +60,23 @@ public class RobotContainer {
         }
 
         private void configureButtonBindings() {
-                //whiletrue is when held toggle is toggle
+                // whiletrue is when held toggle is toggle
                 new JoystickButton(m_driverController, 4)
                                 .toggleOnTrue(new ResetGyro(m_robotDrive));
                 new JoystickButton(m_driverController, 3)
                                 .toggleOnTrue(new RunCommand(
                                                 () -> m_robotDrive.resetOdometry(m_zero)));
-                new JoystickButton(m_driverController, 2)
-                                .whileTrue(new DriveUtils(m_robotDrive).driveToPose(DriveConstants.shootingPose));
+                if (m_robotDrive.getAlliance()) {
+                        new JoystickButton(m_driverController, 2)
+                                        .whileTrue(new DriveUtils(m_robotDrive)
+                                                        .driveToPose(DriveConstants.kShootingPoseRED));
+
+                } else {
+                        new JoystickButton(m_driverController, 2)
+                                        .whileTrue(new DriveUtils(m_robotDrive)
+                                                        .driveToPose(DriveConstants.kShootingPoseBLUE));
+
+                }
 
         }
 

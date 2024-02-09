@@ -32,10 +32,12 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
   public static final class DriveConstants {
 
-    public static final Pose2d shootingPose = new Pose2d(2, 6, new Rotation2d(0));
+    public static final Pose2d kShootingPoseRED = new Pose2d(14, 2, new Rotation2d(0));
+    public static final Pose2d kShootingPoseBLUE = new Pose2d(14, 2, new Rotation2d(Units.degreesToRadians(180)));
+
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 1;//5;// ---> CHANGE 4.45 hello!
+    public static final double kMaxSpeedMetersPerSecond = 5;// 5;// ---> CHANGE 4.45 hello!
     public static final double kMaxAngularSpeed = 10.37; // --> CHANGE 10.32 hello!
 
     public static final double kDirectionSlewRate = 10; // 1.2 radians per second
@@ -70,12 +72,12 @@ public final class Constants {
     public static final int kFrontRightTurningCanId = 31;
     public static final int kRearRightTurningCanId = 11;
 
-    public static final double kAutoTimeDtSecondsAdjust = 0.02; //?????????????????????
+    public static final double kAutoTimeDtSecondsAdjust = 0.02; // ?????????????????????
 
     // pigeon2 CAN ID
     public static final int kPigeon2CanId = 60;
 
-    public static final boolean kGyroReversed = false;
+    public static final boolean kGyroReversed = true;// false;
   }
 
   public static final class ModuleConstants {
@@ -159,9 +161,11 @@ public final class Constants {
     public static final double kFreeSpeedRpm = 5676;
   }
 
-  public static final class VisualConstants{
-    public static final Transform3d kCameraRelativeToRobot = new Transform3d(Units.inchesToMeters(17.5), 0, Units.inchesToMeters(1), new Rotation3d(0, Units.degreesToRadians(54), 0));//subject to change relative, x and y
+  public static final class VisualConstants {
+    public static final Transform3d kCameraRelativeToRobot = new Transform3d(Units.inchesToMeters(17.5), 0,
+        Units.inchesToMeters(1), new Rotation3d(0, Units.degreesToRadians(54), 0));// subject to change relative, x and
+                                                                                   // y
     public static final String kPhotonCameraName = "limelight";
   }
-  
+
 }

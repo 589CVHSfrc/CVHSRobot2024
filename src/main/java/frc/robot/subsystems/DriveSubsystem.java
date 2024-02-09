@@ -125,15 +125,15 @@ public class DriveSubsystem extends SubsystemBase {
     };
   }
 
-  public Pose2d getAutoPose() {
+  // public Pose2d getAutoPose() {
 
-    // double autoPoseY = m_odometry.getPoseMeters().getY();
-    // double autoPoseX = m_odometry.getPoseMeters().getX();
-    // return new Pose2d(autoPoseX, autoPoseY,
-    // m_odometry.getPoseMeters().getRotation());
-    // CHANGE
-    return m_estimator.getEstimatedPosition();
-  }
+  //   // double autoPoseY = m_odometry.getPoseMeters().getY();
+  //   // double autoPoseX = m_odometry.getPoseMeters().getX();
+  //   // return new Pose2d(autoPoseX, autoPoseY,
+  //   // m_odometry.getPoseMeters().getRotation());
+  //   // CHANGE
+  //   return m_estimator.getEstimatedPosition();
+  // }
 
   public Pose2d getAutoPoseReversed() {
     double autoPoseY = m_estimator.getEstimatedPosition().getY();
@@ -142,7 +142,7 @@ public class DriveSubsystem extends SubsystemBase {
         m_estimator.getEstimatedPosition().getRotation());
 
   }
-
+  
   public Rotation2d currentRotation2d() {
     return new Rotation2d(Math.toRadians(getGyroYaw()));
   }
@@ -399,7 +399,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   /**
-   * Returns the turn rate of the robot.
+   * Returns the turn rate of the robot
    *
    * @return The turn rate of the robot, in degrees per second
    */
@@ -436,6 +436,7 @@ public class DriveSubsystem extends SubsystemBase {
   public Boolean getAlliance() {
     var alliance = DriverStation.getAlliance();
     if (alliance.isPresent()) {
+      
       return alliance.get() == DriverStation.Alliance.Red;
     }
     return false;
@@ -457,7 +458,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void configureHolonomicAutoBuilder() {
     AutoBuilder.configureHolonomic(
-        this::getAutoPoseReversed,
+        this::getPose,
         this::resetOdometry,
         this::getChassisSpeeds,
         this::driveRobotRelative,
