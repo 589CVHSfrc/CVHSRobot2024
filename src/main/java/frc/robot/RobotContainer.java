@@ -26,12 +26,14 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 // import frc.robot.Constants.DriveConstants;
 // import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.OIConstants;
+// import frc.robot.commands.CLIMBER.LowerArms;
 import frc.robot.commands.DRIVE.DefaultDrive;
+import frc.robot.commands.DRIVE.PIDTest;
 import frc.robot.commands.DRIVE.Pickup;
 import frc.robot.commands.DRIVE.ResetGyro;
-import frc.robot.subsystems.ArmSubsystem;
+// import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
-
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -42,6 +44,7 @@ import frc.robot.subsystems.DriveSubsystem;
 public class RobotContainer {
         // The robot's subsystems
         private final static DriveSubsystem m_robotDrive = new DriveSubsystem();
+        // private final static ClimberSubsystem m_Climber = new ClimberSubsystem();
         // The driver's controller
         XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
         // XboxController m_codriverController = new
@@ -54,15 +57,13 @@ public class RobotContainer {
          */
         public RobotContainer() {
 
-                //ArmSubsystem m_arm = new ArmSubsystem();
-                //Pickup m_pickup = new Pickup();
-                //NamedCommands.registerCommand(" pickup method", );
+                // ArmSubsystem m_arm = new ArmSubsystem();
+                // Pickup m_pickup = new Pickup();
+                // NamedCommands.registerCommand(" pickup method", );
                 NamedCommands.registerCommand("new pickup", new Pickup());
 
-                 NamedCommands.registerCommand("last pickup", new Pickup());
-                 System.out.print("hi");
-
-
+                NamedCommands.registerCommand("last pickup", new Pickup());
+                // System.out.print("hi");
 
                 // Command test = m_autoBuilder.fullAuto(new PathPlannerTrajectory());
 
@@ -83,8 +84,9 @@ public class RobotContainer {
                 m_robotDrive.configureHolonomicAutoBuilder();
                 m_autoChooser.setDefaultOption("Donuts", new PathPlannerAuto("Donuts"));
                 m_autoChooser.addOption("POS NEG TEST AUTO", new PathPlannerAuto("PosNegTestAuto"));
+                m_autoChooser.addOption("5 Note Auto V1", new PathPlannerAuto("5 Note Auto V1"));
+                m_autoChooser.addOption("5 Note Auto V2", new PathPlannerAuto("5 Note Auto V2"));
 
-        
                 m_robotDrive.setDefaultCommand(new DefaultDrive(m_robotDrive,
                                 () -> -MathUtil.applyDeadband(m_driverController.getLeftY(),
                                                 OIConstants.kDriveDeadband),
@@ -102,6 +104,10 @@ public class RobotContainer {
                                 .whileTrue(new RunCommand(
                                                 () -> m_robotDrive.setX(),
                                                 m_robotDrive));
+                new JoystickButton(m_driverController, 3)
+                                .whileTrue(new PIDTest(m_robotDrive));
+                // new JoystickButton(m_driverController, 3)
+                // .toggleOnTrue(new LowerArms(m_Climber));
 
         }
 
@@ -116,8 +122,9 @@ public class RobotContainer {
                                         .getStaringPoseFromAutoFile(m_autoChooser.getSelected().getName());
                         m_robotDrive.resetOdometry(startingpose);
                         System.out.print("====================POSE: " + startingpose + "==============");
-                        return m_autoChooser.getSelected();
+                        // return new PathPlannerAuto("5 Note Auto V1");
                         // return new PathPlannerAuto("Testing");
+                        return m_autoChooser.getSelected();
 
                 } catch (RuntimeException e) {
                         System.out.print("==================" + e);

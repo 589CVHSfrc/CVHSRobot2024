@@ -29,7 +29,7 @@ public final class Constants {
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 5;// ---> CHANGE 4.45 hello!
+    public static final double kMaxSpeedMetersPerSecond = 4.45;// ---> CHANGE  4.45 hello! 5
     public static final double kMaxAngularSpeed = 10.37; // --> CHANGE 10.32 hello!
 
     public static final double kDirectionSlewRate = 10; // 1.2 radians per second
@@ -37,9 +37,9 @@ public final class Constants {
     public static final double kRotationalSlewRate = 10; // 2.0 percent per second (1 = 100%)
 
     // Chassis configuration
-    public static final double kTrackWidth = Units.inchesToMeters(21);
+    public static final double kTrackWidth = Units.inchesToMeters(29);
     // Distance between centers of right and left wheels on robot
-    public static final double kWheelBase = Units.inchesToMeters(21);
+    public static final double kWheelBase = Units.inchesToMeters(29);
     // Distance between front and back wheels on robot
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
         new Translation2d(kWheelBase / 2, kTrackWidth / 2),
@@ -52,8 +52,7 @@ public final class Constants {
     public static final double kFrontRightChassisAngularOffset = 0;
     public static final double kBackLeftChassisAngularOffset = Math.PI;
     public static final double kBackRightChassisAngularOffset = Math.PI / 2;
-
-    // SPARK MAX CAN IDs
+    
     public static final int kFrontLeftDrivingCanId = 40;
     public static final int kRearLeftDrivingCanId = 20;
     public static final int kFrontRightDrivingCanId = 30;
@@ -63,6 +62,21 @@ public final class Constants {
     public static final int kRearLeftTurningCanId = 21;
     public static final int kFrontRightTurningCanId = 31;
     public static final int kRearRightTurningCanId = 11;
+
+    // SPARK MAX CAN IDs
+    // public static final int kFrontLeftDrivingCanId = 40;
+    // public static final int kRearLeftDrivingCanId = 20;
+    // public static final int kFrontRightDrivingCanId = 30;
+    // public static final int kRearRightDrivingCanId = 10;
+
+    // public static final int kFrontLeftTurningCanId = 41;
+    // public static final int kRearLeftTurningCanId = 21;
+    // public static final int kFrontRightTurningCanId = 31;
+    // public static final int kRearRightTurningCanId = 11;
+    // //kRearRightTurningCanId = 11
+    // public static final int kLeftArmMotorCanId = 11;
+    // public static final int kRightArmMotorCanId = 12;
+
 
     public static final double kAutoTimeDtSecondsAdjust = 0.02; //?????????????????????
 
@@ -87,7 +101,7 @@ public final class Constants {
 
     // Calculations required for driving motor conversion factors and feed forward
     public static final double kDrivingMotorFreeSpeedRps = NeoMotorConstants.kFreeSpeedRpm / 60;
-    public static final double kWheelDiameterMeters = 0.0762;
+    public static final double kWheelDiameterMeters = 0.075797771765;//0.0762;
     public static final double kWheelCircumferenceMeters = kWheelDiameterMeters * Math.PI;
     // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15
     // teeth on the bevel pinion
@@ -106,7 +120,7 @@ public final class Constants {
     public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
     public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
 
-    public static final double kDrivingP = 0.04;
+    public static final double kDrivingP = 0.004;
     public static final double kDrivingI = 0; // 0.0001;
     public static final double kDrivingD = 0;
     public static final double kDrivingFF = 1 / kDriveWheelFreeSpeedRps;
@@ -135,7 +149,7 @@ public final class Constants {
   }
 
   public static final class AutoConstants {
-    public static final double kMaxSpeedMetersPerSecond = 4.45;// 1
+    public static final double kMaxSpeedMetersPerSecond = 4.45;//4.45;// 1
     public static final double kMaxAccelerationMetersPerSecondSquared = 5;// 2
     public static final double kMaxAngularSpeedRadiansPerSecond = 10.37;// pi
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI * 5;// pi
@@ -154,7 +168,7 @@ public final class Constants {
   }
 
   public static final class ArmConstants {
-
+    
     public static final double kShootingAngle = 65;
     public static final double kArmMaxRPM = 11000;
     public static final double kArmMinRPM = 0;
@@ -203,8 +217,8 @@ public final class Constants {
   public static final class ClimberConstants{
     //difference in rate refers to the difference between the left and right amps over change in time;
     public static final double kDifferenceInRate = 5;
-    public static final int kClimberLeftMotorCanID = 54;
-    public static final int kClimberRightMotorCanID = 55;
+    public static final int kClimberLeftMotorCanID = 11;
+    public static final int kClimberRightMotorCanID = 12;
     public static final double kClimbingSpeed = 0.7;
   }
 }

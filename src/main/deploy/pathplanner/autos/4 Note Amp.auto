@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.454549670868242,
-      "y": 5.539225686154654
+      "x": 1.35,
+      "y": 7.07
     },
-    "rotation": -178.31531568249187
+    "rotation": 88.53
   },
   "command": {
     "type": "sequential",
@@ -14,25 +14,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Copy of Note 1"
+            "pathName": "Score Amp"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Copy of Note 2"
+            "pathName": "Note 1 Amp Score"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Copy of Note 3"
+            "pathName": "Note 2 Amp to Amp"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Copy of Note 4(ends at amp)"
+            "pathName": "Note 4(Amp to Amp)"
           }
         }
       ]

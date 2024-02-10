@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.503304879795431,
-        "y": 5.754010492067813
+        "x": 3.6561869414751653,
+        "y": 7.249007821838753
       },
       "isLocked": false,
       "linkedName": "Speaker"
@@ -32,16 +32,16 @@
     },
     {
       "anchor": {
-        "x": 1.981537315430891,
-        "y": 7.4480920431217275
+        "x": 1.8908688649785739,
+        "y": 7.66609053750849
       },
       "prevControl": {
-        "x": 2.4457976159143415,
-        "y": 7.4480920431217275
+        "x": 2.3551291654620243,
+        "y": 7.66609053750849
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Amp"
     }
   ],
   "rotationTargets": [

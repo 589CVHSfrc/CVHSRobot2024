@@ -5,14 +5,11 @@
 package frc.robot.commands.DRIVE;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ArmSubsystem;
 
 public class Pickup extends Command {
   /** Creates a new Pickup. */
 
-  ArmSubsystem m_arm = new ArmSubsystem();
   public Pickup() {
-    addRequirements(m_arm);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 

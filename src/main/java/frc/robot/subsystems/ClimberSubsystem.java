@@ -32,6 +32,13 @@ public class ClimberSubsystem extends SubsystemBase {
     readySide = new boolean [2];
   }
 //true is right, false is left.
+ public void startClimb(){
+    bstartupTime = false;
+    m_previousTime = m_initialClimbTime = Timer.getFPGATimestamp();
+    readySide[0] = false;
+    readySide[1] = false;
+  }
+
   public boolean[] ClimbingSide(){
 
     double timeSinceStart = Timer.getFPGATimestamp() - m_initialClimbTime;
@@ -39,6 +46,7 @@ public class ClimberSubsystem extends SubsystemBase {
     if ( timeSinceStart >= .25 ){
       bstartupTime = true;
     }
+
     double leftAmps = m_leftMotor.getOutputCurrent();
     double rightAmps = m_rightMotor.getOutputCurrent();
 
@@ -61,12 +69,40 @@ public class ClimberSubsystem extends SubsystemBase {
     return readySide;
   }
 
-  public void startClimb(){
-    bstartupTime = false;
-    m_previousTime = m_initialClimbTime = Timer.getFPGATimestamp();
-    readySide[0] = false;
-    readySide[1] = false;
+  public void leftClimb(boolean continueClimb) {
+    if(continueClimb) {
+      m_leftMotor.set(0);
+    }
+    else {
+      m_leftMotor.set(ClimberConstants.kClimbingSpeed);
+    }
   }
+
+  public void rightClimb(boolean continueClimb) {
+    if(continueClimb) {
+      m_rightMotor.set(0);
+    }
+    else {
+      m_rightMotor.set(ClimberConstants.kClimbingSpeed);
+    }
+  }
+
+  public void finishClimb(boolean [] allSidesReady){
+    if(allSidesReady[0] == true && allSidesReady[1] == true){
+      readySide[0] = false;
+      readySide[1] = false;
+      m_rightMotor.set(ClimberConstants.kClimbingSpeed);
+      m_leftMotor.set(ClimberConstants.kClimbingSpeed);
+    }
+  }
+
+  public void climbingOrder(){
+    ClimbingSide();
+    leftClimb(readySide[0]);
+    rightClimb(readySide[1]);
+    finishClimb(readySide);
+  }
+  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

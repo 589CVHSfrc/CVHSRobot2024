@@ -136,6 +136,7 @@ public class DriveSubsystem extends SubsystemBase {
         },
         pose);
   }
+  
 
   /**
    * Method to drive the robot using joystick info.
@@ -149,7 +150,7 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit) {
     // TEST-------------------------------------------------
-    // if ((xSpeed < 0.1 && xSpeed > -0.1) || (ySpeed < 0.1 && ySpeed > -0.1)) {
+    // if ((xSpeed < 0.1 && xSpeed > -0.1) || (ySpeed < 0.1 && ySpeed < -0.1)||( rot > 0.1 && rot > -.1)) {
 
     // m_frontLeft.setDesiredState(new SwerveModuleState(0,
     // m_frontLeft.getState().angle));
@@ -450,10 +451,12 @@ public class DriveSubsystem extends SubsystemBase {
 
         getGyroYaw());
     SmartDashboard.putNumber("DRIVING Encoder Position", getEncoderMeters());
+    SmartDashboard.putString("CURRENT CHASSIS SPEED", getChassisSpeeds().toString());
+    SmartDashboard.putNumber("CURRENT SPEED", m_frontRight.getCurrentSpeed());
     SmartDashboard.putString("CURRENT POSE", getPose().toString());
     // SmartDashboard.putNumber("CURRENT PITCH", m_gyro.getPitch());
     SmartDashboard.putNumber("CURRENT ROLL", m_gyro.getRoll());
-
+    SmartDashboard.putNumber("Requested Speed", m_controllerXY*DriveConstants.kMaxSpeedMetersPerSecond);
   }
 
   public void configureHolonomicAutoBuilder() {

@@ -4,45 +4,33 @@
 
 package frc.robot.commands.DRIVE;
 
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveSubsystem;
 
-public class DefaultDrive extends Command {
-  /** Creates a new DefaultDrive. */
+public class PIDTest extends Command {
+  /** Creates a new PIDTest. */
   private DriveSubsystem m_drive;
-  private DoubleSupplier m_xspeed;
-  private DoubleSupplier m_yspeed;
-  private DoubleSupplier m_rotspeed;
-  public DefaultDrive(DriveSubsystem drive, DoubleSupplier joyleftx, DoubleSupplier joylefty, DoubleSupplier joyrightx) {
+  public PIDTest(DriveSubsystem drive) {
     m_drive = drive;
-    m_xspeed = joyleftx;
-    m_yspeed = joylefty;
-    m_rotspeed = joyrightx;
     addRequirements(drive);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    // if(m_rotspeed.getAsDouble() < 0.1 && m_rotspeed.getAsDouble() > -0.1){
-    //   m_rotspeed = () -> 0;
-    // }
-    m_drive.drive(m_xspeed.getAsDouble(), m_yspeed.getAsDouble(), m_rotspeed.getAsDouble(), true, true);
-    m_drive.controllerXYUpdate((m_xspeed.getAsDouble()));
+  public void execute(){
+    m_drive.drive(.5, 0, 0, true, true);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+
+  }
 
   // Returns true when the command should end.
   @Override
