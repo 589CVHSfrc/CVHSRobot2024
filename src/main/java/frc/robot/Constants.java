@@ -8,6 +8,10 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 // import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkBase.IdleMode;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -27,9 +31,13 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
   public static final class DriveConstants {
+
+    public static final Pose2d kShootingPoseRED = new Pose2d(14, 2, new Rotation2d(0));
+    public static final Pose2d kShootingPoseBLUE = new Pose2d(14, 2, new Rotation2d(Units.degreesToRadians(180)));
+
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 5;// ---> CHANGE 4.45 hello!
+    public static final double kMaxSpeedMetersPerSecond = 5;// 5;// ---> CHANGE 4.45 hello!
     public static final double kMaxAngularSpeed = 10.37; // --> CHANGE 10.32 hello!
 
     public static final double kDirectionSlewRate = 10; // 1.2 radians per second
@@ -64,12 +72,12 @@ public final class Constants {
     public static final int kFrontRightTurningCanId = 31;
     public static final int kRearRightTurningCanId = 11;
 
-    public static final double kAutoTimeDtSecondsAdjust = 0.02; //?????????????????????
+    public static final double kAutoTimeDtSecondsAdjust = 0.02; // ?????????????????????
 
     // pigeon2 CAN ID
     public static final int kPigeon2CanId = 60;
 
-    public static final boolean kGyroReversed = false;
+    public static final boolean kGyroReversed = true;// false;
   }
 
   public static final class ModuleConstants {
@@ -106,14 +114,14 @@ public final class Constants {
     public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
     public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
 
-    public static final double kDrivingP = 0.04;
+    public static final double kDrivingP = 0.00006;//0.04;
     public static final double kDrivingI = 0; // 0.0001;
     public static final double kDrivingD = 0;
     public static final double kDrivingFF = 1 / kDriveWheelFreeSpeedRps;
     public static final double kDrivingMinOutput = -1;
     public static final double kDrivingMaxOutput = 1;
 
-    public static final double kTurningP = 0.5;
+    public static final double kTurningP = 0.55;//0.5;
     public static final double kTurningI = 0.0;
     public static final double kTurningD = 0.0;
     public static final double kTurningFF = 0;
@@ -153,6 +161,13 @@ public final class Constants {
     public static final double kFreeSpeedRpm = 5676;
   }
 
+
+  public static final class VisualConstants {
+    public static final Transform3d kCameraRelativeToRobot = new Transform3d(Units.inchesToMeters(17.5), 0,
+        Units.inchesToMeters(1), new Rotation3d(0, Units.degreesToRadians(54), 0));// subject to change relative, x and
+                                                                                   // y
+    public static final String kPhotonCameraName = "limelight";
+=======
   public static final class ArmConstants {
 
     public static final double kShootingAngle = 65;
@@ -206,5 +221,7 @@ public final class Constants {
     public static final int kClimberLeftMotorCanID = 54;
     public static final int kClimberRightMotorCanID = 55;
     public static final double kClimbingSpeed = 0.7;
+
   }
+
 }
