@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.MathUtil;
@@ -19,7 +20,9 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DRIVE.DefaultDrive;
 import frc.robot.commands.DRIVE.DrivePose;
+import frc.robot.commands.DRIVE.Pickup;
 import frc.robot.commands.DRIVE.ResetGyro;
+import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.utils.DriveUtils;
 
@@ -43,6 +46,27 @@ public class RobotContainer {
          * The container for the robot. Contains subsystems, OI devices, and commands.
          */
         public RobotContainer() {
+                //ArmSubsystem m_arm = new ArmSubsystem();
+                //Pickup m_pickup = new Pickup();
+                //NamedCommands.registerCommand(" pickup method", );
+                NamedCommands.registerCommand("new pickup", new Pickup());
+
+                 NamedCommands.registerCommand("last pickup", new Pickup());
+                 System.out.print("hi");
+
+
+
+                // Command test = m_autoBuilder.fullAuto(new PathPlannerTrajectory());
+
+                // m_autoChooser.addOption("Score TAXIIII", new ScoreTaxi(m_robotDrive,
+                // m_robotSpin));
+                // m_autoChooser.addOption("Score BALANCE", new ScoreBal(m_robotDrive,
+                // m_robotSpin));
+                // m_autoChooser.addOption("Score ONLY", new ScoreONLY(m_robotDrive,
+                // m_robotSpin));
+                // m_autoChooser.addOption("Score Backup Balance", new
+                // ScoreBalance(m_robotDrive, m_robotSpin));
+                // m_autoChooser.setDefaultOption("NOTHING", new NOTHING());
 
                 SmartDashboard.putData(m_autoChooser);
 

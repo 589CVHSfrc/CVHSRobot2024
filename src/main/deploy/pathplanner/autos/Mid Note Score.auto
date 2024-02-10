@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.4961729368519783,
+      "y": 5.55492627078484
+    },
+    "rotation": 179.2559407971113
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Note 6"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Note 4(ends at speaker)"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Note 5"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "3 Note and Under Autos",
+  "choreoAuto": false
+}

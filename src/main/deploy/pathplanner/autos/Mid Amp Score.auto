@@ -1,0 +1,43 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.3491521419562087,
+      "y": 7.0733452736520315
+    },
+    "rotation": 88.52780566254708
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Score Amp"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Note 4(Amp to Amp)"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Note 1 (Amp to speaker)"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Copy of Note 2"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "4+ Note Autos",
+  "choreoAuto": false
+}
