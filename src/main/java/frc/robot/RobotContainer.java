@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.DRIVE.DefaultDrive;
+import frc.robot.commands.DRIVE.DrivePose;
 import frc.robot.commands.DRIVE.ResetGyro;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.utils.DriveUtils;
@@ -66,17 +67,16 @@ public class RobotContainer {
                 new JoystickButton(m_driverController, 3)
                                 .toggleOnTrue(new RunCommand(
                                                 () -> m_robotDrive.resetOdometry(m_zero)));
-                if (m_robotDrive.getAlliance()) {
-                        new JoystickButton(m_driverController, 2)
-                                        .whileTrue(new DriveUtils(m_robotDrive)
-                                                        .driveToPose(DriveConstants.kShootingPoseRED));
+                // if (m_robotDrive.getAlliance()) {
+                new JoystickButton(m_driverController, 2)
+                                .whileTrue(new DrivePose(m_robotDrive).driveShoot());
 
-                } else {
-                        new JoystickButton(m_driverController, 2)
-                                        .whileTrue(new DriveUtils(m_robotDrive)
-                                                        .driveToPose(DriveConstants.kShootingPoseBLUE));
+                // } else {
+                // new JoystickButton(m_driverController, 2)
+                // .whileTrue(new DriveUtils(m_robotDrive)
+                // .driveToPose(DriveConstants.kShootingPoseBLUE));
 
-                }
+                // }
 
         }
 
