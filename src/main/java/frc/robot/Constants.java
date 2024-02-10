@@ -8,6 +8,10 @@ import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 // import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkBase.IdleMode;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -27,9 +31,13 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
   public static final class DriveConstants {
+
+    public static final Pose2d kShootingPoseRED = new Pose2d(14, 2, new Rotation2d(0));
+    public static final Pose2d kShootingPoseBLUE = new Pose2d(14, 2, new Rotation2d(Units.degreesToRadians(180)));
+
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 4.45;// ---> CHANGE  4.45 hello! 5
+    public static final double kMaxSpeedMetersPerSecond = 4.45;// ---> CHANGE 4.45 hello! 5
     public static final double kMaxAngularSpeed = 10.37; // --> CHANGE 10.32 hello!
 
     public static final double kDirectionSlewRate = 10; // 1.2 radians per second
@@ -52,7 +60,7 @@ public final class Constants {
     public static final double kFrontRightChassisAngularOffset = 0;
     public static final double kBackLeftChassisAngularOffset = Math.PI;
     public static final double kBackRightChassisAngularOffset = Math.PI / 2;
-    
+
     public static final int kFrontLeftDrivingCanId = 40;
     public static final int kRearLeftDrivingCanId = 20;
     public static final int kFrontRightDrivingCanId = 30;
@@ -63,27 +71,12 @@ public final class Constants {
     public static final int kFrontRightTurningCanId = 31;
     public static final int kRearRightTurningCanId = 11;
 
-    // SPARK MAX CAN IDs
-    // public static final int kFrontLeftDrivingCanId = 40;
-    // public static final int kRearLeftDrivingCanId = 20;
-    // public static final int kFrontRightDrivingCanId = 30;
-    // public static final int kRearRightDrivingCanId = 10;
-
-    // public static final int kFrontLeftTurningCanId = 41;
-    // public static final int kRearLeftTurningCanId = 21;
-    // public static final int kFrontRightTurningCanId = 31;
-    // public static final int kRearRightTurningCanId = 11;
-    // //kRearRightTurningCanId = 11
-    // public static final int kLeftArmMotorCanId = 11;
-    // public static final int kRightArmMotorCanId = 12;
-
-
-    public static final double kAutoTimeDtSecondsAdjust = 0.02; //?????????????????????
+    public static final double kAutoTimeDtSecondsAdjust = 0.02; // ?????????????????????
 
     // pigeon2 CAN ID
     public static final int kPigeon2CanId = 60;
 
-    public static final boolean kGyroReversed = false;
+    public static final boolean kGyroReversed = true;// false;
   }
 
   public static final class ModuleConstants {
@@ -101,7 +94,7 @@ public final class Constants {
 
     // Calculations required for driving motor conversion factors and feed forward
     public static final double kDrivingMotorFreeSpeedRps = NeoMotorConstants.kFreeSpeedRpm / 60;
-    public static final double kWheelDiameterMeters = 0.075797771765;//0.0762;
+    public static final double kWheelDiameterMeters = 0.075797771765;// 0.0762;
     public static final double kWheelCircumferenceMeters = kWheelDiameterMeters * Math.PI;
     // 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15
     // teeth on the bevel pinion
@@ -120,14 +113,14 @@ public final class Constants {
     public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
     public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
 
-    public static final double kDrivingP = 0.004;
+    public static final double kDrivingP = 0.00006;// 0.04;
     public static final double kDrivingI = 0; // 0.0001;
     public static final double kDrivingD = 0;
     public static final double kDrivingFF = 1 / kDriveWheelFreeSpeedRps;
     public static final double kDrivingMinOutput = -1;
     public static final double kDrivingMaxOutput = 1;
 
-    public static final double kTurningP = 0.5;
+    public static final double kTurningP = 0.55;// 0.5;
     public static final double kTurningI = 0.0;
     public static final double kTurningD = 0.0;
     public static final double kTurningFF = 0;
@@ -149,7 +142,7 @@ public final class Constants {
   }
 
   public static final class AutoConstants {
-    public static final double kMaxSpeedMetersPerSecond = 4.45;//4.45;// 1
+    public static final double kMaxSpeedMetersPerSecond = 4.45;// 4.45;// 1
     public static final double kMaxAccelerationMetersPerSecondSquared = 5;// 2
     public static final double kMaxAngularSpeedRadiansPerSecond = 10.37;// pi
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI * 5;// pi
@@ -167,58 +160,66 @@ public final class Constants {
     public static final double kFreeSpeedRpm = 5676;
   }
 
-  public static final class ArmConstants {
-    
-    public static final double kShootingAngle = 65;
-    public static final double kArmMaxRPM = 11000;
-    public static final double kArmMinRPM = 0;
-    public static final double kArmMaxAccel = 4000;
-    public static final double kArmAllowedErr = 0.005;
+  public static final class VisualConstants {
+    public static final Transform3d kCameraRelativeToRobot = new Transform3d(Units.inchesToMeters(17.5), 0,
+        Units.inchesToMeters(1), new Rotation3d(0, Units.degreesToRadians(54), 0));// subject to change relative, x and
+                                                                                   // y
+    public static final String kPhotonCameraName = "limelight";
 
-    public static final double kP = 0.1;
-    public static final double kI = 0;
-    public static final double kD = 0;
-    public static final double kFF = 0;
+    public static final class ArmConstants {
 
-    public static final int kAngleMotorCanID = 50;
+      public static final double kShootingAngle = 65;
+      public static final double kArmMaxRPM = 11000;
+      public static final double kArmMinRPM = 0;
+      public static final double kArmMaxAccel = 4000;
+      public static final double kArmAllowedErr = 0.005;
 
-    // Physical Constants
-    public static final double kRaisingSpeed = 1;// Change this
-    public static final double kMaxArmAngle = .34;// Change this
-    public static final int ArmScaleEncoder = 1; // Change this
-    public static final int kArmGearRatio = 1; // Change this
+      public static final double kP = 0.1;
+      public static final double kI = 0;
+      public static final double kD = 0;
+      public static final double kFF = 0;
 
-  
-  }
-   public static final class ShooterConstants {
+      public static final int kAngleMotorCanID = 50;
 
-    public static final double kShooterMaxRPM = 11000;
-    public static final double kShooterMinRPM = 0;
-    public static final double kShooterMaxAccel = 4000;
-    public static final double kShooterAllowedErr = 0.005;
+      // Physical Constants
+      public static final double kRaisingSpeed = 1;// Change this
+      public static final double kMaxArmAngle = .34;// Change this
+      public static final int ArmScaleEncoder = 1; // Change this
+      public static final int kArmGearRatio = 1; // Change this
 
-    public static final double kP = 0.1;
-    public static final double kI = 0;
-    public static final double kD = 0;
-    public static final double kFF = 0;
+    }
 
-    public static final int kShooterMotorTopCanID = 51;
-    public static final int kShooterMotorLowCanID = 52;
-    public static final int kGatewayWheelMotorID = 53;
+    public static final class ShooterConstants {
 
-    // Physical Constants
-    public static final double kShooterSpeed = .35;// Change this
-    public static final double kShooterSpeedSlow = .1;// Change this
-    public static final boolean kShooterDirection = false; // false is spitting it out , true is takinShooter
+      public static final double kShooterMaxRPM = 11000;
+      public static final double kShooterMinRPM = 0;
+      public static final double kShooterMaxAccel = 4000;
+      public static final double kShooterAllowedErr = 0.005;
 
-    
-  
-  }
-  public static final class ClimberConstants{
-    //difference in rate refers to the difference between the left and right amps over change in time;
-    public static final double kDifferenceInRate = 5;
-    public static final int kClimberLeftMotorCanID = 11;
-    public static final int kClimberRightMotorCanID = 12;
-    public static final double kClimbingSpeed = 0.7;
+      public static final double kP = 0.1;
+      public static final double kI = 0;
+      public static final double kD = 0;
+      public static final double kFF = 0;
+
+      public static final int kShooterMotorTopCanID = 51;
+      public static final int kShooterMotorLowCanID = 52;
+      public static final int kGatewayWheelMotorID = 53;
+
+      // Physical Constants
+      public static final double kShooterSpeed = .35;// Change this
+      public static final double kShooterSpeedSlow = .1;// Change this
+      public static final boolean kShooterDirection = false; // false is spitting it out , true is takinShooter
+
+    }
+
+    public static final class ClimberConstants {
+      // difference in rate refers to the difference between the left and right amps
+      // over change in time;
+      public static final double kDifferenceInRate = 5;
+      public static final int kClimberLeftMotorCanID = 11;
+      public static final int kClimberRightMotorCanID = 12;
+      public static final double kClimbingSpeed = 0.7;
+
+    }
   }
 }

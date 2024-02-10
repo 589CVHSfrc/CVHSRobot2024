@@ -7,12 +7,6 @@ package frc.robot;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
-// import com.pathplanner.lib.PathConstraints;
-// import com.pathplanner.lib.PathPlanner;
-// import com.pathplanner.lib.PathPlannerTrajectory;
-// import com.pathplanner.lib.auto.PIDConstants;
-// import com.pathplanner.lib.auto.SwerveAutoBuilder;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.XboxController;
@@ -22,18 +16,18 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-// import frc.robot.Constants.AutoConstants;
-// import frc.robot.Constants.DriveConstants;
-// import frc.robot.Constants.ModuleConstants;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 // import frc.robot.commands.CLIMBER.LowerArms;
 import frc.robot.commands.DRIVE.DefaultDrive;
 import frc.robot.commands.DRIVE.PIDTest;
+import frc.robot.commands.DRIVE.DrivePose;
 import frc.robot.commands.DRIVE.Pickup;
 import frc.robot.commands.DRIVE.ResetGyro;
 // import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.utils.DriveUtils;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -79,9 +73,8 @@ public class RobotContainer {
 
                 SmartDashboard.putData(m_autoChooser);
 
-                // Configure the button bindings
                 configureButtonBindings();
-                m_robotDrive.configureHolonomicAutoBuilder();
+                // m_robotDrive.configureHolonomicAutoBuilder();
                 m_autoChooser.setDefaultOption("Donuts", new PathPlannerAuto("Donuts"));
                 m_autoChooser.addOption("POS NEG TEST AUTO", new PathPlannerAuto("PosNegTestAuto"));
                 m_autoChooser.addOption("5 Note Auto V1", new PathPlannerAuto("5 Note Auto V1"));
@@ -97,25 +90,27 @@ public class RobotContainer {
         }
 
         private void configureButtonBindings() {
-
+                // whiletrue is when held toggle is toggle
                 new JoystickButton(m_driverController, 4)
                                 .toggleOnTrue(new ResetGyro(m_robotDrive));
-                new JoystickButton(m_driverController, 2)
-                                .whileTrue(new RunCommand(
-                                                () -> m_robotDrive.setX(),
-                                                m_robotDrive));
                 new JoystickButton(m_driverController, 3)
-                                .whileTrue(new PIDTest(m_robotDrive));
-                // new JoystickButton(m_driverController, 3)
-                // .toggleOnTrue(new LowerArms(m_Climber));
+                                .toggleOnTrue(new RunCommand(
+                                                () -> m_robotDrive.resetOdometry(m_zero)));
+                // if (m_robotDrive.getAlliance()) {
+                new JoystickButton(m_driverController, 2)
+                                .whileTrue(new DrivePose(m_robotDrive).driveShoot());
+
+                // } else {
+                // new JoystickButton(m_driverController, 2)
+                // .whileTrue(new DriveUtils(m_robotDrive)
+                // .driveToPose(DriveConstants.kShootingPoseBLUE));
+
+                // }
 
         }
 
         public Command getAutonomousCommand() {
 
-                // m_robotDrive.configureHolonomicAutoBuilder();
-                // return m_autoChooser.getSelected();
-                // return null;
                 try {
 
                         Pose2d startingpose = PathPlannerAuto
