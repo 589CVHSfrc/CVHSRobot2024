@@ -165,7 +165,7 @@ public final class Constants {
         Units.inchesToMeters(1), new Rotation3d(0, Units.degreesToRadians(54), 0));// subject to change relative, x and
                                                                                    // y
     public static final String kPhotonCameraName = "limelight";
-
+  }
     public static final class ArmConstants {
 
       public static final double kShootingAngle = 65;
@@ -222,4 +222,5 @@ public final class Constants {
 
     }
   }
-}
+
+

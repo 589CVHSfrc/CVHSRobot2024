@@ -14,97 +14,159 @@ import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.ShooterConstants;
 
 public class ClimberSubsystem extends SubsystemBase {
-  private CANSparkMax m_leftMotor, m_rightMotor;
-  private RelativeEncoder m_leftEncoder, m_rightEncoder;
-  private double m_rightMotorPreviousAmps, m_leftMotorPreviousAmps;
-  private double m_initialClimbTime;
-  private boolean[] readySide;
-  private boolean bstartupTime;
-  private double m_previousTime;
+  // private CANSparkMax m_leftMotor, m_rightMotor;
+  // private RelativeEncoder m_leftEncoder, m_rightEncoder;
+  // private Climber  m_rightClimber;
+  // private Climber m_leftClimber;
+  // private double m_rightMotorPreviousAmps, m_leftMotorPreviousAmps;
+  // private double m_initialClimbTime;
+  // private boolean[] readySide;
+  // private boolean bstartupTime;
+  // private double m_previousTime;
 
-  public ClimberSubsystem() {
-   m_leftMotor = new CANSparkMax(ClimberConstants.kClimberLeftMotorCanID, MotorType.kBrushless);
-    m_rightMotor = new CANSparkMax(ClimberConstants.kClimberRightMotorCanID, MotorType.kBrushless);
-    m_rightEncoder = m_rightMotor.getEncoder();
-    m_leftEncoder  = m_leftMotor.getEncoder();
-    m_rightMotorPreviousAmps = 0;
-    m_leftMotorPreviousAmps = 0;
-    readySide = new boolean [2];
-  }
+  // public ClimberSubsystem() {
+  //   m_leftClimber = new Climber(ClimberConstants.kClimberLeftMotorCanID);
+  //   m_rightClimber = new Climber(ClimberConstants.kClimberRightMotorCanID);
+  //   m_rightMotorPreviousAmps = 0;
+  //   m_leftMotorPreviousAmps = 0;
+  //   readySide = new boolean [2];
+  // }
+
 //true is right, false is left.
- public void startClimb(){
-    bstartupTime = false;
-    m_previousTime = m_initialClimbTime = Timer.getFPGATimestamp();
-    readySide[0] = false;
-    readySide[1] = false;
-  }
+//  public void startClimb(){
+//     bstartupTime = false;
+//     m_previousTime = m_initialClimbTime = Timer.getFPGATimestamp();
+//     readySide[0] = false;
+//     readySide[1] = false;
+//   }
 
-  public boolean[] ClimbingSide(){
+  // public boolean[] ClimbingSide(){
 
-    double timeSinceStart = Timer.getFPGATimestamp() - m_initialClimbTime;
-    double deltaTime = Timer.getFPGATimestamp() - m_previousTime;
-    if ( timeSinceStart >= .25 ){
-      bstartupTime = true;
-    }
+  //   double timeSinceStart = Timer.getFPGATimestamp() - m_initialClimbTime;
+  //   double deltaTime = Timer.getFPGATimestamp() - m_previousTime;
+  //   if ( timeSinceStart >= .25 ){
+  //     bstartupTime = true;
+  //   }
 
-    double leftAmps = m_leftMotor.getOutputCurrent();
-    double rightAmps = m_rightMotor.getOutputCurrent();
+  //   double leftAmps = m_leftClimber.getOutputCurrent();
+  //   double rightAmps = m_rightClimber.getOutputCurrent();
 
-    double leftDifference = (leftAmps - m_leftMotorPreviousAmps)*deltaTime;
-    double rightDifference = (rightAmps - m_rightMotorPreviousAmps)*deltaTime;
+  //   double leftDifference = (leftAmps - m_leftMotorPreviousAmps)*deltaTime;
+  //   double rightDifference = (rightAmps - m_rightMotorPreviousAmps)*deltaTime;
 
-    m_rightMotorPreviousAmps = rightAmps;
-    m_leftMotorPreviousAmps = leftAmps;
+  //   m_rightMotorPreviousAmps = rightAmps;
+  //   m_leftMotorPreviousAmps = leftAmps;
 
-    if(bstartupTime){
-      if(leftDifference>= ClimberConstants.kDifferenceInRate){
-        readySide[0] = true;
-      }
+  //   if(bstartupTime){
+  //     if(leftDifference>= ClimberConstants.kDifferenceInRate){
+  //       readySide[0] = true;
+  //     }
 
-      if(rightDifference>= ClimberConstants.kDifferenceInRate){
-        readySide[1] = true;
-      }
-    }
-    m_previousTime = Timer.getFPGATimestamp();
-    return readySide;
-  }
+  //     if(rightDifference>= ClimberConstants.kDifferenceInRate){
+  //       readySide[1] = true;
+  //     }
+  //   }
+  //   m_previousTime = Timer.getFPGATimestamp();
+  //   return readySide;
+  // }
 
-  public void leftClimb(boolean continueClimb) {
-    if(continueClimb) {
-      m_leftMotor.set(0);
-    }
-    else {
-      m_leftMotor.set(ClimberConstants.kClimbingSpeed);
-    }
-  }
+  // public void leftClimb(boolean continueClimb) {
+  //   if(continueClimb) {
+  //     m_leftMotor.set(0);
+  //   }
+  //   else {
+  //     m_leftMotor.set(ClimberConstants.kClimbingSpeed);
+  //   }
+  // }
 
-  public void rightClimb(boolean continueClimb) {
-    if(continueClimb) {
-      m_rightMotor.set(0);
-    }
-    else {
-      m_rightMotor.set(ClimberConstants.kClimbingSpeed);
-    }
-  }
+  // public void rightClimb(boolean continueClimb) {
+  //   if(continueClimb) {
+  //     m_rightMotor.set(0);
+  //   }
+  //   else {
+  //     m_rightMotor.set(ClimberConstants.kClimbingSpeed);
+  //   }
+  // }
 
-  public void finishClimb(boolean [] allSidesReady){
-    if(allSidesReady[0] == true && allSidesReady[1] == true){
-      readySide[0] = false;
-      readySide[1] = false;
-      m_rightMotor.set(ClimberConstants.kClimbingSpeed);
-      m_leftMotor.set(ClimberConstants.kClimbingSpeed);
-    }
-  }
+  // public void finishClimb(boolean [] allSidesReady){
+  //   if(allSidesReady[0] == true && allSidesReady[1] == true){
+  //     readySide[0] = false;
+  //     readySide[1] = false;
+  //     m_rightMotor.set(ClimberConstants.kClimbingSpeed);
+  //     m_leftMotor.set(ClimberConstants.kClimbingSpeed);
+  //   }
+  // }
 
-  public void climbingOrder(){
-    ClimbingSide();
-    leftClimb(readySide[0]);
-    rightClimb(readySide[1]);
-    finishClimb(readySide);
-  }
+  // public void climbingOrder(){
+  //   ClimbingSide();
+  //   // climb(readySide[0]);
+  //   // climb(readySide[1]);
+  //   finishClimb(readySide);
+  // }
   
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+  }
+
+  public class Climber{
+    CANSparkMax m_ArmMotor;
+    RelativeEncoder m_encoder;
+    private double m_previousAmps;
+    private double m_previousTime;
+    private double m_deltaTime;
+    public boolean m_ready;
+    private double m_timeSinceStart;
+    private double m_initialClimbTime;
+    private boolean bstartupTime;
+
+
+    public Climber(int CanID){
+      m_ArmMotor = new CANSparkMax(CanID, MotorType.kBrushless);
+      m_encoder = m_ArmMotor.getEncoder();
+      m_previousAmps = 0;
+      m_previousTime = m_initialClimbTime = Timer.getFPGATimestamp();
+      m_deltaTime = Timer.getFPGATimestamp() - m_previousTime;
+      m_ready = false;
+      m_timeSinceStart = 0;
+      bstartupTime = false;
+    }
+
+    public void hitChain(boolean hasHit){
+        if(hasHit){
+          m_ArmMotor.set(0);
+        }
+        else{
+          m_ArmMotor.set(ClimberConstants.kClimbingSpeed);
+        }
+    }
+
+    public double getDifference(double previousAmps){
+      double difference = (getAmps()-previousAmps)*m_deltaTime;
+      m_previousAmps = getAmps();
+      return difference;
+    }
+    
+    public void startClimb(){
+    bstartupTime = false;
+    m_previousTime = m_initialClimbTime = Timer.getFPGATimestamp();
+    m_ready = false;
+    }
+
+    public void checkHit(){
+      m_timeSinceStart = Timer.getFPGATimestamp() - m_initialClimbTime;
+      if ( m_timeSinceStart >= .25 ){
+       bstartupTime = true;
+      }
+      if(bstartupTime){
+        if(getDifference(m_previousAmps)>ClimberConstants.kDifferenceInRate){
+          m_ready = true;
+        }
+      }
+    }
+
+    public double getAmps(){
+      return m_ArmMotor.getOutputCurrent();
+    }
   }
 }
