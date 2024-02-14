@@ -5,20 +5,29 @@
 package frc.robot.commands.CLIMBER;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.ClimberSubsystem;
 
 public class RaiseArms extends Command {
   /** Creates a new RaiseArms. */
-  public RaiseArms() {
+  ClimberSubsystem m_Climber;
+  public RaiseArms(ClimberSubsystem armsRaise) {
     // Use addRequirements() here to declare subsystem dependencies.
+    m_Climber = armsRaise;
+    addRequirements(m_Climber);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_Climber.release();
+    
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    m_Climber.raiseArms();
+  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -27,6 +36,6 @@ public class RaiseArms extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return m_Climber.getSwitchStatus();
   }
 }

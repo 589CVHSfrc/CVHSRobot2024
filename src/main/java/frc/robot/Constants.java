@@ -218,8 +218,12 @@ public final class Constants {
       public static final double kDifferenceInRate = 5;
       public static final int kClimberLeftMotorCanID = 11;
       public static final int kClimberRightMotorCanID = 12;
-      public static final double kClimbingSpeed = 0.7;
-
+      public static final double kClimbingSpeed = - 0.7;
+      public static final double kArmRaisingSpeed = 0.7;
+      public static final int kClimberLeftReverse = 0;
+      public static final int kClimberRightReverse = 1;
+      public static final int kClimberLeftForward = 2;
+      public static final int kClimberRightForward = 3;
     }
   }
 
