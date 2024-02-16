@@ -9,24 +9,23 @@ import frc.robot.subsystems.ClimberSubsystem;
 
 public class RaiseArms extends Command {
   /** Creates a new RaiseArms. */
-  ClimberSubsystem m_Climber;
+  ClimberSubsystem m_climberSubsystem;
   public RaiseArms(ClimberSubsystem armsRaise) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_Climber = armsRaise;
-    addRequirements(m_Climber);
+    m_climberSubsystem = armsRaise;
+    addRequirements(m_climberSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_Climber.release();
-    
+    m_climberSubsystem.release();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Climber.raiseArms();
+    m_climberSubsystem.raiseArms();
   }
 
   // Called once the command ends or is interrupted.
@@ -36,6 +35,6 @@ public class RaiseArms extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_Climber.getSwitchStatus();
+    return m_climberSubsystem.getSwitchStatus();
   }
 }

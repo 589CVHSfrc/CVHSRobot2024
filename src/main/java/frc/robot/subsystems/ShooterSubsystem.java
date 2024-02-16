@@ -24,16 +24,23 @@ public class ShooterSubsystem extends SubsystemBase {
     m_lowMotor = new CANSparkMax(ShooterConstants.kShooterMotorLowCanID, MotorType.kBrushless);
     m_topEncoder = m_topMotor.getEncoder();
     m_lowEncoder = m_lowMotor.getEncoder();
-    m_lowMotor.follow(m_topMotor);
-    m_lowMotor.setInverted(true);
+    m_lowMotor.follow(m_lowMotor, true);
+    // m_lowMotor.follow(m_topMotor);
+    // m_lowMotor.setInverted(true);
   }
 
   public void shoot(boolean direction) {
-    if (direction) {
-      m_topMotor.set(Constants.ShooterConstants.kShooterSpeed);
+    if(direction) {
+      m_topMotor.set(ShooterConstants.kShooterSpeed);
+    }
+    // else {
+    //   m_topMotor.set(-Constants.ShooterConstants.kShooterSpeed);
+    // }
+  }
 
-    } else {
-      m_topMotor.set(-Constants.ShooterConstants.kShooterSpeed);
+  public void intake(boolean direction){
+    if(!direction){
+      m_topMotor.set(-ShooterConstants.kShooterSpeed);
     }
   }
 

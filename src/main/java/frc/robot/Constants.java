@@ -168,7 +168,9 @@ public final class Constants {
   }
     public static final class ArmConstants {
 
-      public static final double kShootingAngle = 65;
+      public static final double kShootingAngleSpeaker = 65; //change this
+      public static final double kShootingAngleAmp = 30; //change this
+      public static final double kRestingAngle = 10; //change this
       public static final double kArmMaxRPM = 11000;
       public static final double kArmMinRPM = 0;
       public static final double kArmMaxAccel = 4000;
@@ -183,10 +185,10 @@ public final class Constants {
 
       // Physical Constants
       public static final double kRaisingSpeed = 1;// Change this
+      public static final double kMinAngle = .01; //Change this
       public static final double kMaxArmAngle = .34;// Change this
       public static final int ArmScaleEncoder = 1; // Change this
       public static final int kArmGearRatio = 1; // Change this
-
     }
 
     public static final class ShooterConstants {
@@ -195,6 +197,7 @@ public final class Constants {
       public static final double kShooterMinRPM = 0;
       public static final double kShooterMaxAccel = 4000;
       public static final double kShooterAllowedErr = 0.005;
+      public static final double kShooterTime = 0.5;
 
       public static final double kP = 0.1;
       public static final double kI = 0;

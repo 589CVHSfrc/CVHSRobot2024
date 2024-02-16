@@ -9,6 +9,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -24,6 +25,7 @@ import frc.robot.commands.DRIVE.PIDTest;
 import frc.robot.commands.DRIVE.DrivePose;
 import frc.robot.commands.DRIVE.Pickup;
 import frc.robot.commands.DRIVE.ResetGyro;
+import frc.robot.subsystems.ArmSubsystem;
 // import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -38,6 +40,7 @@ import frc.utils.DriveUtils;
 public class RobotContainer {
         // The robot's subsystems
         private final static DriveSubsystem m_robotDrive = new DriveSubsystem();
+        private final static ArmSubsystem m_robotArm = new ArmSubsystem();
         // private final static ClimberSubsystem m_Climber = new ClimberSubsystem();
         // The driver's controller
         XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -80,6 +83,7 @@ public class RobotContainer {
                 m_autoChooser.addOption("5 Note Auto V1", new PathPlannerAuto("5 Note Auto V1"));
                 m_autoChooser.addOption("5 Note Auto V2", new PathPlannerAuto("5 Note Auto V2"));
 
+                m_robotArm.setDefaultCommand(getAutonomousCommand());
                 m_robotDrive.setDefaultCommand(new DefaultDrive(m_robotDrive,
                                 () -> -MathUtil.applyDeadband(m_driverController.getLeftY(),
                                                 OIConstants.kDriveDeadband),
@@ -100,6 +104,8 @@ public class RobotContainer {
                 new JoystickButton(m_driverController, 2)
                                 .whileTrue(new DrivePose(m_robotDrive).driveShoot());
 
+                new JoystickButton(m_driverController, 4)
+                                .whileTrue(new DrivePose(m_robotDrive).Shoot()); //this is me yapping, probably super inaccurate.
                 // } else {
                 // new JoystickButton(m_driverController, 2)
                 // .whileTrue(new DriveUtils(m_robotDrive)

@@ -9,23 +9,23 @@ import frc.robot.subsystems.ClimberSubsystem;
 
 public class LowerArms extends Command {
   /** Creates a new LowerArms. */
-  ClimberSubsystem m_Climb;
+  ClimberSubsystem m_climberSubsystem;
   public LowerArms(ClimberSubsystem Climb) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_Climb = Climb;
-    addRequirements(m_Climb);
+    m_climberSubsystem = Climb;
+    addRequirements(m_climberSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_Climb.startClimb();
+    m_climberSubsystem.startClimb();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Climb.climbingOrder();
+    m_climberSubsystem.climbingOrder();
   }
 
   // Called once the command ends or is interrupted.

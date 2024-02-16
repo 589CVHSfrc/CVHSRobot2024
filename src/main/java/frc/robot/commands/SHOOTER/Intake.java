@@ -7,16 +7,15 @@ package frc.robot.commands.SHOOTER;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ShooterConstants;
-import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
-public class Shoot extends Command {
-  /** Creates a new Shoot. */
+public class Intake extends Command {
+  /** Creates a new Intake. */
   ShooterSubsystem m_shooter = new ShooterSubsystem();
   Timer m_timer = new Timer();
-  public Shoot(ShooterSubsystem shooter){
-    m_shooter = shooter;
-    addRequirements();
+  public Intake(ShooterSubsystem shoot) {
+    m_shooter = shoot;
+    addRequirements(m_shooter);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -29,17 +28,19 @@ public class Shoot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-  m_shooter.shoot(ShooterConstants.kShooterDirection); //change the boolean value later.
+    m_shooter.intake(ShooterConstants.kShooterDirection);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_shooter.stopShoot();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(m_timer.hasElapsed(ShooterConstants.kShooterTime)){
+    if(m_timer.hasElapsed(ShooterConstants.kShooterTime)){ //change this seconds value
       return true;
     }
     return false;
