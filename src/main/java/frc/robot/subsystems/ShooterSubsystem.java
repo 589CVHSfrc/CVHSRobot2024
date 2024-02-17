@@ -16,6 +16,8 @@ public class ShooterSubsystem extends SubsystemBase {
   /** Creates a new ShooterSubsystem. */
   private CANSparkMax m_topMotor;
   private CANSparkMax m_lowMotor;
+  private CANSparkMax m_lowMotorGateway; // this refers to the gateway motor
+  private CANSparkMax m_topMotorGateway; // the other gateway motor
   private RelativeEncoder m_topEncoder;
   private RelativeEncoder m_lowEncoder;
 
@@ -29,24 +31,32 @@ public class ShooterSubsystem extends SubsystemBase {
     // m_lowMotor.setInverted(true);
   }
 
-  public void shoot(boolean direction) {
-    if(direction) {
-      m_topMotor.set(ShooterConstants.kShooterSpeed);
-    }
-    // else {
-    //   m_topMotor.set(-Constants.ShooterConstants.kShooterSpeed);
-    // }
+  public void shoot() {
+    m_topMotor.set(ShooterConstants.kShooterSpeed);
   }
 
-  public void intake(boolean direction){
-    if(!direction){
-      m_topMotor.set(-ShooterConstants.kShooterSpeed);
-    }
+  public void intake() {
+    m_topMotor.set(-ShooterConstants.kShooterSpeed);
   }
 
   public void stopShoot() {
     m_topMotor.set(0);
     m_lowMotor.set(0);
+  }
+
+  // this is to be called in execute in a command.
+  // we are equating the current rpm to the constant rpm as a placeholder, should
+  // not be max.
+
+  public boolean isRampedUp() {
+    return m_topEncoder.getVelocity() > ShooterConstants.kShooterMaxVelocity;
+    // Please Collin come back and check this - we are just yapping.
+  }
+
+  // This method actually ramps it up once ready to shoot.
+  public void spinGateway() {
+    m_topMotorGateway.set(ShooterConstants.kGatewayMotorSpeed);
+    m_lowMotorGateway.set(ShooterConstants.kGatewayMotorSpeed);
   }
 
   @Override
