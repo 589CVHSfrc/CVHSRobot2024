@@ -7,7 +7,6 @@ package frc.robot;
 import java.io.IOException;
 import java.util.Optional;
 
-import javax.lang.model.util.Elements.Origin;
 
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
@@ -19,8 +18,6 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.net.PortForwarder;
 import frc.robot.Constants.VisualConstants;
 import frc.robot.subsystems.DriveSubsystem;
@@ -35,8 +32,6 @@ public class LimeLight {
     private PhotonPoseEstimator m_estimator;
 
     private LimeLight() {
-        // m_tableName = "limelight";
-        // m_table = NetworkTableInstance.getDefault().getTable(m_tableName);
         try {
             m_aprilTagLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile);
 
@@ -64,13 +59,12 @@ public class LimeLight {
 
     public void estimatePose(SwerveDrivePoseEstimator estimator, DriveSubsystem drive) {
         Optional<EstimatedRobotPose> OPestimation = m_estimator.update();
-        // System.out.println(OPestimation.isPresent());
+
         if (OPestimation.isPresent()) {
             EstimatedRobotPose estimation = OPestimation.get();
             Pose2d estimatedPose2d = estimation.estimatedPose.toPose2d();
-            // System.out.print(estimation.estimatedPose);
             estimator.addVisionMeasurement(estimatedPose2d, estimation.timestampSeconds);
-            estimator.resetPosition(estimatedPose2d.getRotation(), 
+            estimator.resetPosition(estimatedPose2d.getRotation(),
                     drive.getSwerveModulePositions(),
                     estimatedPose2d);
         }

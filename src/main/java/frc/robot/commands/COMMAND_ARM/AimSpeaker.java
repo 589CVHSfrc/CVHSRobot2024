@@ -2,19 +2,19 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.ARMS;
+package frc.robot.commands.COMMAND_ARM;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.subsystems.ArmSubsystem;
 
-public class ShootAimAmp extends Command {
-  /** Creates a new ShootAimAmp. */
-  ArmSubsystem m_armSubsystem = new ArmSubsystem();
-  public ShootAimAmp(ArmSubsystem armAimer) {
+public class AimSpeaker extends Command {
+  /** Creates a new shootAim. */
+  ArmSubsystem m_arm = new ArmSubsystem();
+  public AimSpeaker(ArmSubsystem arm) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_armSubsystem = armAimer;
-    addRequirements(m_armSubsystem);
+    m_arm = arm;
+    addRequirements(m_arm);
   }
 
   // Called when the command is initially scheduled.
@@ -24,7 +24,7 @@ public class ShootAimAmp extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_armSubsystem.moveArm(ArmConstants.kShootingAngleAmp);
+    m_arm.moveArm(ArmConstants.kShootingAngleSpeaker);
   }
 
   // Called once the command ends or is interrupted.
@@ -34,6 +34,6 @@ public class ShootAimAmp extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_armSubsystem.AngleReached();
+    return m_arm.AngleReached();
   }
 }

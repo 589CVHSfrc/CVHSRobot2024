@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.DRIVE;
+package frc.robot.commands.COMMAND_DRIVE;
 
 import java.util.function.DoubleSupplier;
 
@@ -33,18 +33,13 @@ public class DefaultDrive extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // if(m_rotspeed.getAsDouble() < 0.1 && m_rotspeed.getAsDouble() > -0.1){
-    //   m_rotspeed = () -> 0;
-    // }
     m_drive.drive(m_xspeed.getAsDouble(), m_yspeed.getAsDouble(), m_rotspeed.getAsDouble(), true, true);
     m_drive.controllerXYUpdate((m_xspeed.getAsDouble()));
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {}
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;

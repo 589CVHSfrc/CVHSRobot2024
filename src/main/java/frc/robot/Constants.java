@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 // import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkBase.IdleMode;
 
@@ -32,8 +31,11 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
   public static final class DriveConstants {
 
-    public static final Pose2d kShootingPoseRED = new Pose2d(14, 2, new Rotation2d(0));
-    public static final Pose2d kShootingPoseBLUE = new Pose2d(14, 2, new Rotation2d(Units.degreesToRadians(180)));
+    public static final Pose2d kShootingPoseSpeakerRED = new Pose2d(14, 2, new Rotation2d(0));
+    public static final Pose2d kShootingPoseSpeakerBLUE = new Pose2d(14, 2, new Rotation2d(Units.degreesToRadians(180)));
+
+    public static final Pose2d kShootingPoseAmpRED = new Pose2d(14, 2, new Rotation2d(0));
+    public static final Pose2d kShootingPoseAmpBLUE = new Pose2d(14, 2, new Rotation2d(0));
 
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
@@ -193,11 +195,13 @@ public final class Constants {
 
     public static final class ShooterConstants {
 
+      public static final double kGatewayMotorSpeed = 1; //Change this
       public static final double kShooterMaxRPM = 11000;
       public static final double kShooterMinRPM = 0;
       public static final double kShooterMaxAccel = 4000;
       public static final double kShooterAllowedErr = 0.005;
       public static final double kShooterTime = 0.5;
+      public static final double kShooterMaxVelocity = 50; //Change this
 
       public static final double kP = 0.1;
       public static final double kI = 0;
@@ -206,7 +210,9 @@ public final class Constants {
 
       public static final int kShooterMotorTopCanID = 51;
       public static final int kShooterMotorLowCanID = 52;
-      public static final int kGatewayWheelMotorID = 53;
+
+      public static final int kTopGatewayWheelMotorID = 53;
+      public static final int kLowGatewayWheelMotorID = 54;
 
       // Physical Constants
       public static final double kShooterSpeed = .35;// Change this
@@ -218,14 +224,14 @@ public final class Constants {
     public static final class ClimberConstants {
       // difference in rate refers to the difference between the left and right amps
       // over change in time;
-      public static final double kDifferenceInRate = 5;
+      public static final double kDifferenceInRate = 2;
       public static final int kClimberLeftMotorCanID = 11;
       public static final int kClimberRightMotorCanID = 12;
-      public static final double kClimbingSpeed = - 0.7;
-      public static final double kArmRaisingSpeed = 0.7;
+      public static final double kClimbingSpeed = - 0.2;// Change back to 0.7
+      public static final double kArmRaisingSpeed = 0.2;// Change back tp 0.7
       public static final int kClimberLeftReverse = 0;
-      public static final int kClimberRightReverse = 1;
-      public static final int kClimberLeftForward = 2;
+      public static final int kClimberRightReverse = 2;
+      public static final int kClimberLeftForward = 1;
       public static final int kClimberRightForward = 3;
     }
   }

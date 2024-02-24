@@ -10,6 +10,8 @@ import com.revrobotics.SparkLimitSwitch;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
 
@@ -23,11 +25,18 @@ public class ArmSubsystem extends SubsystemBase {
   //top/bottom depends on hardware, can change later.
   private SparkLimitSwitch m_limitSwitchTop;
   private SparkLimitSwitch m_limitSwitchBottom; 
+  private DoubleSolenoid m_DoubleSolenoid;
 
   public ArmSubsystem() {
     m_angleMotor = new CANSparkMax(ArmConstants.kAngleMotorCanID, MotorType.kBrushless);
+
+    m_limitSwitchTop = m_angleMotor.getForwardLimitSwitch(com.revrobotics.SparkLimitSwitch.Type.kNormallyOpen);
+    m_limitSwitchBottom = m_angleMotor.getReverseLimitSwitch(com.revrobotics.SparkLimitSwitch.Type.kNormallyOpen);
+
     m_armEncoder = m_angleMotor.getAbsoluteEncoder(Type.kDutyCycle);
+
     m_desiredAngle = 0;
+
     m_bufferZoneTop = ArmConstants.kMaxArmAngle;
     m_bufferZoneBottom = ArmConstants.kMinAngle;
   }
@@ -39,6 +48,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   public void moveArm(double desiredAngle){
       m_desiredAngle = desiredAngle;
+
       if((m_desiredAngle > m_bufferZoneTop && m_desiredAngle < m_bufferZoneBottom) || 
           (m_limitSwitchBottom.isPressed() || m_limitSwitchTop.isPressed())){
          m_angleMotor.set(0);
@@ -59,6 +69,6 @@ public class ArmSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    SmartDashboard.putBoolean("Angle Reached?", AngleReached());
   }
 }
