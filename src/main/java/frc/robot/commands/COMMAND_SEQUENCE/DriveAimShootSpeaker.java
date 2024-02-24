@@ -15,10 +15,10 @@ import frc.robot.subsystems.ShooterSubsystem;
 
 public class DriveAimShootSpeaker extends SequentialCommandGroup {
 
-  public DriveAimShootSpeaker(DriveSubsystem robotDrive, ArmSubsystem arm, ShooterSubsystem shooter) {
+  public DriveAimShootSpeaker(DriveSubsystem drive, ArmSubsystem arm, ShooterSubsystem shooter) {
     addCommands(
 
-        new DrivePose(robotDrive).driveShootSpeaker()
+        new DrivePose(drive).driveShootSpeaker()
         .alongWith(
           new AimSpeaker(arm))
         .alongWith(

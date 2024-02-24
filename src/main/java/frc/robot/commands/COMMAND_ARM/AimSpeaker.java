@@ -11,6 +11,7 @@ import frc.robot.subsystems.ArmSubsystem;
 public class AimSpeaker extends Command {
   /** Creates a new shootAim. */
   ArmSubsystem m_arm = new ArmSubsystem();
+
   public AimSpeaker(ArmSubsystem arm) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_arm = arm;
@@ -19,7 +20,8 @@ public class AimSpeaker extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -29,7 +31,9 @@ public class AimSpeaker extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_arm.stopArm();
+  }
 
   // Returns true when the command should end.
   @Override

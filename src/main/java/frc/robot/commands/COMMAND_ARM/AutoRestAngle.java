@@ -11,6 +11,7 @@ import frc.robot.subsystems.ArmSubsystem;
 public class AutoRestAngle extends Command {
   /** Creates a new autoRestAngle. */
   ArmSubsystem m_arm = new ArmSubsystem();
+
   public AutoRestAngle(ArmSubsystem arm) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_arm = arm;
@@ -19,7 +20,8 @@ public class AutoRestAngle extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -29,7 +31,11 @@ public class AutoRestAngle extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_arm.stopArm();
+
+  }
+
   @Override
   public boolean isFinished() {
     // return false;

@@ -4,12 +4,13 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.SparkPIDController.ArbFFUnits;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.SparkPIDController.ArbFFUnits;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
@@ -17,7 +18,7 @@ import frc.robot.Constants.ShooterConstants;
 public class ShooterSubsystem extends SubsystemBase {
   private CANSparkMax m_topMotor;
   private CANSparkMax m_lowMotor;
-  private CANSparkMax m_gatewayMotor; 
+  private CANSparkMax m_gatewayMotor;
 
   private SparkPIDController m_topMotorPidController;
   private SparkPIDController m_lowMotorPidController;
@@ -44,12 +45,26 @@ public class ShooterSubsystem extends SubsystemBase {
     // m_lowMotor.setInverted(true);
   }
 
+  public void shootSmartVelocity(double velocity) {
+    m_topMotorPidController.setReference(velocity, ControlType.kSmartVelocity, 0, lookupFF(velocity),
+        ArbFFUnits.kPercentOut);
+    m_lowMotorPidController.setReference(velocity, ControlType.kSmartVelocity, 0, lookupFF(velocity),
+        ArbFFUnits.kPercentOut);
+  }
+
+  public void shootSmartVelocity(double velocitytop, double velocitylow) {
+    m_topMotorPidController.setReference(velocitytop, ControlType.kSmartVelocity, 0, lookupFF(velocitytop),
+        ArbFFUnits.kPercentOut);
+    m_lowMotorPidController.setReference(velocitylow, ControlType.kSmartVelocity, 0, lookupFF(velocitylow),
+        ArbFFUnits.kPercentOut);
+  }
+
   public void shoot() {
-    m_topMotor.set(ShooterConstants.kShooterSpeed);
+    shootSmartVelocity(ShooterConstants.kShooterSpeed);
   }
 
   public void intake() {
-    m_topMotor.set(-ShooterConstants.kShooterSpeed);
+    shootSmartVelocity(-ShooterConstants.kIntakeSpeed);
   }
 
   public void stopShoot() {
@@ -73,6 +88,10 @@ public class ShooterSubsystem extends SubsystemBase {
   public double lookupFF(double speed) {
     double FFPercent = Math.min(8.48 * Math.pow(10, -5) * (speed) + .0143, 1.0);
     return FFPercent;
+  }
+  
+  public int lookupSlot(double speed) {
+    return 0;
   }
 
   public void shootSmartDashboard() { // change name from shootsmartdashboard

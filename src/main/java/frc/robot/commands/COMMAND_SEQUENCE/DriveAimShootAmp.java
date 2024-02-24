@@ -15,10 +15,10 @@ import frc.robot.subsystems.ShooterSubsystem;
 
 public class DriveAimShootAmp extends SequentialCommandGroup {
 
-  public DriveAimShootAmp(DriveSubsystem robotDrive, ArmSubsystem arm, ShooterSubsystem shooter) {
+  public DriveAimShootAmp(DriveSubsystem drive, ArmSubsystem arm, ShooterSubsystem shooter) {
     addCommands(
 
-        new DrivePose(robotDrive).driveShootAmp()
+        new DrivePose(drive).driveShootAmp()
         .alongWith(
           new AimAmp(arm))
         .alongWith(

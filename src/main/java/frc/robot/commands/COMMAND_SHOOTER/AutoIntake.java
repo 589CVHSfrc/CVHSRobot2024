@@ -13,8 +13,8 @@ public class AutoIntake extends Command {
   /** Creates a new Intake. */
   ShooterSubsystem m_shooter = new ShooterSubsystem();
   Timer m_timer = new Timer();
-  public AutoIntake(ShooterSubsystem shoot) {
-    m_shooter = shoot;
+  public AutoIntake(ShooterSubsystem shooter) {
+    m_shooter = shooter;
     addRequirements(m_shooter);
     // Use addRequirements() here to declare subsystem dependencies.
   }

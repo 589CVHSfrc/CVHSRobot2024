@@ -9,35 +9,35 @@ import frc.robot.subsystems.ClimberSubsystem;
 
 public class RaiseClimber extends Command {
   /** Creates a new RaiseArms. */
-  ClimberSubsystem m_climberSubsystem;
+  ClimberSubsystem m_climber;
   public RaiseClimber(ClimberSubsystem armsRaise) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_climberSubsystem = armsRaise;
-    addRequirements(m_climberSubsystem);
+    m_climber = armsRaise;
+    addRequirements(m_climber);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_climberSubsystem.release();
-    m_climberSubsystem.raiseArms();
+    m_climber.release();
+    m_climber.raiseArms();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_climberSubsystem.stopMotors();
+    m_climber.stopMotors();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_climberSubsystem.stopMotors();
+    m_climber.stopMotors();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_climberSubsystem.getSwitchStatus();
+    return m_climber.getSwitchStatus();
   }
 }

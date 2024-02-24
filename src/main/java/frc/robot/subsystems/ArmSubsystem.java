@@ -20,12 +20,10 @@ public class ArmSubsystem extends SubsystemBase {
   private CANSparkMax m_angleMotor;
   private double m_desiredAngle;
   private AbsoluteEncoder m_armEncoder;
-  private double m_bufferZoneTop;
-  private double m_bufferZoneBottom;
-  //top/bottom depends on hardware, can change later.
+  // top/bottom depends on hardware, can change later.
   private SparkLimitSwitch m_limitSwitchTop;
-  private SparkLimitSwitch m_limitSwitchBottom; 
-  private DoubleSolenoid m_DoubleSolenoid;
+  private SparkLimitSwitch m_limitSwitchBottom;
+  private DoubleSolenoid m_discBrake;
 
   public ArmSubsystem() {
     m_angleMotor = new CANSparkMax(ArmConstants.kAngleMotorCanID, MotorType.kBrushless);
@@ -37,34 +35,30 @@ public class ArmSubsystem extends SubsystemBase {
 
     m_desiredAngle = 0;
 
-    m_bufferZoneTop = ArmConstants.kMaxArmAngle;
-    m_bufferZoneBottom = ArmConstants.kMinAngle;
   }
 
-  //CHANGE
-  public double getAbsoluteAngle(){
+  // CHANGE
+  public double getAbsoluteAngle() {
     return m_armEncoder.getPosition();
   }
 
-  public void moveArm(double desiredAngle){
-      m_desiredAngle = desiredAngle;
-
-      if((m_desiredAngle > m_bufferZoneTop && m_desiredAngle < m_bufferZoneBottom) || 
-          (m_limitSwitchBottom.isPressed() || m_limitSwitchTop.isPressed())){
-         m_angleMotor.set(0);
-      }
-      else{
-        if(m_desiredAngle > getAbsoluteAngle()){
-         m_angleMotor.set(ArmConstants.kRaisingSpeed);
-        }
-        else{
-          m_angleMotor.set((ArmConstants.kRaisingSpeed)*-1);
-        }
-      }
+  public void stopArm() {
+    m_angleMotor.set(0);
   }
 
-  public boolean AngleReached(){
-    return getAbsoluteAngle() >= m_desiredAngle-5 && getAbsoluteAngle() <= m_desiredAngle+5;
+  public void moveArm(double desiredAngle) {
+
+    m_desiredAngle = desiredAngle;
+
+    if (m_desiredAngle > getAbsoluteAngle()) {
+      m_angleMotor.set(ArmConstants.kRaisingSpeed);
+    } else {
+      m_angleMotor.set((ArmConstants.kRaisingSpeed) * -1);
+    }
+  }
+
+  public boolean AngleReached() {
+    return getAbsoluteAngle() >= m_desiredAngle - 5 && getAbsoluteAngle() <= m_desiredAngle + 5;
   }
 
   @Override
