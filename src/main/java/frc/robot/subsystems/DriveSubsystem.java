@@ -55,6 +55,9 @@ public class DriveSubsystem extends SubsystemBase {
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
   private double m_controllerXY = 1;
   private boolean m_first = true;
+  private double m_controllerYreq = 0;
+  private double m_controllerXreq = 0;
+  
 
   private double m_currentRotation = 0.0;
   private double m_currentTranslationDir = 0.001;
@@ -101,6 +104,12 @@ public class DriveSubsystem extends SubsystemBase {
         m_rearRight.getPosition()
     };
   }
+  public double getYreq(){
+    return m_controllerYreq;
+  }
+  public double getXreq(){
+    return m_controllerXreq;
+  }
 
   public Pose2d getAutoPoseReversed() {
     double autoPoseY = m_estimator.getEstimatedPosition().getY();
@@ -123,7 +132,8 @@ public class DriveSubsystem extends SubsystemBase {
 
     double xSpeedCommanded;
     double ySpeedCommanded;
-
+    m_controllerYreq = xSpeed;
+    m_controllerXreq = ySpeed;
     if (rateLimit) {
       // Convert XY to polar for rate limiting
       double inputTranslationDir = Math.atan2(ySpeed, xSpeed);

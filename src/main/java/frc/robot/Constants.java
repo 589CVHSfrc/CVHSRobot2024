@@ -184,6 +184,8 @@ public final class Constants {
       public static final double kFF = 0;
 
       public static final int kAngleMotorCanID = 50;
+      public static final int kDiscBrakeForwardID = 4;
+      public static final int kDiscBrakeBackwardID = 5;
 
       // Physical Constants
       public static final double kRaisingSpeed = .2;// Change this
@@ -208,15 +210,16 @@ public final class Constants {
       public static final double kD0 = 0;
       public static final double kFF0 = 0;
 
-      
+
 
       public static final int kShooterMotorTopCanID = 51;
       public static final int kShooterMotorLowCanID = 52;
 
       public static final int kTopGatewayWheelMotorID = 53;
-      public static final int kLowGatewayWheelMotorID = 54;
+      // public static final int kLowGatewayWheelMotorID = 54;
 
       // Physical Constants
+      public static final double kShooterGearRatio = .5;
       public static final double kShooterSpeed = .35;// Change this - we need to make this hashmap/lookup table for dif poses/dif objects -speaker amp
       public static final double kIntakeSpeed = -.35;// Change this
       public static final double kShooterSpeedSlow = .1;// Change this

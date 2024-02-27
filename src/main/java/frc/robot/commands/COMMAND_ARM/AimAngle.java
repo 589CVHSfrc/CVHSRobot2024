@@ -8,11 +8,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.subsystems.ArmSubsystem;
 
-public class AimAmp extends Command {
+public class AimAngle extends Command {
   /** Creates a new ShootAimAmp. */
   ArmSubsystem m_arm = new ArmSubsystem();
 
-  public AimAmp(ArmSubsystem arm) {
+  public AimAngle(ArmSubsystem arm, double angle) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_arm = arm;
     addRequirements(m_arm);
