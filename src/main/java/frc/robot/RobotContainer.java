@@ -39,11 +39,12 @@ import frc.robot.subsystems.ShooterSubsystem;
 
 public class RobotContainer {
         // private final static DriveSubsystem m_robotDrive = new DriveSubsystem();
-        private final static ArmSubsystem m_robotArm = new ArmSubsystem();
-        // private final static ShooterSubsystem m_robotShooter = new ShooterSubsystem();
+        // private final static ArmSubsystem m_robotArm = new ArmSubsystem();
+        private final static ShooterSubsystem m_robotShooter = new ShooterSubsystem();
         // private final static ClimberSubsystem m_robotClimb = new ClimberSubsystem();
 
-        // private final static XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+        // private final static XboxController m_driverController = new
+        // XboxController(OIConstants.kDriverControllerPort);
         // private final static GenericHID m_coDriverSwitchBoard = new
         // GenericHID(OIConstants.kCODriverControllerPort);
         private final static GenericHID m_testjoystick1 = new GenericHID(3);
@@ -66,8 +67,8 @@ public class RobotContainer {
                 // m_autoChooser.addOption("5 Note Auto V2", new PathPlannerAuto("5 Note Auto
                 // V2"));
 
-                m_robotArm.setDefaultCommand(new MoveArmJoystick(m_robotArm, () ->
-                m_testjoystick1.getRawAxis(1)));
+                // m_robotArm.setDefaultCommand(new MoveArmJoystick(m_robotArm, () ->
+                // m_testjoystick1.getRawAxis(1)));
                 // m_robotDrive.setDefaultCommand(new DefaultDrive(m_robotDrive,
                 // () -> MathUtil.applyDeadband(m_driverController.getLeftY(),
                 // OIConstants.kDriveDeadband),
@@ -133,15 +134,15 @@ public class RobotContainer {
                 // ===================================SHOOTER/INTAKE==========================================
 
                 // PID TESTING FOR SHOOTER TOP + LOW
-                // new JoystickButton(m_testjoystick1, 2)
-                // .toggleOnTrue(new ShootDial(
-                // m_robotShooter,
-                // () -> -m_testjoystick1.getRawAxis(3),
-                // () -> -m_testjoystick2.getRawAxis(3)));
+                new JoystickButton(m_testjoystick1, 2)
+                                .toggleOnTrue(new ShootDial(
+                                                m_robotShooter,
+                                                () -> -m_testjoystick1.getRawAxis(3),
+                                                () -> -m_testjoystick2.getRawAxis(3)));
 
-                // // PID TESTING FOR SHOOTER TOP + LOW
-                // new JoystickButton(m_testjoystick1, 1)
-                // .toggleOnTrue(new ShootSmartDashboard(m_robotShooter));
+                // PID TESTING FOR SHOOTER TOP + LOW
+                new JoystickButton(m_testjoystick1, 1)
+                                .toggleOnTrue(new ShootSmartDashboard(m_robotShooter));
 
                 // new JoystickButton(m_coDriverSwitchBoard, 9)
                 // .toggleOnTrue(new Intake(m_robotShooter));

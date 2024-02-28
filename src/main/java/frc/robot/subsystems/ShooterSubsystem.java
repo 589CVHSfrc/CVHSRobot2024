@@ -56,6 +56,15 @@ public class ShooterSubsystem extends SubsystemBase {
     m_dial2 = 0;
     maxRPMTop = 0;
     maxRPMLow = 0;
+    oscillationStopWatchLow = new Timer();
+    oscillationStopWatchTop = new Timer();
+
+    SmartDashboard.putNumber("Set Velocity top", velocity);
+    SmartDashboard.putNumber("Set Velocity low", velocity2);
+    SmartDashboard.putNumber("P Gain", ShooterConstants.kPt0);
+    SmartDashboard.putNumber("I Gain", ShooterConstants.kIt0);
+    SmartDashboard.putNumber("D Gain", ShooterConstants.kDt0);
+
   }
 
   public void shootSmartVelocity(double velocity) {
@@ -176,6 +185,7 @@ public class ShooterSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Low Motor", getLowMotorSpeed());
     SmartDashboard.putNumber("maxRPMTop", maxRPMTop);
     SmartDashboard.putNumber("maxRPMLow", maxRPMLow);
+
     SmartDashboard.putNumber("Rise Time Top", riseTimeTop);
     SmartDashboard.putNumber("Rise Time Low", riseTimeLow);
     SmartDashboard.putNumber("Stable Oscillation Time Top", finalOscillationTimeTop);
@@ -226,11 +236,12 @@ public class ShooterSubsystem extends SubsystemBase {
       }
     }
 
+
     p = SmartDashboard.getNumber("P Gain", 0);
     i = SmartDashboard.getNumber("I Gain", 0);
     d = SmartDashboard.getNumber("D Gain", 0);
     velocity = SmartDashboard.getNumber("Set Velocity", 0);
-    velocity2 = SmartDashboard.getNumber("Set Velocity2", 0);
+    velocity2 = SmartDashboard.getNumber("Set Velocity2", 0);    
 
     if (p != cP) {
       m_topMotorPidController.setP(p);
@@ -253,5 +264,6 @@ public class ShooterSubsystem extends SubsystemBase {
     if (velocity2 != cVelocity2) {
       cVelocity2 = velocity2;
     }
+
   }
 }

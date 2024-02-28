@@ -205,10 +205,14 @@ public final class Constants {
       public static final double kShooterTime = 0.5;
       public static final double kShooterMaxVelocity = 50; //Change this
 
-      public static final double kP0 = 0.1;
-      public static final double kI0 = 0;
-      public static final double kD0 = 0;
-      public static final double kFF0 = 0;
+      public static final double kPt0 = 0.1;
+      public static final double kIt0 = 0;
+      public static final double kDt0 = 0;
+
+      public static final double kPl0 = 0.1;
+      public static final double kIl0 = 0;
+      public static final double kDl0 = 0;
+      //public static final double kFF0t = 0;
 
 
 
