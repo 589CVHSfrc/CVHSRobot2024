@@ -5,6 +5,9 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
+
+import java.util.function.DoubleSupplier;
+
 import com.revrobotics.CANSparkMax;
 // import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkLimitSwitch;
@@ -30,6 +33,12 @@ public class ClimberSubsystem extends SubsystemBase {
     m_maxRightAmps = 0;
     m_maxLeftAmps = 0;
 
+  }
+  public void testClimber(DoubleSupplier req){
+    m_rightClimber.setMotor(req.getAsDouble());
+  }
+  public void testClimber2(DoubleSupplier req){
+    m_leftClimber.setMotor(req.getAsDouble());
   }
 
   public void stopMotors() {
@@ -127,6 +136,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
     public Climber(int CanID, int forward, int reverse) {
       m_motor = new CANSparkMax(CanID, MotorType.kBrushless);
+      m_motor.setSmartCurrentLimit(ClimberConstants.kSmartCurrentLimitAmps);
       // m_encoder = m_motor.getEncoder();
       m_limitSwitchForward = m_motor.getForwardLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
       m_limitSwitchReverse = m_motor.getReverseLimitSwitch(SparkLimitSwitch.Type.kNormallyOpen);
@@ -142,6 +152,7 @@ public class ClimberSubsystem extends SubsystemBase {
       brake = new DoubleSolenoid(PneumaticsModuleType.REVPH, forward, reverse);
 
     }
+    
 
     public SparkLimitSwitch getForwardSwitch() {
       return m_limitSwitchForward;

@@ -32,7 +32,8 @@ public final class Constants {
   public static final class DriveConstants {
 
     public static final Pose2d kShootingPoseSpeakerRED = new Pose2d(14, 2, new Rotation2d(0));
-    public static final Pose2d kShootingPoseSpeakerBLUE = new Pose2d(14, 2, new Rotation2d(Units.degreesToRadians(180)));
+    public static final Pose2d kShootingPoseSpeakerBLUE = new Pose2d(14, 2,
+        new Rotation2d(Units.degreesToRadians(180)));
 
     public static final Pose2d kShootingPoseAmpRED = new Pose2d(14, 2, new Rotation2d(0));
     public static final Pose2d kShootingPoseAmpBLUE = new Pose2d(14, 2, new Rotation2d(0));
@@ -168,82 +169,82 @@ public final class Constants {
                                                                                    // y
     public static final String kPhotonCameraName = "limelight";
   }
-    public static final class ArmConstants {
 
-      public static final double kShootingAngleSpeaker = 65; //change this
-      public static final double kShootingAngleAmp = 30; //change this
-      public static final double kRestingAngle = 10; //change this
-      public static final double kArmMaxRPM = 11000;
-      public static final double kArmMinRPM = 0;
-      public static final double kArmMaxAccel = 4000;
-      public static final double kArmAllowedErr = 0.005;
+  public static final class ArmConstants {
 
-      public static final double kP = 0.1;
-      public static final double kI = 0;
-      public static final double kD = 0;
-      public static final double kFF = 0;
+    public static final double kShootingAngleSpeaker = 65; // change this
+    public static final double kShootingAngleAmp = 30; // change this
+    public static final double kRestingAngle = 10; // change this
+    public static final double kArmMaxRPM = 11000;
+    public static final double kArmMinRPM = 0;
+    public static final double kArmMaxAccel = 4000;
+    public static final double kArmAllowedErr = 0.005;
 
-      public static final int kAngleMotorCanID = 50;
-      public static final int kDiscBrakeForwardID = 4;
-      public static final int kDiscBrakeBackwardID = 5;
+    public static final double kP = 0.1;
+    public static final double kI = 0;
+    public static final double kD = 0;
+    public static final double kFF = 0;
 
-      // Physical Constants
-      public static final double kRaisingSpeed = .2;// Change this
-      public static final double kMinAngle = .01; //Change this
-      public static final double kMaxArmAngle = .34;// Change this
-      public static final int ArmScaleEncoder = 1; // Change this
-      public static final int kArmGearRatio = 1; // Change this
-    }
+    public static final int kAngleMotorCanID = 50;
+    public static final int kDiscBrakeForwardID = 4;
+    public static final int kDiscBrakeBackwardID = 5;
 
-    public static final class ShooterConstants {
-
-      public static final double kGatewayMotorSpeed = 1; //Change this
-      public static final double kShooterMaxRPM = 11000;
-      public static final double kShooterMinRPM = 0;
-      public static final double kShooterMaxAccel = 4000;
-      public static final double kShooterAllowedErr = 0.005;
-      public static final double kShooterTime = 0.5;
-      public static final double kShooterMaxVelocity = 50; //Change this
-
-      public static final double kPt0 = 0.1;
-      public static final double kIt0 = 0;
-      public static final double kDt0 = 0;
-
-      public static final double kPl0 = 0.1;
-      public static final double kIl0 = 0;
-      public static final double kDl0 = 0;
-      //public static final double kFF0t = 0;
-
-
-
-      public static final int kShooterMotorTopCanID = 51;
-      public static final int kShooterMotorLowCanID = 52;
-
-      public static final int kTopGatewayWheelMotorID = 53;
-      // public static final int kLowGatewayWheelMotorID = 54;
-
-      // Physical Constants
-      public static final double kShooterGearRatio = .5;
-      public static final double kShooterSpeed = .35;// Change this - we need to make this hashmap/lookup table for dif poses/dif objects -speaker amp
-      public static final double kIntakeSpeed = -.35;// Change this
-      public static final double kShooterSpeedSlow = .1;// Change this
-      public static final boolean kShooterDirection = false; // false is spitting it out , true is takinShooter
-
-    }
-
-    public static final class ClimberConstants {
-      // difference in rate refers to the difference between the left and right amps
-      // over change in time;
-      public static final double kDifferenceInRate = 2;
-      public static final int kClimberLeftMotorCanID = 11;
-      public static final int kClimberRightMotorCanID = 12;
-      public static final double kClimbingSpeed = - 0.2;// Change back to 0.7
-      public static final double kArmRaisingSpeed = 0.2;// Change back tp 0.7
-      public static final int kClimberLeftReverse = 0;
-      public static final int kClimberRightReverse = 2;
-      public static final int kClimberLeftForward = 1;
-      public static final int kClimberRightForward = 3;
-    }
+    // Physical Constants
+    public static final double kRaisingSpeed = .2;// Change this
+    public static final double kMinAngle = .01; // Change this
+    public static final double kMaxArmAngle = .34;// Change this
+    public static final int ArmScaleEncoder = 1; // Change this
+    public static final int kArmGearRatio = 1; // Change this
   }
 
+  public static final class ShooterConstants {
 
+    public static final double kGatewayMotorSpeed = 1; // Change this
+    public static final double kShooterMaxRPM = 11000;
+    public static final double kShooterMinRPM = 0;
+    public static final double kShooterMaxAccel = 4000;
+    public static final double kShooterAllowedErr = 0.005;
+    public static final double kShooterTime = 0.5;
+    public static final double kShooterMaxVelocity = 50; // Change this
+
+    public static final double kPt0 = 0.1;
+    public static final double kIt0 = 0;
+    public static final double kDt0 = 0;
+
+    public static final double kPl0 = 0.1;
+    public static final double kIl0 = 0;
+    public static final double kDl0 = 0;
+    // public static final double kFF0t = 0;
+
+    public static final int kShooterMotorTopCanID = 51;
+    public static final int kShooterMotorLowCanID = 52;
+
+    public static final int kTopGatewayWheelMotorID = 53;
+    // public static final int kLowGatewayWheelMotorID = 54;
+
+    // Physical Constants
+    public static final double kShooterGearRatio = .5;
+    public static final double kShooterSpeed = .35;// Change this - we need to make this hashmap/lookup table for dif
+                                                   // poses/dif objects -speaker amp
+    public static final double kIntakeSpeed = -.35;// Change this
+    public static final double kShooterSpeedSlow = .1;// Change this
+    public static final boolean kShooterDirection = false; // false is spitting it out , true is takinShooter
+
+  }
+
+  public static final class ClimberConstants {
+    public static final int kSmartCurrentLimitAmps = 20;
+
+    // difference in rate refers to the difference between the left and right amps
+    // over change in time;
+    public static final double kDifferenceInRate = 2;
+    public static final int kClimberLeftMotorCanID = 55;
+    public static final int kClimberRightMotorCanID = 56;
+    public static final double kClimbingSpeed = -0.2;// Change back to 0.7
+    public static final double kArmRaisingSpeed = 0.2;// Change back tp 0.7
+    public static final int kClimberLeftReverse = 0;
+    public static final int kClimberRightReverse = 2;
+    public static final int kClimberLeftForward = 1;
+    public static final int kClimberRightForward = 3;
+  }
+}

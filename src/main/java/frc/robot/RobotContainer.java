@@ -22,6 +22,8 @@ import frc.robot.commands.COMMAND_ARM.MoveArmJoystick;
 import frc.robot.commands.COMMAND_CLIMBER.LowerClimber;
 import frc.robot.commands.COMMAND_CLIMBER.MoveClimber;
 import frc.robot.commands.COMMAND_CLIMBER.RaiseClimber;
+import frc.robot.commands.COMMAND_CLIMBER.TestClimber;
+import frc.robot.commands.COMMAND_CLIMBER.TestClimber2;
 import frc.robot.commands.COMMAND_DRIVE.DefaultDrive;
 import frc.robot.commands.COMMAND_DRIVE.DrivePose;
 import frc.robot.commands.COMMAND_DRIVE.ResetGyro;
@@ -40,12 +42,13 @@ import frc.robot.subsystems.ShooterSubsystem;
 public class RobotContainer {
         // private final static DriveSubsystem m_robotDrive = new DriveSubsystem();
         // private final static ArmSubsystem m_robotArm = new ArmSubsystem();
-        private final static ShooterSubsystem m_robotShooter = new ShooterSubsystem();
-        // private final static ClimberSubsystem m_robotClimb = new ClimberSubsystem();
+        // private final static ShooterSubsystem m_robotShooter = new
+        // ShooterSubsystem();
+        private final static ClimberSubsystem m_robotClimb = new ClimberSubsystem();
 
         // private final static XboxController m_driverController = new
         // XboxController(OIConstants.kDriverControllerPort);
-        // private final static GenericHID m_coDriverSwitchBoard = new
+        // private final static GenericHIdD m_coDriverSwitchBoard = new
         // GenericHID(OIConstants.kCODriverControllerPort);
         private final static GenericHID m_testjoystick1 = new GenericHID(3);
         private final static GenericHID m_testjoystick2 = new GenericHID(4);
@@ -119,6 +122,16 @@ public class RobotContainer {
                 // new JoystickButton(m_coDriverSwitchBoard, 6)
                 // .toggleOnTrue(new DriveAimShootSpeaker(m_robotDrive, m_robotArm,
                 // m_robotShooter));
+                
+                new JoystickButton(m_testjoystick1, 5)
+                                .whileTrue(new TestClimber2(m_robotClimb, ()->.2));
+                new JoystickButton(m_testjoystick1, 3)
+                                .whileTrue(new TestClimber2(m_robotClimb, ()->-.2));
+
+                new JoystickButton(m_testjoystick1, 6)
+                                .whileTrue(new TestClimber(m_robotClimb, ()->.2));
+                new JoystickButton(m_testjoystick1, 4)
+                                .whileTrue(new TestClimber(m_robotClimb, ()->-.2));
 
                 // ===================================CLIMBER=========================================
                 // // CLIMB - RAISE
@@ -134,15 +147,15 @@ public class RobotContainer {
                 // ===================================SHOOTER/INTAKE==========================================
 
                 // PID TESTING FOR SHOOTER TOP + LOW
-                new JoystickButton(m_testjoystick1, 2)
-                                .toggleOnTrue(new ShootDial(
-                                                m_robotShooter,
-                                                () -> -m_testjoystick1.getRawAxis(3),
-                                                () -> -m_testjoystick2.getRawAxis(3)));
+                // new JoystickButton(m_testjoystick1, 2)
+                // .toggleOnTrue(new ShootDial(
+                // m_robotShooter,
+                // () -> -m_testjoystick1.getRawAxis(3),
+                // () -> -m_testjoystick2.getRawAxis(3)));
 
                 // PID TESTING FOR SHOOTER TOP + LOW
-                new JoystickButton(m_testjoystick1, 1)
-                                .toggleOnTrue(new ShootSmartDashboard(m_robotShooter));
+                // new JoystickButton(m_testjoystick1, 1)
+                // .toggleOnTrue(new ShootSmartDashboard(m_robotShooter));
 
                 // new JoystickButton(m_coDriverSwitchBoard, 9)
                 // .toggleOnTrue(new Intake(m_robotShooter));
