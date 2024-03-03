@@ -24,7 +24,7 @@ public class ArmSubsystem extends SubsystemBase {
   // top/bottom depends on hardware, can change later.
   private SparkLimitSwitch m_limitSwitchTop;
     private SparkLimitSwitch m_limitSwitchBottom;
-  // private DoubleSolenoid m_discBrake;
+  private DoubleSolenoid m_discBrake;
 
   public ArmSubsystem() {
     m_angleMotor = new CANSparkMax(ArmConstants.kAngleMotorCanID, MotorType.kBrushless);
@@ -36,7 +36,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     m_desiredAngle = 0;
 
-    // m_discBrake = new DoubleSolenoid(PneumaticsModuleType.REVPH, ArmConstants.kDiscBrakeForwardID, ArmConstants.kDiscBrakeBackwardID);
+    m_discBrake = new DoubleSolenoid(PneumaticsModuleType.REVPH, ArmConstants.kDiscBrakeForwardID, ArmConstants.kDiscBrakeBackwardID);
 
   }
 
@@ -45,13 +45,13 @@ public class ArmSubsystem extends SubsystemBase {
     return m_armEncoder.getPosition();
   }
 
-  // public void armBrake() {
-  //   m_discBrake.set(DoubleSolenoid.Value.kForward);
-  // }
+  public void armBrake() {
+    m_discBrake.set(DoubleSolenoid.Value.kForward);
+  }
 
-  // public void armRelease() {
-  //   m_discBrake.set(DoubleSolenoid.Value.kReverse);
-  // }
+  public void armRelease() {
+    m_discBrake.set(DoubleSolenoid.Value.kReverse);
+  }
 
   public void stopArm() {
     m_angleMotor.set(0);
@@ -75,6 +75,10 @@ public class ArmSubsystem extends SubsystemBase {
   public void moveArmJoystick(double speed) {
     m_angleMotor.set(speed*.25);
   }
+  public void moveArmSpeed(double speed) {
+    m_angleMotor.set(speed);
+  }
+
 
   @Override
   public void periodic() {

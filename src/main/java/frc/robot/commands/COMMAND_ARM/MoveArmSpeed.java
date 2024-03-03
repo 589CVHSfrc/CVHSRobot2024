@@ -2,41 +2,41 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.COMMAND_CLIMBER;
+package frc.robot.commands.COMMAND_ARM;
 
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ClimberSubsystem;
-import frc.robot.subsystems.ClimberSubsystem.Climber;
+import frc.robot.subsystems.ArmSubsystem;
 
-public class TestClimber extends Command {
-  /** Creates a new TestClimber. */
-  ClimberSubsystem m_climber;
+public class MoveArmSpeed extends Command {
+  /** Creates a new MoveArmJoystick. */
+  ArmSubsystem m_arm;
   DoubleSupplier m_speed;
 
-  public TestClimber(ClimberSubsystem climber, DoubleSupplier speed) {
-    m_climber = climber;
+  public MoveArmSpeed(ArmSubsystem arm, DoubleSupplier speed) {
+    m_arm = arm;
     m_speed = speed;
-    addRequirements(climber);
-    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(m_arm);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_arm.armRelease();
+    //m_arm.moveArmSpeed(m_speed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_climber.testClimber(m_speed);
+    m_arm.moveArmSpeed(m_speed.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_climber.testClimber(()->0);
+    m_arm.stopArm();
   }
 
   // Returns true when the command should end.

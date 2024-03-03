@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-// import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkBase.IdleMode;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -76,7 +75,6 @@ public final class Constants {
 
     public static final double kAutoTimeDtSecondsAdjust = 0.02; // ?????????????????????
 
-    // pigeon2 CAN ID
     public static final int kPigeon2CanId = 60;
 
     public static final boolean kGyroReversed = true;// false;
@@ -164,9 +162,9 @@ public final class Constants {
   }
 
   public static final class VisualConstants {
-    public static final Transform3d kCameraRelativeToRobot = new Transform3d(Units.inchesToMeters(17.5), 0,
-        Units.inchesToMeters(1), new Rotation3d(0, Units.degreesToRadians(54), 0));// subject to change relative, x and
-                                                                                   // y
+    public static final Transform3d kCameraRelativeToRobot = new Transform3d(Units.inchesToMeters(-4), 0,
+        Units.inchesToMeters(20), new Rotation3d(0, Units.degreesToRadians(30), 0));// subject to change relative, x and
+                                                                                    // y
     public static final String kPhotonCameraName = "limelight";
   }
 
@@ -186,8 +184,8 @@ public final class Constants {
     public static final double kFF = 0;
 
     public static final int kAngleMotorCanID = 50;
-    public static final int kDiscBrakeForwardID = 4;
-    public static final int kDiscBrakeBackwardID = 5;
+    public static final int kDiscBrakeForwardID = 0;
+    public static final int kDiscBrakeBackwardID = 1;
 
     // Physical Constants
     public static final double kRaisingSpeed = .2;// Change this
@@ -195,11 +193,12 @@ public final class Constants {
     public static final double kMaxArmAngle = .34;// Change this
     public static final int ArmScaleEncoder = 1; // Change this
     public static final int kArmGearRatio = 1; // Change this
+
   }
 
   public static final class ShooterConstants {
 
-    public static final double kGatewayMotorSpeed = 1; // Change this
+    public static final double kGatewayMotorSpeed = .2; // Change this
     public static final double kShooterMaxRPM = 11000;
     public static final double kShooterMinRPM = 0;
     public static final double kShooterMaxAccel = 4000;
@@ -224,27 +223,33 @@ public final class Constants {
 
     // Physical Constants
     public static final double kShooterGearRatio = .5;
-    public static final double kShooterSpeed = .35;// Change this - we need to make this hashmap/lookup table for dif
-                                                   // poses/dif objects -speaker amp
-    public static final double kIntakeSpeed = -.35;// Change this
+
+    public static final double kShooterSpeedLow = -6000;
+    public static final double kShooterSpeedTop = -7000;
+    // Change this - we need to make this hashmap/lookup table for dif
+    // poses/dif objects -speaker amp
+    public static final double kIntakeSpeed = 3000;// Change this
     public static final double kShooterSpeedSlow = .1;// Change this
     public static final boolean kShooterDirection = false; // false is spitting it out , true is takinShooter
-
   }
 
   public static final class ClimberConstants {
-    public static final int kSmartCurrentLimitAmps = 20;
+    public static final int kSmartCurrentLimitAmps = 30;
 
     // difference in rate refers to the difference between the left and right amps
     // over change in time;
+    public static final double kEncoderIsRaised = 25; // Change this
     public static final double kDifferenceInRate = 2;
     public static final int kClimberLeftMotorCanID = 55;
     public static final int kClimberRightMotorCanID = 56;
-    public static final double kClimbingSpeed = -0.2;// Change back to 0.7
-    public static final double kArmRaisingSpeed = 0.2;// Change back tp 0.7
-    public static final int kClimberLeftReverse = 0;
-    public static final int kClimberRightReverse = 2;
-    public static final int kClimberLeftForward = 1;
-    public static final int kClimberRightForward = 3;
+    public static final double kClimbingSpeed = -0.7;// Change back to 0.7
+    public static final double kArmRaisingSpeed = 0.7;// Change back tp 0.7
+    public static final int kClimberLeftReverse = 2;
+
+    public static final int kClimberRightReverse = 5;// 5
+
+    public static final int kClimberLeftForward = 3;
+
+    public static final int kClimberRightForward = 4;// 4
   }
 }

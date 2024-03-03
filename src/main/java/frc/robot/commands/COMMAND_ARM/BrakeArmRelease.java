@@ -21,6 +21,6 @@ public class BrakeArmRelease extends InstantCommand {
 
   @Override 
   public void initialize() {
-    // m_arm.armRelease();
+    m_arm.armRelease();
   }
 }

@@ -22,6 +22,7 @@ public class BrakeArm extends InstantCommand {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    // m_arm.armBrake();
+    // m_arm.
+    m_arm.armBrake();
   }
 }

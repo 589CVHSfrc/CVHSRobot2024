@@ -33,6 +33,7 @@ public class AimAngle extends Command {
   @Override
   public void end(boolean interrupted) {
     m_arm.stopArm();
+    m_arm.armBrake();
   }
 
   // Returns true when the command should end.

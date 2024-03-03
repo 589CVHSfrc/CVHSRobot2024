@@ -8,7 +8,9 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import java.util.function.DoubleSupplier;
 
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 // import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkLimitSwitch;
 
@@ -33,11 +35,15 @@ public class ClimberSubsystem extends SubsystemBase {
     m_maxRightAmps = 0;
     m_maxLeftAmps = 0;
 
+    m_leftClimber.setInverted(true);
+
   }
-  public void testClimber(DoubleSupplier req){
+
+  public void testClimber(DoubleSupplier req) {
     m_rightClimber.setMotor(req.getAsDouble());
   }
-  public void testClimber2(DoubleSupplier req){
+
+  public void testClimber2(DoubleSupplier req) {
     m_leftClimber.setMotor(req.getAsDouble());
   }
 
@@ -99,6 +105,24 @@ public class ClimberSubsystem extends SubsystemBase {
     m_rightClimber.release();
   }
 
+  /////////////// Testing
+  public void releaseLeft() {
+    m_leftClimber.release();
+  }
+
+  public void releaseRight() {
+    m_rightClimber.release();
+  }
+
+  public void brakeLeft() {
+    m_leftClimber.brake();
+  }
+
+  public void brakeRight() {
+    m_rightClimber.brake();
+  }
+  /////////////////////
+
   public void climbingOrder() {
     m_leftClimber.hitChain(m_leftClimber.checkHit());
     m_rightClimber.hitChain(m_rightClimber.checkHit());
@@ -107,22 +131,37 @@ public class ClimberSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    if (m_leftClimber.getReverseSwitch().isPressed()) {
+      m_leftClimber.resetEncoder();
+    }
+    if (m_rightClimber.getReverseSwitch().isPressed()) {
+      m_rightClimber.resetEncoder();
+    }
+
+
+
     SmartDashboard.putNumber("Left Climber amps", m_leftClimber.getAmps());
     SmartDashboard.putNumber("Right Climber amps", m_rightClimber.getAmps());
+
     SmartDashboard.putBoolean("Is hit left", m_leftClimber.getIsReady());
     SmartDashboard.putBoolean("Is hit right", m_rightClimber.getIsReady());
+
     SmartDashboard.putNumber("Left climber max amps", getLeftMaxAmps());
     SmartDashboard.putNumber("Right climber max amps", getRightMaxAmps());
-    SmartDashboard.putBoolean("Right Fordward LimitForardSwitch hit", m_rightClimber.getForwardSwitch().isPressed());
-    SmartDashboard.putBoolean("Left Forward LimitForwardSwitch hit", m_leftClimber.getForwardSwitch().isPressed());
-    SmartDashboard.putBoolean("Right Reverse LimitSwitch hit", m_rightClimber.getReverseSwitch().isPressed());
-    SmartDashboard.putBoolean("Left Reverse LimitSwitch hit", m_leftClimber.getReverseSwitch().isPressed());
+
+    SmartDashboard.putNumber("Left climber current relative pos ", m_leftClimber.getEncoder());
+    SmartDashboard.putNumber("Right climber current relative pos ", m_rightClimber.getEncoder());
+
+    SmartDashboard.putBoolean("CLIMBER Right Forward Limit Switch", m_rightClimber.getForwardSwitch().isPressed());
+    SmartDashboard.putBoolean("CLIMBER Left Forward Limit Switch", m_leftClimber.getForwardSwitch().isPressed());
+    SmartDashboard.putBoolean("CLIMBER Right Reverse Limit Switch", m_rightClimber.getReverseSwitch().isPressed());
+    SmartDashboard.putBoolean("CLIMBER Left Reverse Limit Switch", m_leftClimber.getReverseSwitch().isPressed());
   }
 
   public class Climber {
     private CANSparkMax m_motor;
     // private RelativeEncoder m_encoder;
+    private boolean m_bIsInverted;
     private double m_previousAmps;
     private double m_previousTime;
     private double m_deltaTime;
@@ -130,9 +169,10 @@ public class ClimberSubsystem extends SubsystemBase {
     private double m_timeSinceStart;
     private double m_initialClimbTime;
     private boolean bstartupTime;
-    private DoubleSolenoid brake;
+    private DoubleSolenoid m_brake;
     private SparkLimitSwitch m_limitSwitchForward, m_limitSwitchReverse;
     private boolean m_isTimerReached;
+    private RelativeEncoder m_relativeEncoder;
 
     public Climber(int CanID, int forward, int reverse) {
       m_motor = new CANSparkMax(CanID, MotorType.kBrushless);
@@ -149,22 +189,49 @@ public class ClimberSubsystem extends SubsystemBase {
       m_timeSinceStart = 0;
       m_isTimerReached = false;
       bstartupTime = false;
-      brake = new DoubleSolenoid(PneumaticsModuleType.REVPH, forward, reverse);
+      m_brake = new DoubleSolenoid(PneumaticsModuleType.REVPH, forward, reverse);
+      m_relativeEncoder = m_motor.getEncoder();
 
+      m_bIsInverted = false;
+      // if inverted then forward limit switch and motor + is down and encoder reads
+      // negative going up
+      // if not inverted then reverse limit switch and motor - is down and encoder
+      // reads positive going up
     }
-    
+
+    public void setInverted(boolean inverted) {
+      m_bIsInverted = inverted;
+      // m_relativeEncoder.setInverted(m_bIsInverted);
+    }
 
     public SparkLimitSwitch getForwardSwitch() {
+      // if (m_bIsInverted) {
+      //   return m_limitSwitchReverse;
+      // }
+      // return m_limitSwitchForward;
       return m_limitSwitchForward;
       // could be reverse limit switch, depends on hardware
     }
 
+    public void resetEncoder() {
+      m_relativeEncoder.setPosition(0);
+    }
+
+    public double getEncoder() {
+      return m_relativeEncoder.getPosition();
+    }
+
     public SparkLimitSwitch getReverseSwitch() {
       return m_limitSwitchReverse;
+      // if (m_bIsInverted) {
+      //   return m_limitSwitchForward;
+      // }
+      // return m_limitSwitchReverse;
     }
 
     public boolean isFinishedLowering() {
-      return m_limitSwitchReverse.isPressed();
+
+      return getReverseSwitch().isPressed();
       // check which switch it top and bottom, need bottom here
 
       // February 12th, 11:18am - 2024
@@ -173,13 +240,17 @@ public class ClimberSubsystem extends SubsystemBase {
     }
 
     public boolean isFinishedRaising() {
-      return m_limitSwitchForward.isPressed();
+
+      return ClimberConstants.kEncoderIsRaised <= Math.abs(m_relativeEncoder.getPosition());
     }
 
     public void hitChain(boolean hasHit) {
       if (hasHit) {
         m_motor.set(0);
       } else {
+        if (m_bIsInverted) {
+          m_motor.set((ClimberConstants.kClimbingSpeed) * -1);
+        }
         m_motor.set(ClimberConstants.kClimbingSpeed);
       }
     }
@@ -189,16 +260,16 @@ public class ClimberSubsystem extends SubsystemBase {
     }
 
     public void stop() {
-      //brake.set(DoubleSolenoid.Value.kForward);
+      // brake.set(DoubleSolenoid.Value.kForward);
       m_motor.set(0);
     }
 
     public void release() {
-      brake.set(DoubleSolenoid.Value.kReverse);
+      m_brake.set(DoubleSolenoid.Value.kReverse);
     }
 
-    public void brake(){
-      brake.set(DoubleSolenoid.Value.kForward);
+    public void brake() {
+      m_brake.set(DoubleSolenoid.Value.kForward);
     }
 
     public double getDifference(double previousAmps) {
@@ -208,11 +279,10 @@ public class ClimberSubsystem extends SubsystemBase {
     }
 
     public void startClimb() {
-
       bstartupTime = false;
       m_previousTime = m_initialClimbTime = Timer.getFPGATimestamp();
       m_ready = false;
-      brake();
+      // brake();
       m_timeSinceStart = 0;
     }
 
@@ -228,6 +298,8 @@ public class ClimberSubsystem extends SubsystemBase {
         if (getDifference(m_previousAmps) > ClimberConstants.kDifferenceInRate) {
           if (getAmps() > 12) {
             m_ready = true;
+            m_relativeEncoder.setPosition(0);
+
             return m_ready;
           } else {
             System.out.println("Waiting for Timer");
@@ -244,5 +316,14 @@ public class ClimberSubsystem extends SubsystemBase {
     public boolean getIsReady() {
       return m_ready;
     }
+
+    public boolean isAtRest() {
+      if (isFinishedLowering() && m_brake.get() == DoubleSolenoid.Value.kForward) {
+        return true;
+      } else {
+        return false;
+      }
+    }
   }
+  // Cant Zero, Find Difference
 }

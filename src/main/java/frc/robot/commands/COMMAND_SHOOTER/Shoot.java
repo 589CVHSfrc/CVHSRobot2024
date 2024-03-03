@@ -9,12 +9,12 @@ import frc.robot.subsystems.ShooterSubsystem;
 
 public class Shoot extends Command {
   /** Creates a new Shoot. */
-  ShooterSubsystem m_shooter = new ShooterSubsystem();
+  ShooterSubsystem m_shooter;
   // Timer m_timer = new Timer();
 
   public Shoot(ShooterSubsystem shooter) {
     m_shooter = shooter;
-    addRequirements();
+    addRequirements(m_shooter);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
@@ -26,15 +26,17 @@ public class Shoot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_shooter.isRampedUp()) {
+    // if (m_shooter.isRampedUp()) {
+      // m_shooter.shoot();
       m_shooter.shootGateway(); // change the boolean value later.
-    }
+    // }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_shooter.slowDownToZero();
+    // m_shooter.slowDownToZero();
+    m_shooter.stopShoot();
     m_shooter.stopGateway(); 
   }
 

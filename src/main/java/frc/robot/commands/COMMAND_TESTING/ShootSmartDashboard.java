@@ -19,13 +19,13 @@ public class ShootSmartDashboard extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_shooter.initShoot();
+    // m_shooter.initShoot();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_shooter.shootTwoSmartDashboardFF();
+    // m_shooter.shootTwoSmartDashboardFF();
   }
 
   // Called once the command ends or is interrupted.

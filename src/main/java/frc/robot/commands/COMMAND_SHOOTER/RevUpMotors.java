@@ -9,7 +9,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 
 public class RevUpMotors extends Command {
   /** Creates a new RevUpMotors. */
-  ShooterSubsystem m_shooter = new ShooterSubsystem();
+  ShooterSubsystem m_shooter;
 
   public RevUpMotors(ShooterSubsystem shooter) {
     m_shooter = shooter;
@@ -26,7 +26,8 @@ public class RevUpMotors extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_shooter.shootTwoSmartDashboardFF();
+    m_shooter.shoot();
+    // m_shooter.shootTwoSmartDashboardFF();
   }
 
   // Called once the command ends or is interrupted.

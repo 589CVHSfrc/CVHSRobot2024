@@ -9,7 +9,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 
 public class Intake extends Command {
   /** Creates a new Intake. */
-  ShooterSubsystem m_shooter = new ShooterSubsystem();
+  ShooterSubsystem m_shooter;
 
   public Intake(ShooterSubsystem shoot) {
     m_shooter = shoot;
@@ -25,12 +25,14 @@ public class Intake extends Command {
   @Override
   public void execute() {
     m_shooter.intake();
+    m_shooter.intakeGateway();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     m_shooter.stopShoot();
+    m_shooter.stopGateway();
   }
 
   // Returns true when the command should end.

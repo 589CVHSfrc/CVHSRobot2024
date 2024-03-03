@@ -31,8 +31,8 @@ public class ShootDial extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_shooter.shootLow(1, m_leftDial.getAsDouble());
-    m_shooter.shootTop(1, m_rightDial.getAsDouble());
+      // m_shooter.shootLow(1, m_leftDial.getAsDouble());
+      // m_shooter.shootTop(1, m_rightDial.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.
