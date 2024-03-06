@@ -25,8 +25,6 @@ import frc.robot.subsystems.DriveSubsystem;
 /** Add your docs here. */
 public class LimeLight {
     private static LimeLight m_limelight;
-    // String m_tableName;
-    // NetworkTable m_table;
     private AprilTagFieldLayout m_aprilTagLayout;
     private PhotonCamera m_photonCamera = new PhotonCamera("aprilcamera");
     private PhotonPoseEstimator m_estimator;
@@ -64,9 +62,9 @@ public class LimeLight {
             EstimatedRobotPose estimation = OPestimation.get();
             Pose2d estimatedPose2d = estimation.estimatedPose.toPose2d();
             estimator.addVisionMeasurement(estimatedPose2d, estimation.timestampSeconds);
-            estimator.resetPosition(estimatedPose2d.getRotation(),
-                    drive.getSwerveModulePositions(),
-                    estimatedPose2d);
+            // estimator.resetPosition(estimatedPose2d.getRotation(),
+            //         drive.getSwerveModulePositions(),
+            //         estimatedPose2d);
         }
     }
 

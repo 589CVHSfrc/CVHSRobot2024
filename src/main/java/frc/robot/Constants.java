@@ -31,7 +31,7 @@ public final class Constants {
   public static final class DriveConstants {
 
     public static final Pose2d kShootingPoseSpeakerRED = new Pose2d(14, 2, new Rotation2d(0));
-    public static final Pose2d kShootingPoseSpeakerBLUE = new Pose2d(14, 2,
+    public static final Pose2d kShootingPoseSpeakerBLUE = new Pose2d(15.5, 2.6  ,
         new Rotation2d(Units.degreesToRadians(180)));
 
     public static final Pose2d kShootingPoseAmpRED = new Pose2d(14, 2, new Rotation2d(0));
@@ -77,7 +77,7 @@ public final class Constants {
 
     public static final int kPigeon2CanId = 60;
 
-    public static final boolean kGyroReversed = true;// false;
+    public static final boolean kGyroReversed = false;// false;
   }
 
   public static final class ModuleConstants {
@@ -162,8 +162,8 @@ public final class Constants {
   }
 
   public static final class VisualConstants {
-    public static final Transform3d kCameraRelativeToRobot = new Transform3d(Units.inchesToMeters(-4), 0,
-        Units.inchesToMeters(20), new Rotation3d(0, Units.degreesToRadians(30), 0));// subject to change relative, x and
+    public static final Transform3d kCameraRelativeToRobot = new Transform3d(Units.inchesToMeters(-5), 0,
+        Units.inchesToMeters(19.5), new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(30), 0));// subject to change relative, x and
                                                                                     // y
     public static final String kPhotonCameraName = "limelight";
   }
@@ -188,7 +188,7 @@ public final class Constants {
     public static final int kDiscBrakeBackwardID = 1;
 
     // Physical Constants
-    public static final double kRaisingSpeed = .2;// Change this
+    public static final double kStowSpeed = .2;// Change this
     public static final double kMinAngle = .01; // Change this
     public static final double kMaxArmAngle = .34;// Change this
     public static final int ArmScaleEncoder = 1; // Change this
@@ -206,12 +206,12 @@ public final class Constants {
     public static final double kShooterTime = 0.5;
     public static final double kShooterMaxVelocity = 50; // Change this
 
-    public static final double kPt0 = 0.1;
-    public static final double kIt0 = 0;
+    public static final double kPt0 = 0.000003;
+    public static final double kIt0 = 0.0000000009;
     public static final double kDt0 = 0;
 
     public static final double kPl0 = 0.1;
-    public static final double kIl0 = 0;
+    public static final double kIl0 = 0.0000000009;
     public static final double kDl0 = 0;
     // public static final double kFF0t = 0;
 
@@ -224,8 +224,12 @@ public final class Constants {
     // Physical Constants
     public static final double kShooterGearRatio = .5;
 
-    public static final double kShooterSpeedLow = -6000;
-    public static final double kShooterSpeedTop = -7000;
+    public static final double kShooterSpeedSpeakerLow = -7800;//6000
+    public static final double kShooterSpeedSpeakerTop = -9000;//7000
+
+    
+    public static final double kShooterSpeedAmpLow = -6000;
+    public static final double kShooterSpeedAmpTop = -7000;
     // Change this - we need to make this hashmap/lookup table for dif
     // poses/dif objects -speaker amp
     public static final double kIntakeSpeed = 3000;// Change this
@@ -242,7 +246,7 @@ public final class Constants {
     public static final double kDifferenceInRate = 2;
     public static final int kClimberLeftMotorCanID = 55;
     public static final int kClimberRightMotorCanID = 56;
-    public static final double kClimbingSpeed = -0.7;// Change back to 0.7
+    public static final double kLoweringClimbingSpeed = 0.6;// Change back to 0.7
     public static final double kArmRaisingSpeed = 0.7;// Change back tp 0.7
     public static final int kClimberLeftReverse = 2;
 

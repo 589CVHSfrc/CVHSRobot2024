@@ -2,40 +2,40 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.COMMAND_ARM;
+package frc.robot.commands.COMMAND_CLIMBER;
 
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 
-public class MoveArmSpeed extends Command {
-  ArmSubsystem m_arm;
+public class MoveLeftClimber extends Command {
+  ClimberSubsystem m_climber;
   DoubleSupplier m_speed;
 
-  public MoveArmSpeed(ArmSubsystem arm, DoubleSupplier speed) {
-    m_arm = arm;
+  public MoveLeftClimber(ClimberSubsystem climber, DoubleSupplier speed) {
+    m_climber = climber;
     m_speed = speed;
-    addRequirements(m_arm);
   }
 
   @Override
   public void initialize() {
-    m_arm.armRelease();
+    m_climber.releaseLeft();
   }
 
   @Override
   public void execute() {
-    m_arm.moveArmSpeed(m_speed.getAsDouble());
+    m_climber.moveLeftClimber(m_speed);
   }
 
   @Override
   public void end(boolean interrupted) {
-    m_arm.stopArm();
+    m_climber.moveLeftClimber(() -> 0);
+    m_climber.brakeLeft();
   }
 
   @Override
   public boolean isFinished() {
-    return false;
+    return m_climber.getLeftSwitchStatus();
   }
 }

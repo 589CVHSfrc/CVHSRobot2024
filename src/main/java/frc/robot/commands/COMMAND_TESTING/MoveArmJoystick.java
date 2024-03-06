@@ -2,19 +2,21 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.COMMAND_ARM;
+package frc.robot.commands.COMMAND_TESTING;
+
+import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.ArmConstants;
 import frc.robot.subsystems.ArmSubsystem;
 
-public class AutoRestAngle extends Command {
-  /** Creates a new autoRestAngle. */
-  ArmSubsystem m_arm = new ArmSubsystem();
+public class MoveArmJoystick extends Command {
+  /** Creates a new MoveArmJoystick. */
+  ArmSubsystem m_arm;
+  DoubleSupplier m_speed;
 
-  public AutoRestAngle(ArmSubsystem arm) {
-    // Use addRequirements() here to declare subsystem dependencies.
+  public MoveArmJoystick(ArmSubsystem arm, DoubleSupplier speed) {
     m_arm = arm;
+    m_speed = speed;
     addRequirements(m_arm);
   }
 
@@ -26,19 +28,18 @@ public class AutoRestAngle extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_arm.moveArm(ArmConstants.kRestingAngle);
+    m_arm.moveArmJoystick(-1*m_speed.getAsDouble());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_arm.stopArm();
-
+    // m_arm.stopArm();
   }
 
+  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // return false;
-    return m_arm.AngleReached();
+    return false;
   }
 }

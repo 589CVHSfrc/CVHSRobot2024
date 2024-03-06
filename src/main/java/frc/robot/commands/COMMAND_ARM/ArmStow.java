@@ -6,40 +6,52 @@ package frc.robot.commands.COMMAND_ARM;
 
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ArmSubsystem;
 
-public class MoveArmJoystick extends Command {
-  /** Creates a new MoveArmJoystick. */
+public class ArmStow extends Command {
   ArmSubsystem m_arm;
   DoubleSupplier m_speed;
-
-  public MoveArmJoystick(ArmSubsystem arm, DoubleSupplier speed) {
+  boolean m_limitHit;
+  Timer m_timer;
+  public ArmStow(ArmSubsystem arm, DoubleSupplier speed) {
+    m_timer = new Timer();
     m_arm = arm;
     m_speed = speed;
     addRequirements(m_arm);
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_limitHit = false;
+    m_arm.armRelease();
+    m_timer.reset();
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_arm.moveArmJoystick(-1*m_speed.getAsDouble());
+    if(m_arm.isReverselimitReached()){
+      m_limitHit = true;
+      m_timer.start();
+    }
+    if(m_arm.getAbsoluteAngle()<.3){
+      m_arm.moveArmSpeed(-m_speed.getAsDouble()*.4);
+    }
+    m_arm.moveArmSpeed(-m_speed.getAsDouble());
+
+    
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    //m_arm.stopArm();
+    m_arm.stopArm();
+    m_arm.armBrake();
+    m_timer.reset();
   }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return m_limitHit && m_timer.hasElapsed(.5);
   }
 }

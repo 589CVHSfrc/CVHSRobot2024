@@ -4,40 +4,40 @@
 
 package frc.robot.commands.COMMAND_ARM;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.ArmConstants;
 import frc.robot.subsystems.ArmSubsystem;
 
-public class AimSpeaker extends Command {
-  /** Creates a new shootAim. */
-  ArmSubsystem m_arm = new ArmSubsystem();
+public class ArmFloor extends Command {
+  ArmSubsystem m_arm;
+  DoubleSupplier m_speed;
 
-  public AimSpeaker(ArmSubsystem arm) {
-    // Use addRequirements() here to declare subsystem dependencies.
+  public ArmFloor(ArmSubsystem arm, DoubleSupplier speed) {
     m_arm = arm;
+    m_speed = speed;
     addRequirements(m_arm);
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_arm.armRelease();
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_arm.moveArm(ArmConstants.kShootingAngleSpeaker);
+    m_arm.moveArmSpeed(m_speed.getAsDouble());
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     m_arm.stopArm();
+    // m_arm.armBrake();
   }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_arm.AngleReached();
+    
+    return m_arm.isForwardLimitReached();
   }
 }

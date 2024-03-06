@@ -17,13 +17,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
 
 public class ArmSubsystem extends SubsystemBase {
-  /** Creates a new ArmSubsystem. */
   private CANSparkMax m_angleMotor;
   private double m_desiredAngle;
   private AbsoluteEncoder m_armEncoder;
-  // top/bottom depends on hardware, can change later.
   private SparkLimitSwitch m_limitSwitchTop;
-    private SparkLimitSwitch m_limitSwitchBottom;
+  private SparkLimitSwitch m_limitSwitchBottom;
   private DoubleSolenoid m_discBrake;
 
   public ArmSubsystem() {
@@ -36,11 +34,19 @@ public class ArmSubsystem extends SubsystemBase {
 
     m_desiredAngle = 0;
 
-    m_discBrake = new DoubleSolenoid(PneumaticsModuleType.REVPH, ArmConstants.kDiscBrakeForwardID, ArmConstants.kDiscBrakeBackwardID);
+    m_discBrake = new DoubleSolenoid(PneumaticsModuleType.REVPH, ArmConstants.kDiscBrakeForwardID,
+        ArmConstants.kDiscBrakeBackwardID);
 
   }
 
-  // CHANGE
+  public boolean isForwardLimitReached() {
+    return m_limitSwitchTop.isPressed();
+  }
+
+  public boolean isReverselimitReached() {
+    return m_limitSwitchBottom.isPressed();
+  }
+
   public double getAbsoluteAngle() {
     return m_armEncoder.getPosition();
   }
@@ -62,9 +68,9 @@ public class ArmSubsystem extends SubsystemBase {
     m_desiredAngle = desiredAngle;
 
     if (m_desiredAngle > getAbsoluteAngle()) {
-      m_angleMotor.set(ArmConstants.kRaisingSpeed);
+      m_angleMotor.set(ArmConstants.kStowSpeed);
     } else {
-      m_angleMotor.set((ArmConstants.kRaisingSpeed) * -1);
+      m_angleMotor.set((ArmConstants.kStowSpeed) * -1);
     }
   }
 
@@ -73,12 +79,12 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   public void moveArmJoystick(double speed) {
-    m_angleMotor.set(speed*.25);
+    m_angleMotor.set(speed * .25);
   }
+
   public void moveArmSpeed(double speed) {
     m_angleMotor.set(speed);
   }
-
 
   @Override
   public void periodic() {

@@ -6,12 +6,13 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.SparkLimitSwitch.Type;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkLimitSwitch;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.SparkPIDController.ArbFFUnits;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
@@ -19,20 +20,17 @@ import frc.robot.Constants.ShooterConstants;
 public class ShooterSubsystem extends SubsystemBase {
   private CANSparkMax m_topMotor;
   private CANSparkMax m_lowMotor;
-  private CANSparkMax m_gatewayMotor;
 
   private SparkPIDController m_topMotorPidController;
   private SparkPIDController m_lowMotorPidController;
+
+  private SparkLimitSwitch m_gatewayLimitSwitch;
   private RelativeEncoder m_topEncoder;
   private RelativeEncoder m_lowEncoder;
-  private double cVelocityTop, cVelocityLow;
-  // private RelativeEncoder m_gatewayEncoder;
   double p, i, d, velocity, velocity2, cP, cI, cD, cVelocity, cVelocity2, m_dial1, m_dial2, maxRPMTop, maxRPMLow,
       initialTimeTop, initialTimeLow, riseTimeTop, riseTimeLow, startOscillationTimeTop, startOscillationTimeLow,
       finalOscillationTimeTop, finalOscillationTimeLow;
-  // boolean bOscillatingTop, bOscillatingLow;
-  // Timer oscillationStopWatchTop;
-  // Timer oscillationStopWatchLow;
+
 
   public ShooterSubsystem() {
     m_topMotor = new CANSparkMax(ShooterConstants.kShooterMotorTopCanID, MotorType.kBrushless);
@@ -40,9 +38,9 @@ public class ShooterSubsystem extends SubsystemBase {
     m_topMotor.setInverted(true);
     m_lowMotor.setInverted(true);
 
-    m_gatewayMotor = new CANSparkMax(ShooterConstants.kTopGatewayWheelMotorID, MotorType.kBrushless);
 
-    m_gatewayMotor.setInverted(false);
+    m_gatewayLimitSwitch = m_lowMotor.getForwardLimitSwitch(Type.kNormallyOpen);
+    m_gatewayLimitSwitch.enableLimitSwitch(true);
 
     m_topEncoder = m_topMotor.getEncoder();
     m_lowEncoder = m_lowMotor.getEncoder();
@@ -52,23 +50,23 @@ public class ShooterSubsystem extends SubsystemBase {
     m_topMotorPidController = m_topMotor.getPIDController();
     m_lowMotorPidController = m_lowMotor.getPIDController();
 
-    // m_gatewayEncoder = m_gatewayMotor.getEncoder();
 
     cVelocity = 0;
     cVelocity2 = 0;
-    // m_dial1 = 0;
-    // m_dial2 = 0;
-    // maxRPMTop = 0;
-    // maxRPMLow = 0;
-    // // oscillationStopWatchLow = new Timer();
-    // // oscillationStopWatchTop = new Timer();
 
-    // SmartDashboard.putNumber("Set Velocity top", velocity);
-    // SmartDashboard.putNumber("Set Velocity low", velocity2);
-    // SmartDashboard.putNumber("P Gain", ShooterConstants.kPt0);
-    // SmartDashboard.putNumber("I Gain", ShooterConstants.kIt0);
-    // SmartDashboard.putNumber("D Gain", ShooterConstants.kDt0);
+    // UNCOMMENT WHEN YOU RECORD THE ACTUAL MOTOR SPEED VALUES SO YOU CAN ACTUALLY USE PID TO CONTROL RPM
+    // setPID(m_lowMotorPidController, ShooterConstants.kPl0, ShooterConstants.kIl0, ShooterConstants.kDl0, 0);
+    // setPID(m_topMotorPidController, ShooterConstants.kPt0, ShooterConstants.kIt0, ShooterConstants.kDt0, 0);
+  }
 
+  public void setPID(SparkPIDController controller, double p, double i, double d, int slot) {
+    controller.setP(p, slot);
+    controller.setI(i, slot);
+    controller.setD(d, slot);
+  }
+
+  public boolean isSwitchPressed() {
+    return m_gatewayLimitSwitch.isPressed();
   }
 
   public void shootSmartVelocity(double velocity) {
@@ -99,7 +97,11 @@ public class ShooterSubsystem extends SubsystemBase {
   // }
 
   public void shoot() {
-    shootSmartVelocity(ShooterConstants.kShooterSpeedTop, ShooterConstants.kShooterSpeedLow);
+    shootSmartVelocity(ShooterConstants.kShooterSpeedSpeakerTop, ShooterConstants.kShooterSpeedSpeakerLow);
+  }
+
+  public void shootAmp() {
+    //shootSmartVelocity(, );
   }
 
   // public void shootTop(double speed, double dial) {
@@ -130,22 +132,18 @@ public class ShooterSubsystem extends SubsystemBase {
     m_lowMotor.set(0);
   }
 
-  public void stopGateway() {
-    m_gatewayMotor.set(0);
-  }
-
-  // this is to be called in execute in a command.
-  // we are equating the current rpm to the constant rpm as a placeholder, should
-  // not be max.
 
   public boolean isRampedUp() {
     return m_topEncoder.getVelocity() > ShooterConstants.kShooterMaxVelocity;
-    // Please Collin come back and check this - we are just yapping.
   }
 
   public double lookupFF(double speed) {
-    double FFPercent = Math.min(8.48 * Math.pow(10, -5) * (speed) + .0143, 1.0);
-    return FFPercent;
+    // Uncomment for real FF values once you get the actual rpms
+    // double FFDutyCyclePercent = 8.48 * Math.pow(10, -5) * Math.abs(speed) + .0143;
+    // FFDutyCyclePercent = Math.min(1.0, FFDutyCyclePercent);
+    // FFDutyCyclePercent = Math.copySign(FFDutyCyclePercent,speed);
+    // return FFDutyCyclePercent;
+    return Math.min(8.48 * Math.pow(10, -5) * (speed) + .0143, 1.0);
   }
 
   public int lookupSlot(double speed) {
@@ -167,19 +165,6 @@ public class ShooterSubsystem extends SubsystemBase {
         ArbFFUnits.kPercentOut);
     m_lowMotorPidController.setReference(cVelocity2, ControlType.kSmartVelocity, 0, lookupFF(cVelocity),
         ArbFFUnits.kPercentOut);
-  }
-
-  public void slowDownToZero() {
-    m_topMotorPidController.setReference(0, ControlType.kSmartVelocity, 0, lookupFF(0), ArbFFUnits.kPercentOut);
-    m_lowMotorPidController.setReference(0, ControlType.kSmartVelocity, 0, lookupFF(0), ArbFFUnits.kPercentOut);
-  }
-
-  public void intakeGateway() {
-    m_gatewayMotor.set(ShooterConstants.kGatewayMotorSpeed);
-  }
-
-  public void shootGateway() {
-    m_gatewayMotor.set(-ShooterConstants.kGatewayMotorSpeed);
   }
 
   @Override

@@ -57,6 +57,7 @@ public class DriveSubsystem extends SubsystemBase {
   private boolean m_first = true;
   private double m_controllerYreq = 0;
   private double m_controllerXreq = 0;
+  private double m_rotReq = 0;
   
 
   private double m_currentRotation = 0.0;
@@ -110,6 +111,9 @@ public class DriveSubsystem extends SubsystemBase {
   public double getXreq(){
     return m_controllerXreq;
   }
+  public void updateRot(double reqRot){
+    m_rotReq = reqRot;
+  }
 
   public Pose2d getAutoPoseReversed() {
     double autoPoseY = m_estimator.getEstimatedPosition().getY();
@@ -130,6 +134,9 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit) {
 
+    if(m_rotReq != 0){
+      rot = m_rotReq;
+    }
     double xSpeedCommanded;
     double ySpeedCommanded;
     m_controllerYreq = xSpeed;

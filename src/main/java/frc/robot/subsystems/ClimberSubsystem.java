@@ -8,7 +8,6 @@ import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import java.util.function.DoubleSupplier;
 
-import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 // import com.revrobotics.RelativeEncoder;
@@ -39,11 +38,11 @@ public class ClimberSubsystem extends SubsystemBase {
 
   }
 
-  public void testClimber(DoubleSupplier req) {
+  public void moveRightClimber(DoubleSupplier req) {
     m_rightClimber.setMotor(req.getAsDouble());
   }
 
-  public void testClimber2(DoubleSupplier req) {
+  public void moveLeftClimber(DoubleSupplier req) {
     m_leftClimber.setMotor(req.getAsDouble());
   }
 
@@ -80,8 +79,8 @@ public class ClimberSubsystem extends SubsystemBase {
   public void finishClimb() {
     System.out.println(m_leftClimber.checkHit() && m_rightClimber.checkHit());
     if (m_leftClimber.checkHit() && m_rightClimber.checkHit()) {
-      m_rightClimber.setMotor(ClimberConstants.kClimbingSpeed);
-      m_leftClimber.setMotor(ClimberConstants.kClimbingSpeed);
+      m_rightClimber.setMotor(ClimberConstants.kLoweringClimbingSpeed);
+      m_leftClimber.setMotor(ClimberConstants.kLoweringClimbingSpeed);
       if (m_leftClimber.isFinishedLowering() || m_rightClimber.isFinishedLowering()) {
         System.out.println("Left Climber: " + m_leftClimber.isFinishedLowering());
         System.out.println("Right Climber: " + m_rightClimber.isFinishedLowering());
@@ -98,6 +97,12 @@ public class ClimberSubsystem extends SubsystemBase {
 
   public boolean getSwitchStatus() {
     return (m_leftClimber.getForwardSwitch().isPressed() && m_rightClimber.getForwardSwitch().isPressed());
+  }
+  public boolean getLeftSwitchStatus() {
+    return m_leftClimber.getForwardSwitch().isPressed();
+  }
+  public boolean getRightSwitchStatus() {
+    return m_rightClimber.getReverseSwitch().isPressed();
   }
 
   public void release() {
@@ -131,7 +136,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (m_leftClimber.getReverseSwitch().isPressed()) {
+    if (m_leftClimber.getForwardSwitch().isPressed()) {
       m_leftClimber.resetEncoder();
     }
     if (m_rightClimber.getReverseSwitch().isPressed()) {
@@ -163,15 +168,12 @@ public class ClimberSubsystem extends SubsystemBase {
     // private RelativeEncoder m_encoder;
     private boolean m_bIsInverted;
     private double m_previousAmps;
-    private double m_previousTime;
-    private double m_deltaTime;
+    // private double m_previousTime;
     public boolean m_ready;
     private double m_timeSinceStart;
     private double m_initialClimbTime;
-    private boolean bstartupTime;
     private DoubleSolenoid m_brake;
     private SparkLimitSwitch m_limitSwitchForward, m_limitSwitchReverse;
-    private boolean m_isTimerReached;
     private RelativeEncoder m_relativeEncoder;
 
     public Climber(int CanID, int forward, int reverse) {
@@ -183,12 +185,9 @@ public class ClimberSubsystem extends SubsystemBase {
       m_limitSwitchForward.enableLimitSwitch(true);
       m_limitSwitchReverse.enableLimitSwitch(true);
       m_previousAmps = 0;
-      m_previousTime = m_initialClimbTime = Timer.getFPGATimestamp();
-      m_deltaTime = Timer.getFPGATimestamp() - m_previousTime;
+      // m_previousTime = m_initialClimbTime = Timer.getFPGATimestamp();
       m_ready = false;
       m_timeSinceStart = 0;
-      m_isTimerReached = false;
-      bstartupTime = false;
       m_brake = new DoubleSolenoid(PneumaticsModuleType.REVPH, forward, reverse);
       m_relativeEncoder = m_motor.getEncoder();
 
@@ -249,9 +248,9 @@ public class ClimberSubsystem extends SubsystemBase {
         m_motor.set(0);
       } else {
         if (m_bIsInverted) {
-          m_motor.set((ClimberConstants.kClimbingSpeed) * -1);
+          m_motor.set((ClimberConstants.kLoweringClimbingSpeed) * -1);
         }
-        m_motor.set(ClimberConstants.kClimbingSpeed);
+        m_motor.set(ClimberConstants.kLoweringClimbingSpeed);
       }
     }
 
@@ -279,8 +278,7 @@ public class ClimberSubsystem extends SubsystemBase {
     }
 
     public void startClimb() {
-      bstartupTime = false;
-      m_previousTime = m_initialClimbTime = Timer.getFPGATimestamp();
+      // m_previousTime = m_initialClimbTime = Timer.getFPGATimestamp();
       m_ready = false;
       // brake();
       m_timeSinceStart = 0;
@@ -293,7 +291,6 @@ public class ClimberSubsystem extends SubsystemBase {
       // System.out.println(m_initialClimbTime + "Initial Climb Time");
       m_timeSinceStart = Timer.getFPGATimestamp() - m_initialClimbTime;
       if (m_timeSinceStart >= 1) {
-        m_isTimerReached = true;
         // System.out.println("TIMER DONE!!!");
         if (getDifference(m_previousAmps) > ClimberConstants.kDifferenceInRate) {
           if (getAmps() > 12) {

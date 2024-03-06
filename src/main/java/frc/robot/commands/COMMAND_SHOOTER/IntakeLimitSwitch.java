@@ -2,41 +2,39 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.COMMAND_TESTING;
+package frc.robot.commands.COMMAND_SHOOTER;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.GatewaySubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
-public class GatewayTest extends Command {
-  /** Creates a new GatewayTest. */
+public class IntakeLimitSwitch extends Command {
   ShooterSubsystem m_shooter;
-  public GatewayTest(ShooterSubsystem shooter) {
+  GatewaySubsystem m_gate;
+  public IntakeLimitSwitch(ShooterSubsystem shooter, GatewaySubsystem gate) {
     m_shooter = shooter;
-
-    // Use addRequirements() here to declare subsystem dependencies.
+    m_gate = gate;
+    addRequirements(m_shooter, m_gate);
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_shooter.intakeGateway();
+    m_shooter.intake();
+    m_gate.intakeGateway();
   }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_shooter.stopGateway();
+    m_shooter.stopShoot();
+    m_gate.stopGateway();
   }
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return m_shooter.isSwitchPressed();
   }
 }
