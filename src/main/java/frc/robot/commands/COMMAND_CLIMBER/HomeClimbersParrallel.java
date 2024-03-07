@@ -9,11 +9,11 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ClimberSubsystem;
 
-public class MoveLeftClimber extends Command {
+public class HomeClimbersParrallel extends Command {
   ClimberSubsystem m_climber;
   DoubleSupplier m_speed;
 
-  public MoveLeftClimber(ClimberSubsystem climber, DoubleSupplier speed) {
+  public HomeClimbersParrallel(ClimberSubsystem climber, DoubleSupplier speed) {
     m_climber = climber;
     m_speed = speed;
   }
@@ -21,22 +21,25 @@ public class MoveLeftClimber extends Command {
   @Override
   public void initialize() {
     m_climber.releaseLeft();
+    m_climber.releaseRight();
   }
 
   @Override
   public void execute() {
-    m_climber.moveLeftClimber(m_speed);
+    m_climber.moveLeftClimber(() -> m_speed.getAsDouble() * -1);
+    m_climber.moveRightClimber(m_speed);
   }
 
   @Override
   public void end(boolean interrupted) {
     m_climber.moveLeftClimber(() -> 0);
+    m_climber.moveRightClimber(() -> 0);
     m_climber.brakeLeft();
   }
 
   @Override
   public boolean isFinished() {
     // return false;
-    return m_climber.getLeftSwitchStatus();
+    return m_climber.getLeftSwitchStatus() || m_climber.getRightSwitchStatus();
   }
 }

@@ -55,8 +55,8 @@ public class DriveSubsystem extends SubsystemBase {
   private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
   private double m_controllerXY = 1;
   private boolean m_first = true;
-  private double m_controllerYreq = 0;
-  private double m_controllerXreq = 0;
+  // private double m_controllerYreq = 0;
+  // private double m_controllerXreq = 0;
   private double m_rotReq = 0;
   
 
@@ -89,6 +89,8 @@ public class DriveSubsystem extends SubsystemBase {
    * @return The pose.
    */
   public Pose2d getPose() {
+        // System.out.println(m_estimator.getEstimatedPosition()+ "  Estimated Pose");
+
     // CHANGE
     if (m_first) {
       m_first = false;
@@ -105,17 +107,16 @@ public class DriveSubsystem extends SubsystemBase {
         m_rearRight.getPosition()
     };
   }
-  public double getYreq(){
-    return m_controllerYreq;
-  }
-  public double getXreq(){
-    return m_controllerXreq;
-  }
+
   public void updateRot(double reqRot){
     m_rotReq = reqRot;
   }
 
   public Pose2d getAutoPoseReversed() {
+    if (m_first) {
+      m_first = false;
+      return new Pose2d(0, 0, new Rotation2d(0));
+    }
     double autoPoseY = m_estimator.getEstimatedPosition().getY();
     double autoPoseX = m_estimator.getEstimatedPosition().getX() * -1;
     return new Pose2d(autoPoseX, autoPoseY,
@@ -128,6 +129,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void resetOdometry(Pose2d pose) {
+    System.out.println(" Reset Odom");
     m_estimator.resetPosition(new Rotation2d(), getSwerveModulePositions(), pose);
 
   }
@@ -139,8 +141,8 @@ public class DriveSubsystem extends SubsystemBase {
     }
     double xSpeedCommanded;
     double ySpeedCommanded;
-    m_controllerYreq = xSpeed;
-    m_controllerXreq = ySpeed;
+    // m_controllerYreq = xSpeed;
+    // m_controllerXreq = ySpeed;
     if (rateLimit) {
       // Convert XY to polar for rate limiting
       double inputTranslationDir = Math.atan2(ySpeed, xSpeed);
@@ -317,7 +319,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    LimeLight.get().estimatePose(m_estimator, this);
+    // LimeLight.get().estimatePose(m_estimator, this);
 
     m_estimator.update(currentRotation2d(), getSwerveModulePositions());
 
@@ -333,7 +335,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void configureHolonomicAutoBuilder() {
     AutoBuilder.configureHolonomic(
-        this::getPose,
+        this::getPose,//getPose,
         this::resetOdometry,
         this::getChassisSpeeds,
         this::driveRobotRelative,

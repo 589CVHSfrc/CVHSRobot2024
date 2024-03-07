@@ -12,6 +12,12 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "IntakeStow"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "PosNeg Test Path"

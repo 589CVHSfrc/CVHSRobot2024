@@ -224,8 +224,8 @@ public final class Constants {
     // Physical Constants
     public static final double kShooterGearRatio = .5;
 
-    public static final double kShooterSpeedSpeakerLow = -7800;//6000
-    public static final double kShooterSpeedSpeakerTop = -9000;//7000
+    public static final double kShooterSpeedSpeakerLow = -7800;//-7800
+    public static final double kShooterSpeedSpeakerTop = -9500;//-9000
 
     
     public static final double kShooterSpeedAmpLow = -6000;
@@ -247,7 +247,7 @@ public final class Constants {
     public static final int kClimberLeftMotorCanID = 55;
     public static final int kClimberRightMotorCanID = 56;
     public static final double kLoweringClimbingSpeed = 0.6;// Change back to 0.7
-    public static final double kArmRaisingSpeed = 0.7;// Change back tp 0.7
+    public static final double kArmRaisingSpeed = 0.2;// Change back tp 0.7
     public static final int kClimberLeftReverse = 2;
 
     public static final int kClimberRightReverse = 5;// 5
