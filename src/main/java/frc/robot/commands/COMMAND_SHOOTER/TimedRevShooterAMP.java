@@ -9,11 +9,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.GatewaySubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
-public class TimedRevShooter extends Command {
+public class TimedRevShooterAMP extends Command {
   Timer m_timer;
   ShooterSubsystem m_shooter;
   GatewaySubsystem m_gate;
-  public TimedRevShooter(ShooterSubsystem shooter, GatewaySubsystem gate) {
+  public TimedRevShooterAMP(ShooterSubsystem shooter, GatewaySubsystem gate) {
     m_timer = new Timer();
     m_gate = gate;
     m_shooter = shooter;
@@ -22,14 +22,16 @@ public class TimedRevShooter extends Command {
 
   @Override
   public void initialize() {
+
     m_timer.reset();
     m_timer.start();
+
   }
 
   @Override
   public void execute() {
 
-    m_shooter.shoot();
+    m_shooter.shootAmp();
     if(m_timer.hasElapsed(1)){
       m_gate.shootGateway();
     }

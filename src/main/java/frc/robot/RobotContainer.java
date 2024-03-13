@@ -10,6 +10,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -23,23 +24,25 @@ import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.COMMAND_ARM.ArmFloor;
 import frc.robot.commands.COMMAND_ARM.ArmStow;
+import frc.robot.commands.COMMAND_ARM.ArmStowEXP;
 import frc.robot.commands.COMMAND_ARM.BrakeArm;
 import frc.robot.commands.COMMAND_ARM.BrakeArmRelease;
 import frc.robot.commands.COMMAND_CLIMBER.MoveLeftClimber;
 import frc.robot.commands.COMMAND_CLIMBER.MoveRightClimber;
 import frc.robot.commands.COMMAND_DRIVE.DefaultDrive;
-import frc.robot.commands.COMMAND_DRIVE.DrivePose;
 import frc.robot.commands.COMMAND_DRIVE.ResetGyro;
 import frc.robot.commands.COMMAND_DRIVE.Turn180;
-import frc.robot.commands.COMMAND_PARALLEL.ExtendClimbers;
 import frc.robot.commands.COMMAND_PARALLEL.ExtendClimbersHOLD;
 import frc.robot.commands.COMMAND_PARALLEL.HomeClimbers;
 import frc.robot.commands.COMMAND_PARALLEL.IntakeDown;
 import frc.robot.commands.COMMAND_SEQUENCE.IntakeArmFloor;
 import frc.robot.commands.COMMAND_SHOOTER.Intake;
 import frc.robot.commands.COMMAND_SHOOTER.RevUpMotors;
+import frc.robot.commands.COMMAND_SHOOTER.RevUpMotorsAmp;
 import frc.robot.commands.COMMAND_SHOOTER.Shoot;
 import frc.robot.commands.COMMAND_SHOOTER.TimedRevShooter;
+import frc.robot.commands.COMMAND_SHOOTER.TimedRevShooterAMP;
+import frc.robot.commands.COMMAND_TESTING.HarmonyClimb;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -56,6 +59,7 @@ public class RobotContainer {
         private final static XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
         private final static GenericHID m_coDriverSwitchBoard = new GenericHID(OIConstants.kCODriverControllerPort);
         private final static GenericHID m_coDriverJoystick = new GenericHID(3);
+        private final static GenericHID m_coDriverJoystick2 = new GenericHID(4);
 
         private SendableChooser<Command> m_autoChooser = new SendableChooser<>();
 
@@ -74,14 +78,27 @@ public class RobotContainer {
                 NamedCommands.registerCommand("Stow", new ArmStow(
                                 m_robotArm, () -> ArmConstants.kStowSpeed));
 
+                NamedCommands.registerCommand("Shoot Amp", new TimedRevShooterAMP(m_robotShooter, m_robotGateway));
+
                 SmartDashboard.putData(m_autoChooser);
 
                 configureButtonBindings();
-                // m_autoChooser.setDefaultOption("Donuts", new PathPlannerAuto("Donuts"));
-                m_autoChooser.addOption("POS NEG TEST AUTO", new PathPlannerAuto("PosNegTestAuto"));
+                m_autoChooser.setDefaultOption("Forward", new PathPlannerAuto("Forward"));
                 m_autoChooser.addOption("2 Note Preload", new PathPlannerAuto("2Note Preload"));
-                m_autoChooser.addOption("5 Note Auto V1", new PathPlannerAuto("5 Note Auto V1"));
-                m_autoChooser.addOption("5 Note Auto V2", new PathPlannerAuto("5 Note Auto V2"));
+                m_autoChooser.addOption("!!!!NOTHING!!!!!", new WaitCommand(2));
+                m_autoChooser.addOption("Shoot Only - Speaker", new PathPlannerAuto("Shoot Only - Speaker"));
+                // m_autoChooser.addOption("Shoot and Note 1 - Amp ", new PathPlannerAuto("Shoot
+                // and Note 1 - Amp"));
+                m_autoChooser.addOption("Shoot Only - Amp", new PathPlannerAuto("Shoot Only - Amp"));
+
+                m_autoChooser.addOption("Shoot (Source Side) and Taxi",
+                                new PathPlannerAuto("Shoot (Source Side) and Taxi"));
+
+                m_autoChooser.addOption("WAIT Speaker Taxi (Amp side)", new PathPlannerAuto("WAIT Speaker Taxi (Amp side)"));
+                // m_autoChooser.addOption("5 Note Auto V1", new PathPlannerAuto("5 Note Auto
+                // V1"));
+                // m_autoChooser.addOption("5 Note Auto V2", new PathPlannerAuto("5 Note Auto
+                // V2"));
 
                 // m_robotArm.setDefaultCommand(new MoveArmSpeed(m_robotArm, () ->
                 // m_testjoystick1.getRawAxis(1)*.1));
@@ -115,8 +132,8 @@ public class RobotContainer {
                 // ===================================DEBUG/DRIVE=========================================
 
                 // RESET GYRO
-                // new JoystickButton(m_driverController, 4)
-                // .toggleOnTrue(new ResetGyro(m_robotDrive));
+                new JoystickButton(m_driverController, 4)
+                                .toggleOnTrue(new ResetGyro(m_robotDrive));
 
                 // // RESET DRIVE MOTOR ENCODERS
                 new JoystickButton(m_driverController, 4)
@@ -131,8 +148,8 @@ public class RobotContainer {
                                 .toggleOnTrue(new TimedRevShooter(m_robotShooter, m_robotGateway));
 
                 // // DRIVE TO SPEAKER
-                new JoystickButton(m_driverController, 2)
-                                .whileTrue(new DrivePose(m_robotDrive).driveShootSpeaker());
+                // new JoystickButton(m_driverController, 2)
+                // .whileTrue(new DrivePose(m_robotDrive).driveShootSpeaker());
 
                 // (DRIVE + AIM), THEN SHOOT AT AMP
                 // new JoystickButton(m_driverController, 5)
@@ -147,20 +164,25 @@ public class RobotContainer {
                 // ===================================CLIMBER=========================================
 
                 // EXTEND CLIMBERS
-                new JoystickButton(m_coDriverSwitchBoard, 1)
+                // new JoystickButton(m_coDriverSwitchBoard, 1)
+                // .whileTrue(new ExtendClimbersHOLD(m_robotClimber));
+
+                new JoystickButton(m_driverController, 5)
                                 .whileTrue(new ExtendClimbersHOLD(m_robotClimber));
 
                 // EXTEND LEFT
                 new JoystickButton(m_coDriverJoystick, 3)
                                 .whileTrue(new MoveLeftClimber(m_robotClimber,
-                                                () -> -ClimberConstants.kArmRaisingSpeed));
+                                                () -> -ClimberConstants.kClimberRaisingSpeed));
                 // EXTEND RIGHT
                 new JoystickButton(m_coDriverJoystick, 4)
                                 .whileTrue(new MoveRightClimber(m_robotClimber,
-                                                () -> ClimberConstants.kArmRaisingSpeed));
+                                                () -> ClimberConstants.kClimberRaisingSpeed));
 
                 // HOME CLIMBERS
-                new JoystickButton(m_coDriverSwitchBoard, 2)
+                // new JoystickButton(m_coDriverSwitchBoard, 2)
+                // .toggleOnTrue(new HomeClimbers(m_robotClimber));
+                new JoystickButton(m_driverController, 6)
                                 .toggleOnTrue(new HomeClimbers(m_robotClimber));
 
                 // HOME LEFT
@@ -183,7 +205,10 @@ public class RobotContainer {
 
                 // STOW ARM
                 new JoystickButton(m_coDriverSwitchBoard, 6)
-                                .toggleOnTrue(new ArmStow(m_robotArm, () -> ArmConstants.kStowSpeed));
+                                .toggleOnTrue(new ArmStowEXP(m_robotArm, () -> ArmConstants.kStowSpeed));
+                
+                new JoystickButton(m_coDriverJoystick2, 12)
+                                .toggleOnTrue(new ArmStowEXP(m_robotArm, () -> ArmConstants.kStowSpeed));
 
                 // RUN GATEWAYS
                 new JoystickButton(m_coDriverSwitchBoard, 7)
@@ -195,14 +220,14 @@ public class RobotContainer {
 
                 // SHOOT AMP
                 new JoystickButton(m_coDriverSwitchBoard, 10)
-                                .whileTrue(new RevUpMotors(m_robotShooter));
+                                .whileTrue(new RevUpMotorsAmp(m_robotShooter));
                 // ===================================ARM=====================================================
 
                 // BRAKE ARM
-                new JoystickButton(m_coDriverSwitchBoard, 3)
+                new JoystickButton(m_coDriverSwitchBoard, 1)
                                 .whileTrue(new BrakeArm(m_robotArm));
                 // RELEASE ARM BRAKE
-                new JoystickButton(m_coDriverSwitchBoard, 4)
+                new JoystickButton(m_coDriverSwitchBoard, 2)
                                 .whileTrue(new BrakeArmRelease(m_robotArm));
 
                 // THESE WORK=========================
@@ -218,11 +243,11 @@ public class RobotContainer {
 
                 // new JoystickButton(m_coDriverSwitchBoard, 6)
                 // .toggleOnTrue(new ClimberSolenidTestRight(m_robotClimber, true));
-                // // LOCK RIGHT
-
-                // new JoystickButton(m_coDriverSwitchBoard, 4)
-                // .toggleOnTrue(new ClimberSolenidTestRight(m_robotClimber, false));
-                // THESE WORK=========================
+                // // LOCK RWWWWWWIGHT
+                //// HARMMONY CLIMB////
+                new JoystickButton(m_coDriverSwitchBoard, 3)
+                                .toggleOnTrue(new HarmonyClimb(m_robotClimber));
+                // THESE WORK=======================
 
                 // // new JoystickButton(m_testjoystick1, 7)
                 // // .toggleOnTrue(new ShootDial(m_robotShooter, () ->
@@ -232,15 +257,15 @@ public class RobotContainer {
         }
 
         public Command getAutonomousCommand() {
-                // ret urn null;
-
+                // return new DriveBack(m_robotDrive);
                 try {
 
                         Pose2d startingpose = PathPlannerAuto
                                         .getStaringPoseFromAutoFile(m_autoChooser.getSelected().getName());
-                        m_robotDrive.resetOdometry(startingpose);
+                        m_robotDrive.resetOdometry(startingpose.rotateBy(new Rotation2d(Units.degreesToRadians(180))));
                         System.out.print("====================STARTING POSE: " + startingpose +
                                         "====================");
+
                         return m_autoChooser.getSelected();
 
                 } catch (RuntimeException e) {
@@ -249,7 +274,6 @@ public class RobotContainer {
                                         + m_autoChooser.getSelected().getName());
                         return new WaitCommand(1);
                 }
-
         }
 
 }

@@ -7,6 +7,7 @@ package frc.robot.commands.COMMAND_CLIMBER;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.ClimberConstants;
 import frc.robot.subsystems.ClimberSubsystem;
 
 public class MoveLeftClimberHOLD extends Command {
@@ -36,7 +37,7 @@ public class MoveLeftClimberHOLD extends Command {
 
   @Override
   public boolean isFinished() {
-    return false;
+    return m_climber.getPositionLeft() <= (ClimberConstants.kEncoderIsRaised*-1);
     // return m_climber.getLeftSwitchStatus();
   }
 }

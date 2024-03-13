@@ -6,10 +6,10 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.SparkLimitSwitch.Type;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkLimitSwitch;
+import com.revrobotics.SparkLimitSwitch.Type;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.SparkPIDController.ArbFFUnits;
 
@@ -101,7 +101,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void shootAmp() {
-    //shootSmartVelocity(, );
+    shootSmartVelocity(ShooterConstants.kShooterSpeedAmpTop, ShooterConstants.kShooterSpeedAmpLow);
   }
 
   // public void shootTop(double speed, double dial) {

@@ -16,8 +16,8 @@ import frc.robot.subsystems.ClimberSubsystem;
 public class ExtendClimbersHOLD extends ParallelCommandGroup {
   public ExtendClimbersHOLD(ClimberSubsystem climber) {
     addCommands(
-        new MoveRightClimberHOLD(climber, () -> ClimberConstants.kArmRaisingSpeed),
-        new MoveLeftClimberHOLD(climber, () -> -ClimberConstants.kArmRaisingSpeed)
+        new MoveRightClimberHOLD(climber, () -> ClimberConstants.kClimberRaisingSpeed),
+        new MoveLeftClimberHOLD(climber, () -> -ClimberConstants.kClimberRaisingSpeed)
 
     );
   }

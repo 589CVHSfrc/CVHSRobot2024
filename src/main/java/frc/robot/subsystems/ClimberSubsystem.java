@@ -4,10 +4,9 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkLowLevel.MotorType;
-
 import java.util.function.DoubleSupplier;
 
+import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 // import com.revrobotics.RelativeEncoder;
@@ -15,7 +14,6 @@ import com.revrobotics.SparkLimitSwitch;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
@@ -91,18 +89,28 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public void raiseArms() {
-    m_leftClimber.setMotor(ClimberConstants.kArmRaisingSpeed);
-    m_rightClimber.setMotor(ClimberConstants.kArmRaisingSpeed);
+    m_leftClimber.setMotor(ClimberConstants.kClimberRaisingSpeed);
+    m_rightClimber.setMotor(ClimberConstants.kClimberRaisingSpeed);
   }
 
   public boolean getSwitchStatus() {
     return (m_leftClimber.getForwardSwitch().isPressed() && m_rightClimber.getForwardSwitch().isPressed());
   }
+
   public boolean getLeftSwitchStatus() {
     return m_leftClimber.getForwardSwitch().isPressed();
   }
+
   public boolean getRightSwitchStatus() {
     return m_rightClimber.getReverseSwitch().isPressed();
+  }
+
+  public double getPositionRight() {
+    return m_rightClimber.getEncoder();
+  }
+
+  public double getPositionLeft() {
+    return m_leftClimber.getEncoder();
   }
 
   public void release() {
@@ -129,9 +137,31 @@ public class ClimberSubsystem extends SubsystemBase {
   /////////////////////
 
   public void climbingOrder() {
-    m_leftClimber.hitChain(m_leftClimber.checkHit());
-    m_rightClimber.hitChain(m_rightClimber.checkHit());
-    finishClimb();
+
+    if (m_leftClimber.checkHit() && m_rightClimber.checkHit()) {
+      m_leftClimber.release();
+      m_rightClimber.release();
+      m_leftClimber.setMotor(ClimberConstants.kLoweringClimbingSpeed);
+      m_rightClimber.setMotor(-ClimberConstants.kLoweringClimbingSpeed);
+      return;
+    }
+
+
+    if (m_leftClimber.checkHit()) {
+      m_leftClimber.stop();
+      m_leftClimber.brake();
+    } else {
+      m_leftClimber.setMotor(ClimberConstants.kLoweringClimbingSpeed);
+    }
+    if (m_rightClimber.checkHit()) {
+      m_rightClimber.stop();
+      m_rightClimber.brake();
+    } else {
+      m_rightClimber.setMotor(-ClimberConstants.kLoweringClimbingSpeed);
+    }
+    // m_leftClimber.hitChain(m_leftClimber.checkHit());
+    // m_rightClimber.hitChain(m_rightClimber.checkHit());
+    // finishClimb();
   }
 
   @Override
@@ -142,8 +172,6 @@ public class ClimberSubsystem extends SubsystemBase {
     if (m_rightClimber.getReverseSwitch().isPressed()) {
       m_rightClimber.resetEncoder();
     }
-
-
 
     SmartDashboard.putNumber("Left Climber amps", m_leftClimber.getAmps());
     SmartDashboard.putNumber("Right Climber amps", m_rightClimber.getAmps());
@@ -172,6 +200,7 @@ public class ClimberSubsystem extends SubsystemBase {
     public boolean m_ready;
     private double m_timeSinceStart;
     private double m_initialClimbTime;
+    private int m_hitCounter;
     private DoubleSolenoid m_brake;
     private SparkLimitSwitch m_limitSwitchForward, m_limitSwitchReverse;
     private RelativeEncoder m_relativeEncoder;
@@ -190,6 +219,7 @@ public class ClimberSubsystem extends SubsystemBase {
       m_timeSinceStart = 0;
       m_brake = new DoubleSolenoid(PneumaticsModuleType.REVPH, forward, reverse);
       m_relativeEncoder = m_motor.getEncoder();
+      m_hitCounter = 0;
 
       m_bIsInverted = false;
       // if inverted then forward limit switch and motor + is down and encoder reads
@@ -205,7 +235,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
     public SparkLimitSwitch getForwardSwitch() {
       // if (m_bIsInverted) {
-      //   return m_limitSwitchReverse;
+      // return m_limitSwitchReverse;
       // }
       // return m_limitSwitchForward;
       return m_limitSwitchForward;
@@ -223,7 +253,7 @@ public class ClimberSubsystem extends SubsystemBase {
     public SparkLimitSwitch getReverseSwitch() {
       return m_limitSwitchReverse;
       // if (m_bIsInverted) {
-      //   return m_limitSwitchForward;
+      // return m_limitSwitchForward;
       // }
       // return m_limitSwitchReverse;
     }
@@ -247,10 +277,13 @@ public class ClimberSubsystem extends SubsystemBase {
       if (hasHit) {
         m_motor.set(0);
       } else {
+
         if (m_bIsInverted) {
           m_motor.set((ClimberConstants.kLoweringClimbingSpeed) * -1);
         }
+
         m_motor.set(ClimberConstants.kLoweringClimbingSpeed);
+
       }
     }
 
@@ -278,6 +311,7 @@ public class ClimberSubsystem extends SubsystemBase {
     }
 
     public void startClimb() {
+      m_hitCounter = 0;
       // m_previousTime = m_initialClimbTime = Timer.getFPGATimestamp();
       m_ready = false;
       // brake();
@@ -289,20 +323,21 @@ public class ClimberSubsystem extends SubsystemBase {
     public boolean checkHit() {
       // System.out.println(m_timeSinceStart + "Time Since Start");
       // System.out.println(m_initialClimbTime + "Initial Climb Time");
-      m_timeSinceStart = Timer.getFPGATimestamp() - m_initialClimbTime;
-      if (m_timeSinceStart >= 1) {
-        // System.out.println("TIMER DONE!!!");
-        if (getDifference(m_previousAmps) > ClimberConstants.kDifferenceInRate) {
-          if (getAmps() > 12) {
+      // m_timeSinceStart = Timer.getFPGATimestamp() - m_initialClimbTime;
+      // if (m_timeSinceStart >= 1) {
+      // System.out.println("TIMER DONE!!!");
+      if (getDifference(m_previousAmps) > ClimberConstants.kDifferenceInRate) {
+        if (getAmps() > 12) {
+          m_hitCounter++;
+          if (m_hitCounter > 5) {
             m_ready = true;
-            m_relativeEncoder.setPosition(0);
-
-            return m_ready;
-          } else {
-            System.out.println("Waiting for Timer");
           }
+
+          return m_ready;
         }
+        m_hitCounter = 0;
       }
+      // }
       return m_ready;
     }
 

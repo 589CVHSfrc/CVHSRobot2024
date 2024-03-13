@@ -114,14 +114,17 @@ public final class Constants {
     public static final double kTurningEncoderPositionPIDMinInput = 0; // radians
     public static final double kTurningEncoderPositionPIDMaxInput = kTurningEncoderPositionFactor; // radians
 
-    public static final double kDrivingP = 0.00006;// 0.04;
+    // public static final double kDrivingP = 0.00006;// 0.04;
+    public static final double kDrivingP = 0.04;// 0.04;
     public static final double kDrivingI = 0; // 0.0001;
+    // public static final double kDrivingI = 0.0001; // 0.0001;
     public static final double kDrivingD = 0;
     public static final double kDrivingFF = 1 / kDriveWheelFreeSpeedRps;
     public static final double kDrivingMinOutput = -1;
     public static final double kDrivingMaxOutput = 1;
 
-    public static final double kTurningP = 0.55;// 0.5;
+    // public static final double kTurningP = 0.55;// 0.5;
+    public static final double kTurningP = 0.6;// 0.5;
     public static final double kTurningI = 0.0;
     public static final double kTurningD = 0.0;
     public static final double kTurningFF = 0;
@@ -227,9 +230,8 @@ public final class Constants {
     public static final double kShooterSpeedSpeakerLow = -7800;//-7800
     public static final double kShooterSpeedSpeakerTop = -9500;//-9000
 
-    
-    public static final double kShooterSpeedAmpLow = -6000;
-    public static final double kShooterSpeedAmpTop = -7000;
+    public static final double kShooterSpeedAmpLow = -3500; //-3000 if want lower
+    public static final double kShooterSpeedAmpTop = -2500; //-2000 if want lower
     // Change this - we need to make this hashmap/lookup table for dif
     // poses/dif objects -speaker amp
     public static final double kIntakeSpeed = 3000;// Change this
@@ -242,18 +244,21 @@ public final class Constants {
 
     // difference in rate refers to the difference between the left and right amps
     // over change in time;
-    public static final double kEncoderIsRaised = 25; // Change this
+    public static final double kEncoderIsRaised = 90; // Change this
     public static final double kDifferenceInRate = 2;
     public static final int kClimberLeftMotorCanID = 55;
     public static final int kClimberRightMotorCanID = 56;
-    public static final double kLoweringClimbingSpeed = 0.6;// Change back to 0.7
-    public static final double kArmRaisingSpeed = 0.2;// Change back tp 0.7
-    public static final int kClimberLeftReverse = 2;
+
+    public static final double kLoweringClimbingSpeed = 0.6;// Pit: 0.1
+    public static final double kClimberRaisingSpeed = 0.4;// Pit: 0.2
+
+    public static final int kClimberLeftReverse = 2; //
 
     public static final int kClimberRightReverse = 5;// 5
 
     public static final int kClimberLeftForward = 3;
 
     public static final int kClimberRightForward = 4;// 4
+    
   }
 }
