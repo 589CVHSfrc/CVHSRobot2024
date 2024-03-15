@@ -117,6 +117,7 @@ public class MAXSwerveModule {
     m_drivingEncoder.setPosition(0);
     // m_drivingSparkMax.setInverted(true);
     // m_drivingEncoder.setInverted(true);
+    
   }
 
   /**

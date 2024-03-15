@@ -31,7 +31,7 @@ public final class Constants {
   public static final class DriveConstants {
 
     public static final Pose2d kShootingPoseSpeakerRED = new Pose2d(14, 2, new Rotation2d(0));
-    public static final Pose2d kShootingPoseSpeakerBLUE = new Pose2d(15.5, 2.6  ,
+    public static final Pose2d kShootingPoseSpeakerBLUE = new Pose2d(15.5, 2.6,
         new Rotation2d(Units.degreesToRadians(180)));
 
     public static final Pose2d kShootingPoseAmpRED = new Pose2d(14, 2, new Rotation2d(0));
@@ -47,9 +47,9 @@ public final class Constants {
     public static final double kRotationalSlewRate = 10; // 2.0 percent per second (1 = 100%)
 
     // Chassis configuration
-    public static final double kTrackWidth = Units.inchesToMeters(29);
+    public static final double kTrackWidth = Units.inchesToMeters(25.5);// 29
     // Distance between centers of right and left wheels on robot
-    public static final double kWheelBase = Units.inchesToMeters(29);
+    public static final double kWheelBase = Units.inchesToMeters(25.5);// 29
     // Distance between front and back wheels on robot
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
         new Translation2d(kWheelBase / 2, kTrackWidth / 2),
@@ -86,7 +86,7 @@ public final class Constants {
     // This changes the drive speed of the module (a pinion gear with more teeth
     // will result in a
     // robot that drives faster).
-    public static final int kDrivingMotorPinionTeeth = 13;
+    public static final int kDrivingMotorPinionTeeth = 13;//12
 
     // Invert the turning encoder, since the output shaft rotates in the opposite
     // direction of
@@ -165,10 +165,13 @@ public final class Constants {
   }
 
   public static final class VisualConstants {
-    public static final Transform3d kCameraRelativeToRobot = new Transform3d(Units.inchesToMeters(-5), 0,
-        Units.inchesToMeters(19.5), new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(30), 0));// subject to change relative, x and
-                                                                                    // y
-    public static final String kPhotonCameraName = "limelight";
+    public static final Transform3d kCameraRelativeToRobot = new Transform3d(
+        Units.inchesToMeters(-5),
+        0,
+        Units.inchesToMeters(19.5),
+        new Rotation3d(Units.degreesToRadians(0),
+            Units.degreesToRadians(30), 0));
+    public static final String kPhotonCameraName = "aprilcamera";
   }
 
   public static final class ArmConstants {
@@ -227,11 +230,11 @@ public final class Constants {
     // Physical Constants
     public static final double kShooterGearRatio = .5;
 
-    public static final double kShooterSpeedSpeakerLow = -7800;//-7800
-    public static final double kShooterSpeedSpeakerTop = -9500;//-9000
+    public static final double kShooterSpeedSpeakerLow = -7800;// -7800
+    public static final double kShooterSpeedSpeakerTop = -9500;// -9000
 
-    public static final double kShooterSpeedAmpLow = -3500; //-3000 if want lower
-    public static final double kShooterSpeedAmpTop = -2500; //-2000 if want lower
+    public static final double kShooterSpeedAmpLow = -3500; // -3000 if want lower
+    public static final double kShooterSpeedAmpTop = -2500; // -2000 if want lower
     // Change this - we need to make this hashmap/lookup table for dif
     // poses/dif objects -speaker amp
     public static final double kIntakeSpeed = 3000;// Change this
@@ -259,6 +262,6 @@ public final class Constants {
     public static final int kClimberLeftForward = 3;
 
     public static final int kClimberRightForward = 4;// 4
-    
+
   }
 }

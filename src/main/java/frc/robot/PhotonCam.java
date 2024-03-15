@@ -7,7 +7,6 @@ package frc.robot;
 import java.io.IOException;
 import java.util.Optional;
 
-
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -19,52 +18,81 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.net.PortForwarder;
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.Constants.VisualConstants;
 import frc.robot.subsystems.DriveSubsystem;
 
-/** Add your docs here. */
-public class LimeLight {
-    private static LimeLight m_limelight;
+public class PhotonCam {
+    private static PhotonCam m_photonCam;
     private AprilTagFieldLayout m_aprilTagLayout;
-    private PhotonCamera m_photonCamera = new PhotonCamera("aprilcamera");
-    private PhotonPoseEstimator m_estimator;
+    private PhotonCamera m_photonCamera = new PhotonCamera("aprilcamera");// CHANGE TO CONSTANT
+    private PhotonPoseEstimator m_photonEstimator;
 
-    private LimeLight() {
+    private PhotonCam() {
         try {
             m_aprilTagLayout = AprilTagFieldLayout.loadFromResource(AprilTagFields.k2024Crescendo.m_resourceFile);
 
         } catch (IOException e) {
             System.out.println("======Unable to load AprilTag Layout: ======");
-            System.out.print(e);
+            System.out.println(e);
         }
-        m_aprilTagLayout.setOrigin(OriginPosition.kRedAllianceWallRightSide);
-        // m_photonCamera = new PhotonCamera(VisualConstants.kPhotonCameraName);
-        m_estimator = new PhotonPoseEstimator(m_aprilTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+
+
+        m_photonEstimator = new PhotonPoseEstimator(m_aprilTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
                 m_photonCamera,
                 VisualConstants.kCameraRelativeToRobot);
-        m_estimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+    
+        m_photonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
         PortForwarder.add(5800, "photonvision.local", 5800);
-
+        
     }
 
-    public static LimeLight get() {
-        if (m_limelight == null) {
-            m_limelight = new LimeLight();
-            return m_limelight;
+    /**
+     * red = true
+     * 
+     * @return alliance as a bool
+     */
+    public boolean getAlliance() {
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent()) {
+
+            return alliance.get() == DriverStation.Alliance.Red;
         }
-        return m_limelight;
+        return false;
     }
 
-    public void estimatePose(SwerveDrivePoseEstimator estimator, DriveSubsystem drive) {
-        Optional<EstimatedRobotPose> OPestimation = m_estimator.update();
+
+
+    public static PhotonCam get() {
+        if (m_photonCam == null) {
+            m_photonCam = new PhotonCam();
+        }
+        return m_photonCam;
+    }
+
+    public void estimatePose(SwerveDrivePoseEstimator estimator) {
+        // Gets Estimation from camera
+        Optional<EstimatedRobotPose> OPestimation = m_photonEstimator.update();
 
         if (OPestimation.isPresent()) {
             EstimatedRobotPose estimation = OPestimation.get();
             Pose2d estimatedPose2d = estimation.estimatedPose.toPose2d();
+
+            // if estimation exists, then add Vision Measurement, to odom in class
             estimator.addVisionMeasurement(estimatedPose2d, estimation.timestampSeconds);
+
             // estimator.resetPosition(estimatedPose2d.getRotation(),
-            //         drive.getSwerveModulePositions(),
-            //         estimatedPose2d);
+            // drive.getSwerveModulePositions(),
+            // estimatedPose2d);
+        }
+    }
+    public void setAlliance(boolean alliance){
+        if (alliance) {
+            m_aprilTagLayout.setOrigin(OriginPosition.kBlueAllianceWallRightSide);
+
+        } else {
+            m_aprilTagLayout.setOrigin(OriginPosition.kRedAllianceWallRightSide);
+
         }
     }
 

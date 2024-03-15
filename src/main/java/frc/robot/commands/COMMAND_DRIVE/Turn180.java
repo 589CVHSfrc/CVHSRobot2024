@@ -14,21 +14,21 @@ public class Turn180 extends Command {
 
     public Turn180(DriveSubsystem drive) {
         m_drive = drive;
-        m_origAngle = m_drive.getGyroYaw();
+        m_origAngle = m_drive.getGyroYawDeg();
         // Use addRequirements() here to declare subsystem dependencies.
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
-        m_origAngle = m_drive.getGyroYaw();
+        m_origAngle = m_drive.getGyroYawDeg();
 
     }
 
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        System.out.println(m_drive.getGyroYaw());
+        System.out.println(m_drive.getGyroYawDeg());
 
         if (m_origAngle >= 0) {
             m_drive.updateRot(-.2);
@@ -60,9 +60,9 @@ public class Turn180 extends Command {
     @Override
     public boolean isFinished() {
         if (m_origAngle > 0) {
-            return m_drive.getGyroYaw() <= 15;
+            return m_drive.getGyroYawDeg() <= 15;
         } else {
-            return m_drive.getGyroYaw() >= -15;
+            return m_drive.getGyroYawDeg() >= -15;
 
         }
     }

@@ -420,7 +420,7 @@
 //         this::getAlliance,
 //         this);
 //   }
-  
+
 //   public Boolean getAlliance() {
 //     var alliance = DriverStation.getAlliance();
 //     if (alliance.isPresent()) {
@@ -448,12 +448,6 @@
 // }
 
 ///////////////////////////////////////////////////////////////////
-
-
-
-
-
-
 
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
@@ -484,7 +478,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
-import frc.robot.LimeLight;
+import frc.robot.PhotonCam;
 import frc.utils.SwerveUtils;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -515,7 +509,6 @@ public class DriveSubsystem extends SubsystemBase {
   // private double m_controllerYreq = 0;
   // private double m_controllerXreq = 0;
   private double m_rotReq = 0;
-  
 
   private double m_currentRotation = 0.0;
   private double m_currentTranslationDir = 0.001;
@@ -533,11 +526,12 @@ public class DriveSubsystem extends SubsystemBase {
       AutoConstants.kMaxSpeedMetersPerSecond, DriveConstants.kTrackWidth / 2, new ReplanningConfig(),
       0.02);
   private SwerveDrivePoseEstimator m_estimator = new SwerveDrivePoseEstimator(DriveConstants.kDriveKinematics,
-      new Rotation2d(Units.degreesToRadians(getGyroYaw())), getSwerveModulePositions(), getPose());
+      new Rotation2d(Units.degreesToRadians(getGyroYawDeg())), getSwerveModulePositions(), getPose());
 
   public DriveSubsystem() {
 
     configureHolonomicAutoBuilder();
+
   }
 
   /**
@@ -546,7 +540,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @return The pose.
    */
   public Pose2d getPose() {
-        // System.out.println(m_estimator.getEstimatedPosition()+ "  Estimated Pose");
+    // System.out.println(m_estimator.getEstimatedPosition()+ " Estimated Pose");
 
     // CHANGE
     if (m_first) {
@@ -565,7 +559,7 @@ public class DriveSubsystem extends SubsystemBase {
     };
   }
 
-  public void updateRot(double reqRot){
+  public void updateRot(double reqRot) {
     m_rotReq = reqRot;
   }
 
@@ -582,7 +576,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public Rotation2d currentRotation2d() {
-    return new Rotation2d(Math.toRadians(getGyroYaw()));
+    return new Rotation2d(Math.toRadians(getGyroYawDeg()));
   }
 
   public void resetOdometry(Pose2d pose) {
@@ -593,7 +587,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit) {
 
-    if(m_rotReq != 0){
+    if (m_rotReq != 0) {
       rot = m_rotReq;
     }
     double xSpeedCommanded;
@@ -654,7 +648,7 @@ public class DriveSubsystem extends SubsystemBase {
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
         fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered,
-                Rotation2d.fromDegrees(getGyroYaw()))
+                Rotation2d.fromDegrees(getGyroYawDeg()))
             : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
@@ -734,14 +728,14 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public double getHeading() {
-    return Rotation2d.fromDegrees(getGyroYaw()).getDegrees();
+    return Rotation2d.fromDegrees(getGyroYawDeg()).getDegrees();
   }
 
   public double getTurnRate() {
-    return getGyroYaw() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+    return getGyroYawDeg() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
 
-  public double getGyroYaw() {
+  public double getGyroYawDeg() {
     return (m_gyro.getYaw()) * -1;
     // return (m_gyro.getYaw());
   }
@@ -765,7 +759,12 @@ public class DriveSubsystem extends SubsystemBase {
         m_rearRight.getState().angle));
   }
 
-  public Boolean getAlliance() {
+  /**
+   * red = true
+   * 
+   * @return alliance as a bool
+   */
+  public boolean getAlliance() {
     var alliance = DriverStation.getAlliance();
     if (alliance.isPresent()) {
 
@@ -776,12 +775,19 @@ public class DriveSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // LimeLight.get().estimatePose(m_estimator, this);
+
+    if (m_first) {
+      System.out.println("Alliance Apriltag (red side = true):  " + getAlliance());
+      PhotonCam.get().setAlliance(getAlliance());
+
+    }
+
+    PhotonCam.get().estimatePose(m_estimator);
 
     m_estimator.update(currentRotation2d(), getSwerveModulePositions());
 
     SmartDashboard.putNumber("TURNING Encoder Position", m_frontRight.getTurningEncoder());
-    SmartDashboard.putNumber("Angle Position", getGyroYaw());
+    SmartDashboard.putNumber("Angle Position", getGyroYawDeg());
     SmartDashboard.putNumber("DRIVING Encoder Position", getEncoderMeters());
     SmartDashboard.putString("CURRENT CHASSIS SPEED", getChassisSpeeds().toString());
     SmartDashboard.putNumber("CURRENT SPEED", m_frontRight.getCurrentSpeed());
@@ -792,7 +798,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void configureHolonomicAutoBuilder() {
     AutoBuilder.configureHolonomic(
-        this::getPose,//getPose,
+        this::getPose, // getPose,
         this::resetOdometry,
         this::getChassisSpeeds,
         this::driveRobotRelative,
