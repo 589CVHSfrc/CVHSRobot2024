@@ -55,14 +55,28 @@ public class ShooterSubsystem extends SubsystemBase {
     cVelocity2 = 0;
 
     // UNCOMMENT WHEN YOU RECORD THE ACTUAL MOTOR SPEED VALUES SO YOU CAN ACTUALLY USE PID TO CONTROL RPM
-    // setPID(m_lowMotorPidController, ShooterConstants.kPl0, ShooterConstants.kIl0, ShooterConstants.kDl0, 0);
-    // setPID(m_topMotorPidController, ShooterConstants.kPt0, ShooterConstants.kIt0, ShooterConstants.kDt0, 0);
+    setPID(m_lowMotorPidController, ShooterConstants.kPl0, ShooterConstants.kIl0, ShooterConstants.kDl0, ShooterConstants.kIz,0, -1,1,  1);
+    setPID(m_topMotorPidController, ShooterConstants.kPt0, ShooterConstants.kIt0, ShooterConstants.kDt0,ShooterConstants.kIz,0, -1,1,  1);
+
+    setSmartMotion(m_lowMotorPidController, ShooterConstants.kShooterMaxRPM, ShooterConstants.kShooterMinRPM, ShooterConstants.kShooterMaxAccel, ShooterConstants.kShooterAllowedErr, 1);
+    setSmartMotion(m_topMotorPidController, ShooterConstants.kShooterMaxRPM, ShooterConstants.kShooterMinRPM, ShooterConstants.kShooterMaxAccel, ShooterConstants.kShooterAllowedErr, 1);
   }
 
-  public void setPID(SparkPIDController controller, double p, double i, double d, int slot) {
+  public void setPID(SparkPIDController controller, double p, double i, double d, double Iz, double FF, double minOutput, double maxOutput, int slot) {
     controller.setP(p, slot);
     controller.setI(i, slot);
     controller.setD(d, slot);
+    controller.setIZone(Iz, slot);
+    controller.setFF(FF, slot);
+    controller.setOutputRange(minOutput,maxOutput,slot);
+  }
+
+
+  public void setSmartMotion(SparkPIDController controller, double maxVel, double minVel, double maxAcc, double allowedErr, int slot ){
+    controller.setSmartMotionMaxVelocity(maxVel, slot);
+    controller.setSmartMotionMinOutputVelocity(minVel, slot);
+    controller.setSmartMotionMaxAccel(maxAcc, slot);
+    controller.setSmartMotionAllowedClosedLoopError(allowedErr, slot);
   }
 
   public boolean isSwitchPressed() {
@@ -73,13 +87,27 @@ public class ShooterSubsystem extends SubsystemBase {
     m_topMotorPidController.setReference(velocity, ControlType.kSmartVelocity, 0, lookupFF(velocity),
         ArbFFUnits.kPercentOut);
     m_lowMotorPidController.setReference(velocity, ControlType.kSmartVelocity, 0, lookupFF(velocity),
-        ArbFFUnits.kPercentOut);
+        ArbFFUnits.kPercentOut);   
   }
 
   public void shootSmartVelocity(double velocitytop, double velocitylow) {
     m_topMotorPidController.setReference(velocitytop, ControlType.kSmartVelocity, 0, lookupFF(velocitytop),
         ArbFFUnits.kPercentOut);
     m_lowMotorPidController.setReference(velocitylow, ControlType.kSmartVelocity, 0, lookupFF(velocitylow),
+        ArbFFUnits.kPercentOut);
+  }
+
+  public void shootSmartVelocityPID(double velocity) {
+    m_topMotorPidController.setReference(velocity, ControlType.kSmartVelocity, 1, lookupFF(velocity),
+        ArbFFUnits.kPercentOut);
+    m_lowMotorPidController.setReference(velocity, ControlType.kSmartVelocity, 1, lookupFF(velocity),
+        ArbFFUnits.kPercentOut);   
+  }
+
+  public void shootSmartVelocityPID(double velocitytop, double velocitylow) {
+    m_topMotorPidController.setReference(velocitytop, ControlType.kSmartVelocity, 1, lookupFF(velocitytop),
+        ArbFFUnits.kPercentOut);
+    m_lowMotorPidController.setReference(velocitylow, ControlType.kSmartVelocity, 1, lookupFF(velocitylow),
         ArbFFUnits.kPercentOut);
   }
 

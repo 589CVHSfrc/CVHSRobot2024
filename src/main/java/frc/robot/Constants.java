@@ -35,7 +35,7 @@ public final class Constants {
         new Rotation2d(Units.degreesToRadians(180)));
 
     public static final Pose2d kShootingPoseAmpRED = new Pose2d(14, 2, new Rotation2d(0));
-    public static final Pose2d kShootingPoseAmpBLUE = new Pose2d(14, 2, new Rotation2d(0));
+    public static final Pose2d kShootingPoseAmpBLUE = new Pose2d(1.9, 8.2, new Rotation2d(Units.degreesToRadians(90)));
 
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
@@ -50,6 +50,8 @@ public final class Constants {
     public static final double kTrackWidth = Units.inchesToMeters(25.5);// 29
     // Distance between centers of right and left wheels on robot
     public static final double kWheelBase = Units.inchesToMeters(25.5);// 29
+    // Distance from the robot center to the center of a swerve module
+    public static final double kDrivePlatformRadius = Math.sqrt(2.0*Math.pow(kWheelBase/2.0, 2));
     // Distance between front and back wheels on robot
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
         new Translation2d(kWheelBase / 2, kTrackWidth / 2),
@@ -86,7 +88,7 @@ public final class Constants {
     // This changes the drive speed of the module (a pinion gear with more teeth
     // will result in a
     // robot that drives faster).
-    public static final int kDrivingMotorPinionTeeth = 13;//12
+    public static final int kDrivingMotorPinionTeeth = 13;//12;
 
     // Invert the turning encoder, since the output shaft rotates in the opposite
     // direction of
@@ -216,7 +218,9 @@ public final class Constants {
     public static final double kIt0 = 0.0000000009;
     public static final double kDt0 = 0;
 
-    public static final double kPl0 = 0.1;
+    public static final double kIz =0;
+
+    public static final double kPl0 = 0.000003;
     public static final double kIl0 = 0.0000000009;
     public static final double kDl0 = 0;
     // public static final double kFF0t = 0;

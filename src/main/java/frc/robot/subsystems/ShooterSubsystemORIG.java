@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
 
-public class ShooterSubsystem extends SubsystemBase {
+public class ShooterSubsystemORIG extends SubsystemBase {
   private CANSparkMax m_topMotor;
   private CANSparkMax m_lowMotor;
 
@@ -32,7 +32,7 @@ public class ShooterSubsystem extends SubsystemBase {
       finalOscillationTimeTop, finalOscillationTimeLow;
 
 
-  public ShooterSubsystem() {
+  public ShooterSubsystemORIG() {
     m_topMotor = new CANSparkMax(ShooterConstants.kShooterMotorTopCanID, MotorType.kBrushless);
     m_lowMotor = new CANSparkMax(ShooterConstants.kShooterMotorLowCanID, MotorType.kBrushless);
     m_topMotor.setInverted(true);

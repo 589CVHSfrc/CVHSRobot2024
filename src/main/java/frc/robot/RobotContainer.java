@@ -29,7 +29,6 @@ import frc.robot.commands.COMMAND_ARM.BrakeArm;
 import frc.robot.commands.COMMAND_ARM.BrakeArmRelease;
 import frc.robot.commands.COMMAND_CLIMBER.MoveLeftClimber;
 import frc.robot.commands.COMMAND_CLIMBER.MoveRightClimber;
-import frc.robot.commands.COMMAND_DRIVE.DefaultDrive;
 import frc.robot.commands.COMMAND_DRIVE.ResetGyro;
 import frc.robot.commands.COMMAND_DRIVE.Turn180;
 import frc.robot.commands.COMMAND_PARALLEL.ExtendClimbersHOLD;
@@ -42,6 +41,9 @@ import frc.robot.commands.COMMAND_SHOOTER.RevUpMotorsAmp;
 import frc.robot.commands.COMMAND_SHOOTER.Shoot;
 import frc.robot.commands.COMMAND_SHOOTER.TimedRevShooter;
 import frc.robot.commands.COMMAND_SHOOTER.TimedRevShooterAMP;
+import frc.robot.commands.COMMAND_DRIVE.DefaultDrive;
+import frc.robot.commands.COMMAND_DRIVE.DrivePose;
+import frc.robot.commands.COMMAND_TESTING.FixedDrive;
 import frc.robot.commands.COMMAND_TESTING.HarmonyClimb;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -52,6 +54,8 @@ import frc.robot.subsystems.ShooterSubsystem;
 public class RobotContainer {
         private final static DriveSubsystem m_robotDrive = new DriveSubsystem();
         private final static ArmSubsystem m_robotArm = new ArmSubsystem();
+        // private final static ShooterSubsystemORIG m_robotShooter = new
+        // ShooterSubsystemORIG();
         private final static ShooterSubsystem m_robotShooter = new ShooterSubsystem();
         private final static GatewaySubsystem m_robotGateway = new GatewaySubsystem();
         private final static ClimberSubsystem m_robotClimber = new ClimberSubsystem();
@@ -94,7 +98,8 @@ public class RobotContainer {
                 m_autoChooser.addOption("Shoot (Source Side) and Taxi",
                                 new PathPlannerAuto("Shoot (Source Side) and Taxi"));
 
-                m_autoChooser.addOption("WAIT Speaker Taxi (Amp side)", new PathPlannerAuto("WAIT Speaker Taxi (Amp side)"));
+                m_autoChooser.addOption("WAIT Speaker Taxi (Amp side)",
+                                new PathPlannerAuto("WAIT Speaker Taxi (Amp side)"));
                 // m_autoChooser.addOption("5 Note Auto V1", new PathPlannerAuto("5 Note Auto
                 // V1"));
                 // m_autoChooser.addOption("5 Note Auto V2", new PathPlannerAuto("5 Note Auto
@@ -142,14 +147,14 @@ public class RobotContainer {
                                                 .alongWith(new ResetGyro(m_robotDrive)));
 
                 new JoystickButton(m_driverController, 3)
-                                .toggleOnTrue(new Turn180(m_robotDrive));
+                                .whileTrue(new FixedDrive(m_robotDrive));
 
                 new JoystickButton(m_driverController, 9)
                                 .toggleOnTrue(new TimedRevShooter(m_robotShooter, m_robotGateway));
 
-                // // DRIVE TO SPEAKER
-                // new JoystickButton(m_driverController, 2)
-                // .whileTrue(new DrivePose(m_robotDrive).driveShootSpeaker());
+                // // DRIVE TO AMP
+                new JoystickButton(m_driverController, 2)
+                                .whileTrue(new DrivePose(m_robotDrive).driveShootAmp());
 
                 // (DRIVE + AIM), THEN SHOOT AT AMP
                 // new JoystickButton(m_driverController, 5)
@@ -206,7 +211,7 @@ public class RobotContainer {
                 // STOW ARM
                 new JoystickButton(m_coDriverSwitchBoard, 6)
                                 .toggleOnTrue(new ArmStowEXP(m_robotArm, () -> ArmConstants.kStowSpeed));
-                
+
                 new JoystickButton(m_coDriverJoystick2, 12)
                                 .toggleOnTrue(new ArmStowEXP(m_robotArm, () -> ArmConstants.kStowSpeed));
 

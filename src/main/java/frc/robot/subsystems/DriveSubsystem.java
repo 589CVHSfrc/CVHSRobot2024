@@ -523,7 +523,9 @@ public class DriveSubsystem extends SubsystemBase {
           ModuleConstants.kDrivingD),
       new PIDConstants(ModuleConstants.kTurningP, ModuleConstants.kTurningI,
           ModuleConstants.kDrivingD),
-      AutoConstants.kMaxSpeedMetersPerSecond, DriveConstants.kTrackWidth / 2, new ReplanningConfig(),
+      AutoConstants.kMaxSpeedMetersPerSecond, 
+      DriveConstants.kDrivePlatformRadius,
+      new ReplanningConfig(),
       0.02);
   private SwerveDrivePoseEstimator m_estimator = new SwerveDrivePoseEstimator(DriveConstants.kDriveKinematics,
       new Rotation2d(Units.degreesToRadians(getGyroYawDeg())), getSwerveModulePositions(), getPose());
@@ -531,7 +533,7 @@ public class DriveSubsystem extends SubsystemBase {
   public DriveSubsystem() {
 
     configureHolonomicAutoBuilder();
-
+    
   }
 
   /**
@@ -666,6 +668,19 @@ public class DriveSubsystem extends SubsystemBase {
     m_frontLeft.setDesiredState(new SwerveModuleState(0.01, Rotation2d.fromDegrees(-45)));
   }
 
+  public void alignWheels() {
+    m_frontRight.setDesiredState(new SwerveModuleState(0.01, Rotation2d.fromDegrees(0)));
+    m_rearLeft.setDesiredState(new SwerveModuleState(0.01, Rotation2d.fromDegrees(0)));
+    m_rearRight.setDesiredState(new SwerveModuleState(0.01, Rotation2d.fromDegrees(0)));
+    m_frontLeft.setDesiredState(new SwerveModuleState(0.01, Rotation2d.fromDegrees(0)));
+  }
+  public void alignWheelsStop() {
+    m_frontRight.setDesiredState(new SwerveModuleState(0.00, Rotation2d.fromDegrees(0)));
+    m_rearLeft.setDesiredState(new SwerveModuleState(0.00, Rotation2d.fromDegrees(0)));
+    m_rearRight.setDesiredState(new SwerveModuleState(0.0, Rotation2d.fromDegrees(0)));
+    m_frontLeft.setDesiredState(new SwerveModuleState(0.0, Rotation2d.fromDegrees(0)));
+  }
+
   public SwerveModuleState[] getStates() {
     SwerveModuleState[] states = {
         m_frontRight.getState(),
@@ -781,10 +796,9 @@ public class DriveSubsystem extends SubsystemBase {
       PhotonCam.get().setAlliance(getAlliance());
 
     }
+    m_estimator.update(currentRotation2d(), getSwerveModulePositions());
 
     PhotonCam.get().estimatePose(m_estimator);
-
-    m_estimator.update(currentRotation2d(), getSwerveModulePositions());
 
     SmartDashboard.putNumber("TURNING Encoder Position", m_frontRight.getTurningEncoder());
     SmartDashboard.putNumber("Angle Position", getGyroYawDeg());

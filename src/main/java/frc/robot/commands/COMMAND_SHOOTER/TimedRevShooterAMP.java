@@ -18,6 +18,7 @@ public class TimedRevShooterAMP extends Command {
     m_gate = gate;
     m_shooter = shooter;
     addRequirements(shooter);
+    addRequirements(gate);
   }
 
   @Override
