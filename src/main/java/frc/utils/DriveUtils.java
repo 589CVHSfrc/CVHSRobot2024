@@ -31,11 +31,11 @@ public class DriveUtils {
         PathPlannerPath path = new PathPlannerPath(
                 bezierPoints,
                 new PathConstraints(
-                        DriveConstants.kMaxSpeedMetersPerSecond/2,
+                        DriveConstants.kMaxSpeedMetersPerSecond,
                         AutoConstants.kMaxAccelerationMetersPerSecondSquared/2,
                         DriveConstants.kMaxAngularSpeed/2,
                         AutoConstants.kMaxAngularSpeedRadiansPerSecondSquared/2),
-                new GoalEndState(0.0, requestedPose.getRotation()));
+                new GoalEndState(0.1, requestedPose.getRotation()));
 
         // Prevent the path from being flipped if the coordinates are already correct
         path.preventFlipping = true;

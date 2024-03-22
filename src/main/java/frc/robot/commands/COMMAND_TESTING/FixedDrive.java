@@ -38,13 +38,13 @@ public class FixedDrive extends Command {
   @Override
   public void execute() {
     if(m_timer.hasElapsed(2)){
-      m_drive.drive(.5, 0, 0, true, false);
+      m_drive.drive(.5, 0, .2, true, true);
     }
     }
 
   @Override
   public void end(boolean interrupted) {
-        m_drive.drive(0, 0, 0, true, false);
+        m_drive.drive(0, 0, 0, true, true);
 
   }
 

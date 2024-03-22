@@ -35,7 +35,7 @@ public final class Constants {
         new Rotation2d(Units.degreesToRadians(180)));
 
     public static final Pose2d kShootingPoseAmpRED = new Pose2d(14, 2, new Rotation2d(0));
-    public static final Pose2d kShootingPoseAmpBLUE = new Pose2d(1.9, 8.2, new Rotation2d(Units.degreesToRadians(90)));
+    public static final Pose2d kShootingPoseAmpBLUE = new Pose2d(1.8, 8.5, new Rotation2d(Units.degreesToRadians(90)));
 
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
@@ -168,10 +168,10 @@ public final class Constants {
 
   public static final class VisualConstants {
     public static final Transform3d kCameraRelativeToRobot = new Transform3d(
-        Units.inchesToMeters(-5),
-        0,
-        Units.inchesToMeters(19.5),
-        new Rotation3d(Units.degreesToRadians(0),
+        Units.inchesToMeters(4),
+         Units.inchesToMeters(0),
+        Units.inchesToMeters(20),
+        new Rotation3d(0,
             Units.degreesToRadians(30), 0));
     public static final String kPhotonCameraName = "aprilcamera";
   }

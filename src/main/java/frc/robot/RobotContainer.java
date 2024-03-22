@@ -30,7 +30,6 @@ import frc.robot.commands.COMMAND_ARM.BrakeArmRelease;
 import frc.robot.commands.COMMAND_CLIMBER.MoveLeftClimber;
 import frc.robot.commands.COMMAND_CLIMBER.MoveRightClimber;
 import frc.robot.commands.COMMAND_DRIVE.ResetGyro;
-import frc.robot.commands.COMMAND_DRIVE.Turn180;
 import frc.robot.commands.COMMAND_PARALLEL.ExtendClimbersHOLD;
 import frc.robot.commands.COMMAND_PARALLEL.HomeClimbers;
 import frc.robot.commands.COMMAND_PARALLEL.IntakeDown;
@@ -137,15 +136,16 @@ public class RobotContainer {
                 // ===================================DEBUG/DRIVE=========================================
 
                 // RESET GYRO
-                new JoystickButton(m_driverController, 4)
-                                .toggleOnTrue(new ResetGyro(m_robotDrive));
+                // new JoystickButton(m_driverController, 4)
+                // .toggleOnTrue(new ResetGyro(m_robotDrive));
 
-                // // RESET DRIVE MOTOR ENCODERS
+                // // RESET DRIVE MOTOR ENCODERS AND HEADING
                 new JoystickButton(m_driverController, 4)
                                 .whileTrue(new RunCommand(
                                                 () -> m_robotDrive.resetOdometry(new Pose2d(0, 0, new Rotation2d())))
                                                 .alongWith(new ResetGyro(m_robotDrive)));
 
+                // DEBUG FIXED DRIVE DRIVE FORWARD + ROTATE LEFT
                 new JoystickButton(m_driverController, 3)
                                 .whileTrue(new FixedDrive(m_robotDrive));
 
@@ -154,7 +154,7 @@ public class RobotContainer {
 
                 // // DRIVE TO AMP
                 new JoystickButton(m_driverController, 2)
-                                .whileTrue(new DrivePose(m_robotDrive).driveShootAmp());
+                                .whileTrue(new DrivePose(m_robotDrive).driveShootAmp().andThen (new DrivePose(m_robotDrive).driveShootAmp()));
 
                 // (DRIVE + AIM), THEN SHOOT AT AMP
                 // new JoystickButton(m_driverController, 5)
@@ -271,7 +271,10 @@ public class RobotContainer {
                         System.out.print("====================STARTING POSE: " + startingpose +
                                         "====================");
 
-                        return m_autoChooser.getSelected();
+                        return m_autoChooser.getSelected().andThen(new RunCommand(
+                                        () -> m_robotDrive.resetOdometry(m_robotDrive.getPose()
+                                                        .rotateBy(new Rotation2d(Units.degreesToRadians(180)))))
+                                        .alongWith(new ResetGyro(m_robotDrive)));
 
                 } catch (RuntimeException e) {
                         System.out.print("==================" + e);

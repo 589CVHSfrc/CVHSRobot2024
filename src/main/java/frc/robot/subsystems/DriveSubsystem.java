@@ -508,7 +508,6 @@ public class DriveSubsystem extends SubsystemBase {
   private boolean m_first = true;
   // private double m_controllerYreq = 0;
   // private double m_controllerXreq = 0;
-  private double m_rotReq = 0;
 
   private double m_currentRotation = 0.0;
   private double m_currentTranslationDir = 0.001;
@@ -561,9 +560,7 @@ public class DriveSubsystem extends SubsystemBase {
     };
   }
 
-  public void updateRot(double reqRot) {
-    m_rotReq = reqRot;
-  }
+ 
 
   public Pose2d getAutoPoseReversed() {
     if (m_first) {
@@ -578,7 +575,7 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public Rotation2d currentRotation2d() {
-    return new Rotation2d(Math.toRadians(getGyroYawDeg()));
+    return m_gyro.getRotation2d();
   }
 
   public void resetOdometry(Pose2d pose) {
@@ -589,9 +586,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit) {
 
-    if (m_rotReq != 0) {
-      rot = m_rotReq;
-    }
+   
     double xSpeedCommanded;
     double ySpeedCommanded;
     // m_controllerYreq = xSpeed;
@@ -661,12 +656,6 @@ public class DriveSubsystem extends SubsystemBase {
     m_rearRight.setDesiredState(swerveModuleStates[3]);
   }
 
-  public void setX() {
-    m_frontRight.setDesiredState(new SwerveModuleState(0.01, Rotation2d.fromDegrees(45)));
-    m_rearLeft.setDesiredState(new SwerveModuleState(0.01, Rotation2d.fromDegrees(45)));
-    m_rearRight.setDesiredState(new SwerveModuleState(0.01, Rotation2d.fromDegrees(-45)));
-    m_frontLeft.setDesiredState(new SwerveModuleState(0.01, Rotation2d.fromDegrees(-45)));
-  }
 
   public void alignWheels() {
     m_frontRight.setDesiredState(new SwerveModuleState(0.01, Rotation2d.fromDegrees(0)));
@@ -674,12 +663,12 @@ public class DriveSubsystem extends SubsystemBase {
     m_rearRight.setDesiredState(new SwerveModuleState(0.01, Rotation2d.fromDegrees(0)));
     m_frontLeft.setDesiredState(new SwerveModuleState(0.01, Rotation2d.fromDegrees(0)));
   }
-  public void alignWheelsStop() {
-    m_frontRight.setDesiredState(new SwerveModuleState(0.00, Rotation2d.fromDegrees(0)));
-    m_rearLeft.setDesiredState(new SwerveModuleState(0.00, Rotation2d.fromDegrees(0)));
-    m_rearRight.setDesiredState(new SwerveModuleState(0.0, Rotation2d.fromDegrees(0)));
-    m_frontLeft.setDesiredState(new SwerveModuleState(0.0, Rotation2d.fromDegrees(0)));
-  }
+  // public void alignWheelsStop() {
+  //   m_frontRight.setDesiredState(new SwerveModuleState(0.00, Rotation2d.fromDegrees(0)));
+  //   m_rearLeft.setDesiredState(new SwerveModuleState(0.00, Rotation2d.fromDegrees(0)));
+  //   m_rearRight.setDesiredState(new SwerveModuleState(0.0, Rotation2d.fromDegrees(0)));
+  //   m_frontLeft.setDesiredState(new SwerveModuleState(0.0, Rotation2d.fromDegrees(0)));
+  // }
 
   public SwerveModuleState[] getStates() {
     SwerveModuleState[] states = {
