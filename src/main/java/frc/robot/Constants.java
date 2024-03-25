@@ -126,7 +126,7 @@ public final class Constants {
     public static final double kDrivingMaxOutput = 1;
 
     // public static final double kTurningP = 0.55;// 0.5;
-    public static final double kTurningP = 0.6;// 0.5;
+    public static final double kTurningP = 1;//0.6;// 0.5(manufacture example) //1.1(9 inches)//1(2102 example)
     public static final double kTurningI = 0.0;
     public static final double kTurningD = 0.0;
     public static final double kTurningFF = 0;
