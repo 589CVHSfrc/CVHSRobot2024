@@ -154,7 +154,8 @@ public class RobotContainer {
 
                 // // DRIVE TO AMP
                 new JoystickButton(m_driverController, 2)
-                                .whileTrue(new DrivePose(m_robotDrive).driveShootAmp().andThen (new DrivePose(m_robotDrive).driveShootAmp()));
+                                .whileTrue(new DrivePose(m_robotDrive, () -> 0.9).driveShootAmp()
+                                                .andThen(new DrivePose(m_robotDrive, () -> 0.1).driveShootAmp()).andThen(new TimedRevShooterAMP(m_robotShooter, m_robotGateway)));
 
                 // (DRIVE + AIM), THEN SHOOT AT AMP
                 // new JoystickButton(m_driverController, 5)
@@ -207,6 +208,8 @@ public class RobotContainer {
                 // INTAKE SOURCE
                 new JoystickButton(m_coDriverSwitchBoard, 5)
                                 .toggleOnTrue(new Intake(m_robotShooter, m_robotGateway));
+                // new JoystickButton(m_coDriverJoystick, 5)
+                //                 .toggleOnTrue(new Intake(m_robotShooter, m_robotGateway));
 
                 // STOW ARM
                 new JoystickButton(m_coDriverSwitchBoard, 6)
@@ -261,6 +264,12 @@ public class RobotContainer {
 
         }
 
+        public void flipGyro(){
+                m_robotDrive.resetOdometry(m_robotDrive.getPose()
+                                                        .rotateBy(new Rotation2d(Units.degreesToRadians(180))));
+                                        
+        }
+
         public Command getAutonomousCommand() {
                 // return new DriveBack(m_robotDrive);
                 try {
@@ -271,10 +280,10 @@ public class RobotContainer {
                         System.out.print("====================STARTING POSE: " + startingpose +
                                         "====================");
 
-                        return m_autoChooser.getSelected().andThen(new RunCommand(
-                                        () -> m_robotDrive.resetOdometry(m_robotDrive.getPose()
-                                                        .rotateBy(new Rotation2d(Units.degreesToRadians(180)))))
-                                        .alongWith(new ResetGyro(m_robotDrive)));
+                         return m_autoChooser.getSelected();//.andThen(new RunCommand(
+                        //                 () -> m_robotDrive.resetOdometry(m_robotDrive.getPose()
+                        //                                 .rotateBy(new Rotation2d(Units.degreesToRadians(180)))))
+                        //                 .alongWith(new ResetGyro(m_robotDrive)));
 
                 } catch (RuntimeException e) {
                         System.out.print("==================" + e);
@@ -284,4 +293,4 @@ public class RobotContainer {
                 }
         }
 
-}
+}       

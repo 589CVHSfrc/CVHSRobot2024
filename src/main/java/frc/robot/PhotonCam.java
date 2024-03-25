@@ -20,11 +20,10 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.Constants.VisualConstants;
-import frc.robot.subsystems.DriveSubsystem;
 
 public class PhotonCam {
     private static PhotonCam m_photonCam;
-    private AprilTagFieldLayout m_aprilTagLayout;
+    public AprilTagFieldLayout m_aprilTagLayout;
     private PhotonCamera m_photonCamera = new PhotonCamera("aprilcamera");// CHANGE TO CONSTANT
     private PhotonPoseEstimator m_photonEstimator;
 
@@ -40,7 +39,7 @@ public class PhotonCam {
 
         m_photonEstimator = new PhotonPoseEstimator(m_aprilTagLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
                 m_photonCamera,
-                VisualConstants.    kCameraRelativeToRobot);
+                VisualConstants.kCameraRelativeToRobot);
     
         m_photonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
         PortForwarder.add(5800, "photonvision.local", 5800);
