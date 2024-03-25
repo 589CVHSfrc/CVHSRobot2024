@@ -10,6 +10,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 public class ShootSmartDashboard extends Command {
   /** Creates a new ShootSmartDashboard. */
   ShooterSubsystem m_shooter;
+
   public ShootSmartDashboard(ShooterSubsystem shoot) {
     m_shooter = shoot;
     addRequirements(m_shooter);
@@ -20,12 +21,14 @@ public class ShootSmartDashboard extends Command {
   @Override
   public void initialize() {
     // m_shooter.initShoot();
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // m_shooter.shootTwoSmartDashboardFF();
+    m_shooter.shootTwoSmartDashboard();
+
   }
 
   // Called once the command ends or is interrupted.

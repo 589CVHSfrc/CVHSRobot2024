@@ -20,12 +20,14 @@ public class Intake extends Command {
 
   @Override
   public void initialize() {
+    m_shooter.intake();
+    m_gate.intakeGateway();
   }
 
   @Override
   public void execute() {
-    m_shooter.intake();
-    m_gate.intakeGateway();
+    // m_shooter.intake();
+    // m_gate.intakeGateway();
   }
 
   @Override

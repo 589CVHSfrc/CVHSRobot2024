@@ -17,11 +17,14 @@ public class DrivePose {
     public Command driveShootSpeaker(){
         //RED IS TRUE
         if(m_drive.getAlliance()){
+            
             return new DriveUtils(m_drive).driveToPose(DriveConstants.kShootingPoseSpeakerRED, m_speed);
         }
         return new DriveUtils(m_drive).driveToPose(DriveConstants.kShootingPoseSpeakerBLUE, m_speed); 
     }
     public Command driveShootAmp(){
+                System.out.println("RED IS TRUE "+ m_drive.getAlliance() );
+
         if(m_drive.getAlliance()){
             System.out.println(m_drive.getAlliance());
             return new DriveUtils(m_drive).driveToPose(DriveConstants.kShootingPoseAmpRED, m_speed);

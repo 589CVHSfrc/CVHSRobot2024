@@ -11,6 +11,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkLimitSwitch;
 import com.revrobotics.SparkLimitSwitch.Type;
 import com.revrobotics.SparkPIDController;
+import com.revrobotics.SparkPIDController.AccelStrategy;
 import com.revrobotics.SparkPIDController.ArbFFUnits;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -31,13 +32,11 @@ public class ShooterSubsystem extends SubsystemBase {
       initialTimeTop, initialTimeLow, riseTimeTop, riseTimeLow, startOscillationTimeTop, startOscillationTimeLow,
       finalOscillationTimeTop, finalOscillationTimeLow;
 
-
   public ShooterSubsystem() {
     m_topMotor = new CANSparkMax(ShooterConstants.kShooterMotorTopCanID, MotorType.kBrushless);
     m_lowMotor = new CANSparkMax(ShooterConstants.kShooterMotorLowCanID, MotorType.kBrushless);
     m_topMotor.setInverted(true);
     m_lowMotor.setInverted(true);
-
 
     m_gatewayLimitSwitch = m_lowMotor.getForwardLimitSwitch(Type.kNormallyOpen);
     m_gatewayLimitSwitch.enableLimitSwitch(true);
@@ -51,32 +50,34 @@ public class ShooterSubsystem extends SubsystemBase {
     m_lowMotorPidController = m_lowMotor.getPIDController();
 
 
+
     cVelocity = 0;
     cVelocity2 = 0;
 
-    // UNCOMMENT WHEN YOU RECORD THE ACTUAL MOTOR SPEED VALUES SO YOU CAN ACTUALLY USE PID TO CONTROL RPM
-    setPID(m_lowMotorPidController, ShooterConstants.kPl0, ShooterConstants.kIl0, ShooterConstants.kDl0, ShooterConstants.kIz,0, -1,1,  1);
-    setPID(m_topMotorPidController, ShooterConstants.kPt0, ShooterConstants.kIt0, ShooterConstants.kDt0,ShooterConstants.kIz,0, -1,1,  1);
+    // UNCOMMENT WHEN YOU RECORD THE ACTUAL MOTOR SPEED VALUES SO YOU CAN ACTUALLY
+    // USE PID TO CONTROL RPM
+    setPID(m_lowMotorPidController, ShooterConstants.kPl0, ShooterConstants.kIl0, ShooterConstants.kDl0, 0);
+    setPID(m_topMotorPidController, ShooterConstants.kPt0, ShooterConstants.kIt0, ShooterConstants.kDt0, 0);
 
-    setSmartMotion(m_lowMotorPidController, ShooterConstants.kShooterMaxRPM, ShooterConstants.kShooterMinRPM, ShooterConstants.kShooterMaxAccel, ShooterConstants.kShooterAllowedErr, 1);
-    setSmartMotion(m_topMotorPidController, ShooterConstants.kShooterMaxRPM, ShooterConstants.kShooterMinRPM, ShooterConstants.kShooterMaxAccel, ShooterConstants.kShooterAllowedErr, 1);
+    setSmartMotion(m_lowMotorPidController, ShooterConstants.kShooterMaxRPM, ShooterConstants.kShooterMinRPM,
+            ShooterConstants.kShooterMaxAccel, ShooterConstants.kShooterAllowedErr, 0);
+        setSmartMotion(m_topMotorPidController, ShooterConstants.kShooterMaxRPM, ShooterConstants.kShooterMinRPM,
+            ShooterConstants.kShooterMaxAccel, ShooterConstants.kShooterAllowedErr, 0);  
   }
 
-  public void setPID(SparkPIDController controller, double p, double i, double d, double Iz, double FF, double minOutput, double maxOutput, int slot) {
-    controller.setP(p, slot);
-    controller.setI(i, slot);
-    controller.setD(d, slot);
-    controller.setIZone(Iz, slot);
-    controller.setFF(FF, slot);
-    controller.setOutputRange(minOutput,maxOutput,slot);
-  }
-
-
-  public void setSmartMotion(SparkPIDController controller, double maxVel, double minVel, double maxAcc, double allowedErr, int slot ){
+  public void setSmartMotion(SparkPIDController controller, double maxVel, double minVel, double maxAcc,
+      double allowedErr, int slot) {
     controller.setSmartMotionMaxVelocity(maxVel, slot);
     controller.setSmartMotionMinOutputVelocity(minVel, slot);
     controller.setSmartMotionMaxAccel(maxAcc, slot);
     controller.setSmartMotionAllowedClosedLoopError(allowedErr, slot);
+    controller.setSmartMotionAccelStrategy(AccelStrategy.kSCurve, slot);
+  }
+
+  public void setPID(SparkPIDController controller, double p, double i, double d, int slot) {
+    controller.setP(p, slot);
+    controller.setI(i, slot);
+    controller.setD(d, slot);
   }
 
   public boolean isSwitchPressed() {
@@ -87,27 +88,13 @@ public class ShooterSubsystem extends SubsystemBase {
     m_topMotorPidController.setReference(velocity, ControlType.kSmartVelocity, 0, lookupFF(velocity),
         ArbFFUnits.kPercentOut);
     m_lowMotorPidController.setReference(velocity, ControlType.kSmartVelocity, 0, lookupFF(velocity),
-        ArbFFUnits.kPercentOut);   
+        ArbFFUnits.kPercentOut);
   }
 
   public void shootSmartVelocity(double velocitytop, double velocitylow) {
     m_topMotorPidController.setReference(velocitytop, ControlType.kSmartVelocity, 0, lookupFF(velocitytop),
         ArbFFUnits.kPercentOut);
     m_lowMotorPidController.setReference(velocitylow, ControlType.kSmartVelocity, 0, lookupFF(velocitylow),
-        ArbFFUnits.kPercentOut);
-  }
-
-  public void shootSmartVelocityPID(double velocity) {
-    m_topMotorPidController.setReference(velocity, ControlType.kSmartVelocity, 1, lookupFF(velocity),
-        ArbFFUnits.kPercentOut);
-    m_lowMotorPidController.setReference(velocity, ControlType.kSmartVelocity, 1, lookupFF(velocity),
-        ArbFFUnits.kPercentOut);   
-  }
-
-  public void shootSmartVelocityPID(double velocitytop, double velocitylow) {
-    m_topMotorPidController.setReference(velocitytop, ControlType.kSmartVelocity, 1, lookupFF(velocitytop),
-        ArbFFUnits.kPercentOut);
-    m_lowMotorPidController.setReference(velocitylow, ControlType.kSmartVelocity, 1, lookupFF(velocitylow),
         ArbFFUnits.kPercentOut);
   }
 
@@ -129,6 +116,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void shootAmp() {
+    
     shootSmartVelocity(ShooterConstants.kShooterSpeedAmpTop, ShooterConstants.kShooterSpeedAmpLow);
   }
 
@@ -160,18 +148,18 @@ public class ShooterSubsystem extends SubsystemBase {
     m_lowMotor.set(0);
   }
 
-
   public boolean isRampedUp() {
     return m_topEncoder.getVelocity() > ShooterConstants.kShooterMaxVelocity;
   }
 
   public double lookupFF(double speed) {
     // Uncomment for real FF values once you get the actual rpms
-    // double FFDutyCyclePercent = 8.48 * Math.pow(10, -5) * Math.abs(speed) + .0143;
+    // double FFDutyCyclePercent = 8.48 * Math.pow(10, -5) * Math.abs(speed) +
+    // .0143;
     // FFDutyCyclePercent = Math.min(1.0, FFDutyCyclePercent);
     // FFDutyCyclePercent = Math.copySign(FFDutyCyclePercent,speed);
     // return FFDutyCyclePercent;
-    return Math.min(8.48 * Math.pow(10, -5) * (speed) + .0143, 1.0);
+    return 8.48 * Math.pow(10, -5) * (speed);
   }
 
   public int lookupSlot(double speed) {

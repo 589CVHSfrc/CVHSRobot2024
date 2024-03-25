@@ -44,6 +44,7 @@ import frc.robot.commands.COMMAND_DRIVE.DefaultDrive;
 import frc.robot.commands.COMMAND_DRIVE.DrivePose;
 import frc.robot.commands.COMMAND_TESTING.FixedDrive;
 import frc.robot.commands.COMMAND_TESTING.HarmonyClimb;
+import frc.robot.commands.COMMAND_TESTING.ShootSmartDashboard;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -173,8 +174,12 @@ public class RobotContainer {
                 // new JoystickButton(m_coDriverSwitchBoard, 1)
                 // .whileTrue(new ExtendClimbersHOLD(m_robotClimber));
 
+                // new JoystickButton(m_driverController, 5)
+                //                 .whileTrue(new ExtendClimbersHOLD(m_robotClimber));
+
+                                
                 new JoystickButton(m_driverController, 5)
-                                .whileTrue(new ExtendClimbersHOLD(m_robotClimber));
+                                .toggleOnTrue(new ShootSmartDashboard(m_robotShooter));
 
                 // EXTEND LEFT
                 new JoystickButton(m_coDriverJoystick, 3)

@@ -16,12 +16,12 @@ public class RevUpMotorsAmp extends Command {
 
   @Override
   public void initialize() {
+    m_shooter.shootAmp();
 
   }
 
   @Override
   public void execute() {
-    m_shooter.shootAmp();
   }
 
   @Override

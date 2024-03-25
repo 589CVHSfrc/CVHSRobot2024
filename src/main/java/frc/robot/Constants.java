@@ -209,19 +209,19 @@ public final class Constants {
     public static final double kGatewayMotorSpeed = .2; // Change this
     public static final double kShooterMaxRPM = 11000;
     public static final double kShooterMinRPM = 0;
-    public static final double kShooterMaxAccel = 4000;
+    public static final double kShooterMaxAccel = 5000;
     public static final double kShooterAllowedErr = 0.005;
     public static final double kShooterTime = 0.5;
     public static final double kShooterMaxVelocity = 50; // Change this
 
-    public static final double kPt0 = 0.000003;
-    public static final double kIt0 = 0.0000000009;
+    public static final double kPt0 = 0.0002;
+    public static final double kIt0 = 0.0000015; //.000001
     public static final double kDt0 = 0;
 
     public static final double kIz =0;
 
-    public static final double kPl0 = 0.000003;
-    public static final double kIl0 = 0.0000000009;
+    public static final double kPl0 = 0.0002; //0003
+    public static final double kIl0 = 0.0000015; //.000001
     public static final double kDl0 = 0;
     // public static final double kFF0t = 0;
 
@@ -234,14 +234,14 @@ public final class Constants {
     // Physical Constants
     public static final double kShooterGearRatio = .5;
 
-    public static final double kShooterSpeedSpeakerLow = -7800;// -7800
-    public static final double kShooterSpeedSpeakerTop = -9500;// -9000
+    public static final double kShooterSpeedSpeakerLow = -3400; //-7800;// -7800
+    public static final double kShooterSpeedSpeakerTop = -4100; //-9500;// -9000
 
-    public static final double kShooterSpeedAmpLow = -3500; // -3000 if want lower
-    public static final double kShooterSpeedAmpTop = -2500; // -2000 if want lower
+    public static final double kShooterSpeedAmpLow = -950; //-3500; // -3000 if want lower
+    public static final double kShooterSpeedAmpTop = -1460; //-2500; // -2000 if want lower
     // Change this - we need to make this hashmap/lookup table for dif
     // poses/dif objects -speaker amp
-    public static final double kIntakeSpeed = 3000;// Change this
+    public static final double kIntakeSpeed = 1300;// Change this
     public static final double kShooterSpeedSlow = .1;// Change this
     public static final boolean kShooterDirection = false; // false is spitting it out , true is takinShooter
   }

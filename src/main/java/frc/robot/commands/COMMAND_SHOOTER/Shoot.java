@@ -9,6 +9,7 @@ import frc.robot.subsystems.GatewaySubsystem;
 
 public class Shoot extends Command {
   GatewaySubsystem m_gate;
+
   public Shoot(GatewaySubsystem gate) {
     m_gate = gate;
     addRequirements(gate);
@@ -16,11 +17,13 @@ public class Shoot extends Command {
 
   @Override
   public void initialize() {
+    m_gate.shootGateway();
+
   }
 
   @Override
   public void execute() {
-    m_gate.shootGateway();
+    // m_gate.shootGateway();
   }
 
   @Override

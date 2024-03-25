@@ -16,12 +16,12 @@ public class RevUpMotors extends Command {
 
   @Override
   public void initialize() {
-
+    m_shooter.shoot();
   }
 
   @Override
   public void execute() {
-    m_shooter.shoot();
+    // m_shooter.shoot();
   }
 
   @Override
