@@ -32,4 +32,13 @@ public class DrivePose {
         return new DriveUtils(m_drive).driveToPose(DriveConstants.kShootingPoseAmpBLUE, m_speed); 
     }
 
+    public Command driveSource(){
+        //RED IS TRUE
+        if(m_drive.getAlliance()){
+            
+            return new DriveUtils(m_drive).driveToPose(DriveConstants.kIntakeSourceRED, m_speed);
+        }
+        return new DriveUtils(m_drive).driveToPose(DriveConstants.kIntakeSourceBLUE, m_speed); 
+    }
+
 }

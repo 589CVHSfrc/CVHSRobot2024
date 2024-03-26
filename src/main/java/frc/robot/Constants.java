@@ -34,7 +34,11 @@ public final class Constants {
     public static final Pose2d kShootingPoseSpeakerBLUE = new Pose2d(15.5, 2.6,
         new Rotation2d(Units.degreesToRadians(180)));
 
-    public static final Pose2d kShootingPoseAmpRED = new Pose2d(14.70 , 7.8, new Rotation2d(Units.degreesToRadians(90)));
+    public static final Pose2d kIntakeSourceRED = new Pose2d(.57, 1.18, new Rotation2d(Units.degreesToRadians(-120)));
+    public static final Pose2d kIntakeSourceBLUE = new Pose2d(15.98, 1.18,
+        new Rotation2d(Units.degreesToRadians(-60)));
+
+    public static final Pose2d kShootingPoseAmpRED = new Pose2d(14.70, 7.8, new Rotation2d(Units.degreesToRadians(90)));
     public static final Pose2d kShootingPoseAmpBLUE = new Pose2d(1.84, 7.8, new Rotation2d(Units.degreesToRadians(90)));
 
     // Driving Parameters - Note that these are not the maximum capable speeds of
@@ -51,7 +55,7 @@ public final class Constants {
     // Distance between centers of right and left wheels on robot
     public static final double kWheelBase = Units.inchesToMeters(25.5);// 29
     // Distance from the robot center to the center of a swerve module
-    public static final double kDrivePlatformRadius = Math.sqrt(2.0*Math.pow(kWheelBase/2.0, 2));
+    public static final double kDrivePlatformRadius = Math.sqrt(2.0 * Math.pow(kWheelBase / 2.0, 2));
     // Distance between front and back wheels on robot
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
         new Translation2d(kWheelBase / 2, kTrackWidth / 2),
@@ -88,7 +92,7 @@ public final class Constants {
     // This changes the drive speed of the module (a pinion gear with more teeth
     // will result in a
     // robot that drives faster).
-    public static final int kDrivingMotorPinionTeeth = 13;//12;
+    public static final int kDrivingMotorPinionTeeth = 13;// 12;
 
     // Invert the turning encoder, since the output shaft rotates in the opposite
     // direction of
@@ -126,7 +130,7 @@ public final class Constants {
     public static final double kDrivingMaxOutput = 1;
 
     // public static final double kTurningP = 0.55;// 0.5;
-    public static final double kTurningP = 1;//0.6;// 0.5(manufacture example) //1.1(9 inches)//1(2102 example)
+    public static final double kTurningP = 1;// 0.6;// 0.5(manufacture example) //1.1(9 inches)//1(2102 example)
     public static final double kTurningI = 0.0;
     public static final double kTurningD = 0.0;
     public static final double kTurningFF = 0;
@@ -169,7 +173,7 @@ public final class Constants {
   public static final class VisualConstants {
     public static final Transform3d kCameraRelativeToRobot = new Transform3d(
         Units.inchesToMeters(-4),
-         Units.inchesToMeters(0),
+        Units.inchesToMeters(0),
         Units.inchesToMeters(20),
         new Rotation3d(0,
             Units.degreesToRadians(-30), 0));
@@ -207,21 +211,21 @@ public final class Constants {
   public static final class ShooterConstants {
 
     public static final double kGatewayMotorSpeed = .2; // Change this
-    public static final double kShooterMaxRPM = 11000;
+    public static final double kShooterMaxRPM = 11000;// 11000
     public static final double kShooterMinRPM = 0;
-    public static final double kShooterMaxAccel = 5000;
+    public static final double kShooterMaxAccel = 7000;
     public static final double kShooterAllowedErr = 0.005;
     public static final double kShooterTime = 0.5;
     public static final double kShooterMaxVelocity = 50; // Change this
 
-    public static final double kPt0 = 0.0002;
-    public static final double kIt0 = 0.0000015; //.000001
+    public static final double kPt0 = 0.00006;
+    public static final double kIt0 = 0.00000075; // .000001 //0000015
     public static final double kDt0 = 0;
 
-    public static final double kIz =0;
+    public static final double kIz = 0;
 
-    public static final double kPl0 = 0.0002; //0003
-    public static final double kIl0 = 0.0000015; //.000001
+    public static final double kPl0 = 0.00006; // 0003
+    public static final double kIl0 = 0.00000075; // .000001
     public static final double kDl0 = 0;
     // public static final double kFF0t = 0;
 
@@ -234,11 +238,11 @@ public final class Constants {
     // Physical Constants
     public static final double kShooterGearRatio = .5;
 
-    public static final double kShooterSpeedSpeakerLow = -3400; //-7800;// -7800
-    public static final double kShooterSpeedSpeakerTop = -4100; //-9500;// -9000
+    public static final double kShooterSpeedSpeakerLow = -2900;// -3400 (REAL VENTURA VALUES); // -7800;// -7800
+    public static final double kShooterSpeedSpeakerTop = -3600;// -4100(REAL VENTURA VALUES); // -9500;// -9000
 
-    public static final double kShooterSpeedAmpLow = -950; //-3500; // -3000 if want lower
-    public static final double kShooterSpeedAmpTop = -1460; //-2500; // -2000 if want lower
+    public static final double kShooterSpeedAmpLow = -950; // -3500; // -3000 if want lower
+    public static final double kShooterSpeedAmpTop = -1460; // -2500; // -2000 if want lower
     // Change this - we need to make this hashmap/lookup table for dif
     // poses/dif objects -speaker amp
     public static final double kIntakeSpeed = 1300;// Change this

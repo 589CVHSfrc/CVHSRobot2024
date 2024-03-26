@@ -17,6 +17,7 @@
 // import edu.wpi.first.wpilibj2.command.SubsystemBase;
 // import frc.robot.Constants.ShooterConstants;
 
+// //VENTURA COMP CODE
 // public class ShooterSubsystem extends SubsystemBase {
 //   private CANSparkMax m_topMotor;
 //   private CANSparkMax m_lowMotor;
@@ -55,8 +56,8 @@
 //     cVelocity2 = 0;
 
 //     // UNCOMMENT WHEN YOU RECORD THE ACTUAL MOTOR SPEED VALUES SO YOU CAN ACTUALLY USE PID TO CONTROL RPM
-//     // setPID(m_lowMotorPidController, ShooterConstants.kPl0, ShooterConstants.kIl0, ShooterConstants.kDl0, 0);
-//     // setPID(m_topMotorPidController, ShooterConstants.kPt0, ShooterConstants.kIt0, ShooterConstants.kDt0, 0);
+//     setPID(m_lowMotorPidController, 0, 0, 0, 0);
+//     setPID(m_topMotorPidController, 0, 0, 0, 0);
 //   }
 
 //   public void setPID(SparkPIDController controller, double p, double i, double d, int slot) {
