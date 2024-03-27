@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkBase.ControlType;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -51,6 +52,9 @@ public class ShooterSubsystem extends SubsystemBase {
 
         m_topMotorPidController = m_topMotor.getPIDController();
         m_lowMotorPidController = m_lowMotor.getPIDController();
+
+        m_topMotor.setIdleMode(IdleMode.kCoast);
+        m_lowMotor.setIdleMode(IdleMode.kCoast);
 
         cVelocity = 0;
         cVelocity2 = 0;
@@ -157,8 +161,10 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void stopShoot() {
-        m_topMotor.set(0);
-        m_lowMotor.set(0);
+                shootSmartVelocity(0);
+
+        // m_topMotor.set(0);
+        // m_lowMotor.set(0);
     }
 
     public boolean isRampedUp() {
@@ -208,7 +214,7 @@ public class ShooterSubsystem extends SubsystemBase {
         // m_lowMotor.getAppliedOutput()*m_lowMotor.getBusVoltage());
         // SmartDashboard.putNumber("maxRPMTop", maxRPMTop);
         // SmartDashboard.putNumber("maxRPMLow", maxRPMLow);
-
+        SmartDashboard.putBoolean("NOTE IN?", m_gatewayLimitSwitch.isPressed());
         // SmartDashboard.putNumber("Rise Time Top", riseTimeTop);
         // SmartDashboard.putNumber("Rise Time Low", riseTimeLow);
         // SmartDashboard.putNumber("Stable Oscillation Time Top",
