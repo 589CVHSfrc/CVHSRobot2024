@@ -23,12 +23,13 @@ public class DrivePose {
         return new DriveUtils(m_drive).driveToPose(DriveConstants.kShootingPoseSpeakerBLUE, m_speed); 
     }
     public Command driveShootAmp(){
-                System.out.println("RED IS TRUE "+ m_drive.getAlliance() );
+                //System.out.println("RED IS TRUE "+ m_drive.getAlliance() );
 
         if(m_drive.getAlliance()){
-            System.out.println(m_drive.getAlliance());
+            System.out.println("============RED");
             return new DriveUtils(m_drive).driveToPose(DriveConstants.kShootingPoseAmpRED, m_speed);
         }
+        System.out.println("=================BLUE");
         return new DriveUtils(m_drive).driveToPose(DriveConstants.kShootingPoseAmpBLUE, m_speed); 
     }
 

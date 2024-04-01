@@ -43,6 +43,7 @@ public class PhotonCam {
     
         m_photonEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
         PortForwarder.add(5800, "photonvision.local", 5800);
+        PortForwarder.add(5800, "10.5.89.11", 5800);
         
     }
 

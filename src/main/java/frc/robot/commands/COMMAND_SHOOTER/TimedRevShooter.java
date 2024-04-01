@@ -31,7 +31,7 @@ public class TimedRevShooter extends Command {
   public void execute() {
 
     m_shooter.shoot();
-    if(m_timer.hasElapsed(1)){
+    if(m_timer.hasElapsed(1.5)){//1
       m_gate.shootGateway();
     }
   }
@@ -46,6 +46,6 @@ public class TimedRevShooter extends Command {
 
   @Override
   public boolean isFinished() {
-    return m_timer.hasElapsed(1.6);
+    return m_timer.hasElapsed(1.8); //1.6
   }
 }

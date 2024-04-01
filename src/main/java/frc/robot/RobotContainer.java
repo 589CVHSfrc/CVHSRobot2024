@@ -44,12 +44,15 @@ import frc.robot.commands.COMMAND_DRIVE.DefaultDrive;
 import frc.robot.commands.COMMAND_DRIVE.DrivePose;
 import frc.robot.commands.COMMAND_TESTING.FixedDrive;
 import frc.robot.commands.COMMAND_TESTING.HarmonyClimb;
+import frc.robot.commands.COMMAND_TESTING.PRINTBLUE;
+import frc.robot.commands.COMMAND_TESTING.PRINTRED;
 import frc.robot.commands.COMMAND_TESTING.ShootSmartDashboard;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.GatewaySubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.utils.CommandSupplier;
 
 public class RobotContainer {
         private final static DriveSubsystem m_robotDrive = new DriveSubsystem();
@@ -146,19 +149,28 @@ public class RobotContainer {
                                 .alongWith(new ResetGyro(m_robotDrive)));
 
                 // DEBUG FIXED DRIVE DRIVE FORWARD + ROTATE LEFT
-                new JoystickButton(m_driverController, 3)
-                                .whileTrue(new DrivePose(m_robotDrive, () -> 0.9).driveSource()
-                                                .andThen(new DrivePose(m_robotDrive, () -> 0.1).driveSource())
-                                                .andThen(new Intake(m_robotShooter, m_robotGateway)));
+                // new JoystickButton(m_driverController, 3)
+                // .whileTrue(new DrivePose(m_robotDrive, () -> 0.9).driveSource()
+                // .andThen(new DrivePose(m_robotDrive, () -> 0.1).driveSource()));
+                // .andThen(new Intake(m_robotShooter, m_robotGateway)));
 
                 // new JoystickButton(m_driverController, 9)
                 // .toggleOnTrue(new TimedRevShooter(m_robotShooter, m_robotGateway));
 
-                // DRIVE TO AMP
+                // DRIVE TO AMP CommandSupplier
                 new JoystickButton(m_driverController, 2)
                                 .whileTrue(new DrivePose(m_robotDrive, () -> 0.9).driveShootAmp()
-                                                .andThen(new DrivePose(m_robotDrive, () -> 0.1).driveShootAmp())
-                                                .andThen(new TimedRevShooterAMP(m_robotShooter, m_robotGateway)));
+                                                .andThen(new DrivePose(m_robotDrive, () -> 0.1).driveShootAmp()));
+
+                new JoystickButton(m_driverController, 2)
+                                .whileTrue(new DrivePose(m_robotDrive, () -> 0.9).driveShootAmp()
+                                                .andThen(new DrivePose(m_robotDrive, () -> 0.1).driveShootAmp()));
+
+                // new JoystickButton((m_driverController), 1).whileTrue(new CommandSupplier(new PRINTBLUE(), new PRINTRED()).getAllianceCommand());
+
+                // new JoystickButton(m_driverController, 2)
+                // .whileTrue(m_robotDrive.getAlliance()? new DrivePose() : );
+                // .andThen(new TimedRevShooterAMP(m_robotShooter, m_robotGateway)));
 
                 // (DRIVE + AIM), THEN SHOOT AT AMP
                 // new JoystickButton(m_driverController, 5)
@@ -189,76 +201,68 @@ public class RobotContainer {
                 new JoystickButton(m_driverController, 6)
                                 .toggleOnTrue(new HomeClimbers(m_robotClimber));
 
+                // CODRIVER
 
-                //CODRIVER
-
-                new JoystickButton(m_coDriverSwitchBoard, 4)//3
+                new JoystickButton(m_coDriverSwitchBoard, 4)// 3
                                 .toggleOnTrue(new HarmonyClimb(m_robotClimber));
-
-
-
-
-        
 
                 // DEBUG CLIMBERS
 
-                // HOME LEFT
-                new JoystickButton(m_coDriverJoystick, 5)
-                                .toggleOnTrue(new MoveLeftClimber(m_robotClimber,
-                                                () -> ClimberConstants.kLoweringClimbingSpeed));
-                // HOME RIGHT
-                new JoystickButton(m_coDriverJoystick, 6)
-                                .toggleOnTrue(new MoveRightClimber(m_robotClimber,
-                                                () -> -ClimberConstants.kLoweringClimbingSpeed));
+                // // HOME LEFT
+                // new JoystickButton(m_coDriverJoystick, 5)
+                // .toggleOnTrue(new MoveLeftClimber(m_robotClimber,
+                // () -> ClimberConstants.kLoweringClimbingSpeed));
+                // // HOME RIGHT
+                // new JoystickButton(m_coDriverJoystick, 6)
+                // .toggleOnTrue(new MoveRightClimber(m_robotClimber,
+                // () -> -ClimberConstants.kLoweringClimbingSpeed));
 
-                new JoystickButton(m_coDriverJoystick, 3)
-                                .whileTrue(new MoveLeftClimber(m_robotClimber,
-                                                () -> -ClimberConstants.kClimberRaisingSpeed));
-                // EXTEND RIGHT
-                new JoystickButton(m_coDriverJoystick, 4)
-                                .whileTrue(new MoveRightClimber(m_robotClimber,
-                                                () -> ClimberConstants.kClimberRaisingSpeed));
+                // new JoystickButton(m_coDriverJoystick, 3)
+                // .whileTrue(new MoveLeftClimber(m_robotClimber,
+                // () -> -ClimberConstants.kClimberRaisingSpeed));
+                // // EXTEND RIGHT
+                // new JoystickButton(m_coDriverJoystick, 4)
+                // .whileTrue(new MoveRightClimber(m_robotClimber,
+                // () -> ClimberConstants.kClimberRaisingSpeed));
 
                 // ===================================SHOOTER/INTAKE==========================================
 
                 // DOWN INTAKE STOW BRAKE
-                new JoystickButton(m_coDriverSwitchBoard, 10)//9
+                new JoystickButton(m_coDriverSwitchBoard, 10)// 9
                                 .toggleOnTrue(new IntakeArmFloor(
                                                 m_robotArm, m_robotShooter, m_robotGateway));
                 // INTAKE SOURCE
-                new JoystickButton(m_coDriverSwitchBoard, 8)//5
+                new JoystickButton(m_coDriverSwitchBoard, 8)// 5
                                 .toggleOnTrue(new Intake(m_robotShooter, m_robotGateway));
                 // new JoystickButton(m_coDriverJoystick, 5)
                 // .toggleOnTrue(new Intake(m_robotShooter, m_robotGateway));
 
                 // STOW ARM
-                new JoystickButton(m_coDriverSwitchBoard, 5)//6
+                new JoystickButton(m_coDriverSwitchBoard, 5)// 6
                                 .toggleOnTrue(new ArmStowEXP(m_robotArm, () -> ArmConstants.kStowSpeed));
 
-             
                 // RUN GATEWAYS
-                new JoystickButton(m_coDriverSwitchBoard, 9)//7
+                new JoystickButton(m_coDriverSwitchBoard, 9)// 7
                                 .whileTrue(new Shoot(m_robotGateway));
 
                 // SHOOT SPEAKER
-                new JoystickButton(m_coDriverSwitchBoard, 7)//8
+                new JoystickButton(m_coDriverSwitchBoard, 7)// 8
                                 .whileTrue(new RevUpMotors(m_robotShooter));
 
                 // SHOOT AMP
-                new JoystickButton(m_coDriverSwitchBoard, 6)//10
+                new JoystickButton(m_coDriverSwitchBoard, 6)// 10
                                 .whileTrue(new RevUpMotorsAmp(m_robotShooter));
 
-
-                //    new JoystickButton(m_coDriverJoystick2, 12)
-                //                 .toggleOnTrue(new ArmStowEXP(m_robotArm, () -> ArmConstants.kStowSpeed));
+                // new JoystickButton(m_coDriverJoystick2, 12)
+                // .toggleOnTrue(new ArmStowEXP(m_robotArm, () -> ArmConstants.kStowSpeed));
 
                 // ===================================ARM=====================================================
 
                 // BRAKE ARM
-                new JoystickButton(m_coDriverSwitchBoard, 3)//1
+                new JoystickButton(m_coDriverSwitchBoard, 3)// 1
                                 .whileTrue(new BrakeArm(m_robotArm));
                 // RELEASE ARM BRAKE
-                new JoystickButton(m_coDriverSwitchBoard, 1)//2
+                new JoystickButton(m_coDriverSwitchBoard, 1)// 2
                                 .whileTrue(new BrakeArmRelease(m_robotArm));
 
                 // THESE WORK=========================
@@ -282,9 +286,14 @@ public class RobotContainer {
         }
 
         public void flipGyro() {
-                m_robotDrive.resetOdometry(m_robotDrive.getPose()
-                                .rotateBy(new Rotation2d(Units.degreesToRadians(180))));
+                // m_robotDrive.resetOdometry(m_robotDrive.getPose()
+                //                 .rotateBy(new Rotation2d(Units.degreesToRadians(180))));
 
+                m_robotDrive.flipHeading();
+
+        }
+        public void alignWheels(){
+                m_robotDrive.alignWheels();
         }
 
         public Command getAutonomousCommand() {

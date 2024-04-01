@@ -285,6 +285,10 @@ public class DriveSubsystem extends SubsystemBase {
     m_gyro.reset();
   }
 
+  public void flipHeading() {
+    m_gyro.setAngleAdjustment(180);
+  }
+
   public double getHeading() {
     return Rotation2d.fromDegrees(getGyroYawDeg()).getDegrees();
   }
@@ -406,6 +410,7 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Distance to Amp", distToAmp(getPose()));
     SmartDashboard.putNumber("Distance to Speaker", distToSpeaker(getPose()));
     SmartDashboard.putData(m_field);
+    SmartDashboard.putBoolean("Alliance True = Red", getAlliance());
     ///////////
   }
 

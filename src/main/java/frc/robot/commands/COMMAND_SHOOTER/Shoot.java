@@ -17,13 +17,14 @@ public class Shoot extends Command {
 
   @Override
   public void initialize() {
-    m_gate.shootGateway();
+    //m_gate.shootGateway();
+    //System.out.println("SHOOT");
 
   }
 
   @Override
   public void execute() {
-    // m_gate.shootGateway();
+    m_gate.shootGateway();
   }
 
   @Override

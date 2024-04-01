@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
 
 public class ShooterSubsystem extends SubsystemBase {
+    
     private CANSparkMax m_topMotor;
     private CANSparkMax m_lowMotor;
 
@@ -32,6 +33,7 @@ public class ShooterSubsystem extends SubsystemBase {
     double p, i, d, velocity, velocity2, cP, cI, cD, cVelocity, cVelocity2, m_dial1, m_dial2, maxRPMTop, maxRPMLow,
             initialTimeTop, initialTimeLow, riseTimeTop, riseTimeLow, startOscillationTimeTop, startOscillationTimeLow,
             finalOscillationTimeTop, finalOscillationTimeLow;
+
 
     public ShooterSubsystem() {
         m_topMotor = new CANSparkMax(ShooterConstants.kShooterMotorTopCanID, MotorType.kBrushless);
@@ -75,6 +77,13 @@ public class ShooterSubsystem extends SubsystemBase {
         // setPID(m_lowMotorPidController, 100 / 917, 0, 0, 0);
         // setPID(m_topMotorPidController, 100 / 917, 0, 0, 0);
 
+    }
+
+    public boolean isIntaking() {
+        if (m_lowEncoder.getVelocity() > ShooterConstants.kIntakeSpeed/2) {
+            return true;
+        } 
+        return false;
     }
 
     public void setSmartMotion(SparkPIDController controller, double maxVel, double minVel, double maxAcc,
@@ -156,15 +165,15 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void intake() {
-
+        
         shootSmartVelocity(ShooterConstants.kIntakeSpeed);
     }
 
     public void stopShoot() {
-                shootSmartVelocity(0);
+                // shootSmartVelocity(0);
 
-        // m_topMotor.set(0);
-        // m_lowMotor.set(0);
+        m_topMotor.set(0);
+        m_lowMotor.set(0);
     }
 
     public boolean isRampedUp() {
@@ -215,6 +224,7 @@ public class ShooterSubsystem extends SubsystemBase {
         // SmartDashboard.putNumber("maxRPMTop", maxRPMTop);
         // SmartDashboard.putNumber("maxRPMLow", maxRPMLow);
         SmartDashboard.putBoolean("NOTE IN?", m_gatewayLimitSwitch.isPressed());
+        SmartDashboard.putBoolean("INTAKE SPINNING", isIntaking());
         // SmartDashboard.putNumber("Rise Time Top", riseTimeTop);
         // SmartDashboard.putNumber("Rise Time Low", riseTimeLow);
         // SmartDashboard.putNumber("Stable Oscillation Time Top",

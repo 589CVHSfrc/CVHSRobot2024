@@ -64,7 +64,12 @@ public class DriveUtils {
 
         // Prevent the path from being flipped if the coordinates are already correct
         path.preventFlipping = true;
-        return AutoBuilder.followPath(path);
+        return AutoBuilder.pathfindToPose(requestedPose, new PathConstraints(
+                        DriveConstants.kMaxSpeedMetersPerSecond * speed.getAsDouble(),
+                        AutoConstants.kMaxAccelerationMetersPerSecondSquared,
+                        DriveConstants.kMaxAngularSpeed,
+                        AutoConstants.kMaxAngularSpeedRadiansPerSecondSquared), 0);
+        //return AutoBuilder.followPath(path);
     }
 
 }
