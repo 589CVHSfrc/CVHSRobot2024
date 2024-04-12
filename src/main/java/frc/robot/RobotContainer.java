@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WrapperCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.ClimberConstants;
@@ -47,6 +48,7 @@ import frc.robot.commands.COMMAND_TESTING.HarmonyClimb;
 import frc.robot.commands.COMMAND_TESTING.PRINTBLUE;
 import frc.robot.commands.COMMAND_TESTING.PRINTRED;
 import frc.robot.commands.COMMAND_TESTING.ShootSmartDashboard;
+import frc.robot.commands.COMMAND_TESTING.SwitchaRooCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
@@ -82,7 +84,7 @@ public class RobotContainer {
                                 m_robotArm, m_robotShooter, m_robotGateway));
                 NamedCommands.registerCommand("Arm Down", new ArmFloor(m_robotArm, () -> .1));
                 NamedCommands.registerCommand("Intake", new Intake(m_robotShooter, m_robotGateway));
-                NamedCommands.registerCommand("Stow", new ArmStow(
+                NamedCommands.registerCommand("Stow", new ArmStowEXP(
                                 m_robotArm, () -> ArmConstants.kStowSpeed));
 
                 NamedCommands.registerCommand("Shoot Amp", new TimedRevShooterAMP(m_robotShooter, m_robotGateway));
@@ -158,13 +160,12 @@ public class RobotContainer {
                 // .toggleOnTrue(new TimedRevShooter(m_robotShooter, m_robotGateway));
 
                 // DRIVE TO AMP CommandSupplier
-                new JoystickButton(m_driverController, 2)
-                                .whileTrue(new DrivePose(m_robotDrive, () -> 0.9).driveShootAmp()
-                                                .andThen(new DrivePose(m_robotDrive, () -> 0.1).driveShootAmp()));
+                // new JoystickButton(m_driverController, 2)
+                //                 .whileTrue(new DrivePose(m_robotDrive, () -> 0.9).driveShootAmp()
+                //                                 .andThen(new DrivePose(m_robotDrive, () -> 0.1).driveShootAmp()));
 
                 new JoystickButton(m_driverController, 2)
-                                .whileTrue(new DrivePose(m_robotDrive, () -> 0.9).driveShootAmp()
-                                                .andThen(new DrivePose(m_robotDrive, () -> 0.1).driveShootAmp()));
+                                .whileTrue(new SwitchaRooCommand(m_robotDrive));
 
                 // new JoystickButton((m_driverController), 1).whileTrue(new CommandSupplier(new PRINTBLUE(), new PRINTRED()).getAllianceCommand());
 

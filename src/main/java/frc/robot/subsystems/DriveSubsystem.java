@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import java.util.Optional;
 
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
@@ -57,7 +58,8 @@ public class DriveSubsystem extends SubsystemBase {
       DriveConstants.kRearRightTurningCanId,
       DriveConstants.kBackRightChassisAngularOffset);
 
-  private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
+  // private final AHRS m_gyro = new AHRS(SPI.Port.kMXP);
+  private final Pigeon2 m_pigeon = new Pigeon2(DriveConstants.kPigeon2CanId);
   private double m_controllerXY = 1;
   private boolean m_first = true;
   // private double m_controllerYreq = 0;
@@ -127,7 +129,8 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public Rotation2d currentRotation2d() {
-    return m_gyro.getRotation2d();
+    return m_pigeon.getRotation2d();
+    // return m_gyro.getRotation2d();
   }
 
   public void resetOdometry(Pose2d pose) {
@@ -259,18 +262,19 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void setGyro(double angle) {
-    m_gyro.setAngleAdjustment(angle);
+    // m_gyro.setAngleAdjustment(angle);
+    m_pigeon.setYaw(angle);
   }
 
-  public double pitchAdjustVelocity() {
-    if (m_gyro.getRoll() + 3 > 6) {
-      return (m_gyro.getRoll() + 3) * 0.01;
-    } else if (m_gyro.getRoll() + 3 < -6) {
-      return (m_gyro.getRoll() + 3) * 0.01;
-    } else {
-      return 0;
-    }
-  }
+  // public double pitchAdjustVelocity() {
+  //   if (m_gyro.getRoll() + 3 > 6) {
+  //     return (m_gyro.getRoll() + 3) * 0.01;
+  //   } else if (m_gyro.getRoll() + 3 < -6) {
+  //     return (m_gyro.getRoll() + 3) * 0.01;
+  //   } else {
+  //     return 0;
+  //   }
+  // }
 
   public ChassisSpeeds getChassisSpeeds() {
     ChassisSpeeds chassisspeed = DriveConstants.kDriveKinematics.toChassisSpeeds(
@@ -282,23 +286,25 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void zeroHeading() {
-    m_gyro.reset();
+    // m_gyro.reset();
+    m_pigeon.reset();
   }
 
   public void flipHeading() {
-    m_gyro.setAngleAdjustment(180);
+    // m_gyro.setAngleAdjustment(180);
+    m_pigeon.setYaw(180);
   }
 
-  public double getHeading() {
-    return Rotation2d.fromDegrees(getGyroYawDeg()).getDegrees();
-  }
 
   public double getTurnRate() {
     return getGyroYawDeg() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
 
   public double getGyroYawDeg() {
-    return (m_gyro.getYaw()) * -1;
+    // return (m_gyro.getYaw()) * -1;
+    return m_pigeon.getAngle() *-1;
+
+
     // return (m_gyro.getYaw());
   }
 
@@ -403,7 +409,7 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putString("CURRENT CHASSIS SPEED", getChassisSpeeds().toString());
     SmartDashboard.putNumber("CURRENT SPEED", m_frontRight.getCurrentSpeed());
     SmartDashboard.putString("CURRENT POSE", getPose().toString());
-    SmartDashboard.putNumber("CURRENT ROLL", m_gyro.getRoll());
+    // SmartDashboard.putNumber("CURRENT ROLL", m_gyro.getRoll());
     SmartDashboard.putNumber("Requested Speed", m_controllerXY * DriveConstants.kMaxSpeedMetersPerSecond);
 
     // MRG -- Consider adding code below

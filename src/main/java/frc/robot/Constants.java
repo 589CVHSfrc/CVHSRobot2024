@@ -38,8 +38,10 @@ public final class Constants {
     public static final Pose2d kIntakeSourceBLUE = new Pose2d(15.98, 1.18,
         new Rotation2d(Units.degreesToRadians(-60)));
 
-    public static final Pose2d kShootingPoseAmpRED = new Pose2d(14.70, 7.86, new Rotation2d(Units.degreesToRadians(90)));
-    public static final Pose2d kShootingPoseAmpBLUE = new Pose2d(1.84, 7.86, new Rotation2d(Units.degreesToRadians(90)));
+    public static final Pose2d kShootingPoseAmpRED = new Pose2d(14.70, 7.86,
+        new Rotation2d(Units.degreesToRadians(90)));
+    public static final Pose2d kShootingPoseAmpBLUE = new Pose2d(1.84, 7.86,
+        new Rotation2d(Units.degreesToRadians(90)));
     // Y = 7.83
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
@@ -195,6 +197,11 @@ public final class Constants {
     public static final double kD = 0;
     public static final double kFF = 0;
 
+    public static final double kS = 0;
+    public static final double kG = 0.85;
+    public static final double kV = 0.67;
+    public static final double kA = 0.02;
+
     public static final int kAngleMotorCanID = 50;
     public static final int kDiscBrakeForwardID = 0;
     public static final int kDiscBrakeBackwardID = 1;
@@ -241,8 +248,9 @@ public final class Constants {
     public static final double kShooterSpeedSpeakerLow = -2900;// -3400 (REAL VENTURA VALUES); // -7800;// -7800
     public static final double kShooterSpeedSpeakerTop = -3600;// -4100(REAL VENTURA VALUES); // -9500;// -9000
 
-    public static final double kShooterSpeedAmpLow = -1410;//-650 //-550 //-350//-950 // -3500; // -3000 if want lower
-    public static final double kShooterSpeedAmpTop = -900;//-1160 //-1060 //-860//-1460 // -2500; // -2000 if want lower
+    public static final double kShooterSpeedAmpLow = -1410;// -650 //-550 //-350//-950 // -3500; // -3000 if want lower
+    public static final double kShooterSpeedAmpTop = -900;// -1160 //-1060 //-860//-1460 // -2500; // -2000 if want
+                                                          // lower
     // Change this - we need to make this hashmap/lookup table for dif
     // poses/dif objects -speaker amp
     public static final double kIntakeSpeed = 1300;// Change this
@@ -261,7 +269,7 @@ public final class Constants {
     public static final int kClimberRightMotorCanID = 56;
 
     public static final double kLoweringClimbingSpeed = 0.6;// Pit: 0.1
-    public static final double kClimberRaisingSpeed = 0.6;//0.5 //0.4 // Pit: 0.2
+    public static final double kClimberRaisingSpeed = 0.6;// 0.5 //0.4 // Pit: 0.2
 
     public static final int kClimberLeftReverse = 2; //
 

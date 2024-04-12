@@ -25,25 +25,25 @@ public class DriveUtils {
         // m_drive.configureHolonomicAutoBuilder();
     }
 
-    public Command driveToPoseORIG(Pose2d requestedPose) {
-        Pose2d startingPose = m_drive.getPose();
+//     public Command driveToPoseORIG(Pose2d requestedPose) {
+//         Pose2d startingPose = m_drive.getPose();
 
-        List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(startingPose, requestedPose);
+//         List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(startingPose, requestedPose);
 
-        // Create the path using the bezier points created above
-        PathPlannerPath path = new PathPlannerPath(
-                bezierPoints,
-                new PathConstraints(
-                        DriveConstants.kMaxSpeedMetersPerSecond / 2,
-                        AutoConstants.kMaxAccelerationMetersPerSecondSquared / 2,
-                        DriveConstants.kMaxAngularSpeed,
-                        AutoConstants.kMaxAngularSpeedRadiansPerSecondSquared),
-                new GoalEndState(0.1, requestedPose.getRotation()));
+//         // Create the path using the bezier points created above
+//         PathPlannerPath path = new PathPlannerPath(
+//                 bezierPoints,
+//                 new PathConstraints(
+//                         DriveConstants.kMaxSpeedMetersPerSecond / 2,
+//                         AutoConstants.kMaxAccelerationMetersPerSecondSquared / 2,
+//                         DriveConstants.kMaxAngularSpeed,
+//                         AutoConstants.kMaxAngularSpeedRadiansPerSecondSquared),
+//                 new GoalEndState(0.1, requestedPose.getRotation()));
 
-        // Prevent the path from being flipped if the coordinates are already correct
-        path.preventFlipping = true;
-        return AutoBuilder.followPath(path);
-    }
+//         // Prevent the path from being flipped if the coordinates are already correct
+//         path.preventFlipping = true;
+//         return AutoBuilder.followPath(path);
+//     }
 
     public Command driveToPose(Pose2d requestedPose, DoubleSupplier speed) {
         Pose2d startingPose = m_drive.getPose();
@@ -64,12 +64,12 @@ public class DriveUtils {
 
         // Prevent the path from being flipped if the coordinates are already correct
         path.preventFlipping = true;
-        return AutoBuilder.pathfindToPose(requestedPose, new PathConstraints(
-                        DriveConstants.kMaxSpeedMetersPerSecond * speed.getAsDouble(),
-                        AutoConstants.kMaxAccelerationMetersPerSecondSquared,
-                        DriveConstants.kMaxAngularSpeed,
-                        AutoConstants.kMaxAngularSpeedRadiansPerSecondSquared), 0);
-        //return AutoBuilder.followPath(path);
+        // return AutoBuilder.pathfindToPose(requestedPose, new PathConstraints(
+        //                 DriveConstants.kMaxSpeedMetersPerSecond * speed.getAsDouble(),
+        //                 AutoConstants.kMaxAccelerationMetersPerSecondSquared,
+        //                 DriveConstants.kMaxAngularSpeed,
+        //                 AutoConstants.kMaxAngularSpeedRadiansPerSecondSquared), 0);
+        return AutoBuilder.followPath(path);
     }
 
 }

@@ -37,7 +37,7 @@ public class ArmStowEXP extends Command {
     }
 
     if(m_arm.getAbsoluteAngle()<.25){
-      System.out.println("slow....");
+      // System.out.println("slow....");
       m_arm.moveArmSpeed(.01);
     }
 
