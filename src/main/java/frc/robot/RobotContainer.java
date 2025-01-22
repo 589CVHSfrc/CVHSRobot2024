@@ -36,6 +36,7 @@ import frc.robot.commands.COMMAND_PARALLEL.HomeClimbers;
 import frc.robot.commands.COMMAND_PARALLEL.IntakeDown;
 import frc.robot.commands.COMMAND_SEQUENCE.IntakeArmFloor;
 import frc.robot.commands.COMMAND_SHOOTER.Intake;
+import frc.robot.commands.COMMAND_SHOOTER.IntakeLimitSwitch;
 import frc.robot.commands.COMMAND_SHOOTER.RevUpMotors;
 import frc.robot.commands.COMMAND_SHOOTER.RevUpMotorsAmp;
 import frc.robot.commands.COMMAND_SHOOTER.Shoot;
@@ -234,7 +235,7 @@ public class RobotContainer {
                                                 m_robotArm, m_robotShooter, m_robotGateway));
                 // INTAKE SOURCE
                 new JoystickButton(m_coDriverSwitchBoard, 8)// 5
-                                .toggleOnTrue(new Intake(m_robotShooter, m_robotGateway));
+                                .toggleOnTrue(new IntakeLimitSwitch(m_robotShooter, m_robotGateway));
                 // new JoystickButton(m_coDriverJoystick, 5)
                 // .toggleOnTrue(new Intake(m_robotShooter, m_robotGateway));
 

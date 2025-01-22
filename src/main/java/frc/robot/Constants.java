@@ -248,8 +248,8 @@ public final class Constants {
     public static final double kShooterSpeedSpeakerLow = -2900;// -3400 (REAL VENTURA VALUES); // -7800;// -7800
     public static final double kShooterSpeedSpeakerTop = -3600;// -4100(REAL VENTURA VALUES); // -9500;// -9000
 
-    public static final double kShooterSpeedAmpLow = -1410;// -650 //-550 //-350//-950 // -3500; // -3000 if want lower
-    public static final double kShooterSpeedAmpTop = -900;// -1160 //-1060 //-860//-1460 // -2500; // -2000 if want
+    public static final double kShooterSpeedAmpLow = -650;//-1410;// -650 //-550 //-350//-950 // -3500; // -3000 if want lower
+    public static final double kShooterSpeedAmpTop = -1160;//-900;// -1160 //-1060 //-860//-1460 // -2500; // -2000 if want
                                                           // lower
     // Change this - we need to make this hashmap/lookup table for dif
     // poses/dif objects -speaker amp
